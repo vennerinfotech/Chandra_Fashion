@@ -1,34 +1,165 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light shadow-sm" style="width: 250px; min-height: 100vh;">
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="{{ route('admin.main') }}" class="nav-link {{ request()->routeIs('admin.main') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-speedometer2 me-2"></i> Dashboard
-            </a>
-        </li>
-       <a href="{{ route('admin.products.index') }}"
-        class="nav-link {{ request()->routeIs('products.*') ? 'active' : 'text-dark' }}">
-        <i class="bi bi-box-seam me-2"></i> Products
-        </a>
+<style>
+    /* Base Styles */
+    .sidebar-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100%;
+        background-color: #ffffff;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
 
-        <li>
-            <a href="#" class="nav-link {{ request()->routeIs('orders.*') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-cart-check me-2"></i> Orders
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link {{ request()->routeIs('customers.*') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-people me-2"></i> Customers
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-bar-chart-line me-2"></i> Reports
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link {{ request()->routeIs('settings') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-gear me-2"></i> Settings
-            </a>
-        </li>
+    .sidebar-wrapper.open {
+        left: -250px;
+        /* Show sidebar when open */
+    }
+
+    .sidebar-wrapper ul {
+        padding: 0;
+        list-style-type: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .sidebar-wrapper ul li {
+        border-left: 4px solid transparent;
+    }
+
+    .sidebar-wrapper ul li a {
+        font-size: 16px;
+        font-weight: 400;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #2b3d51;
+        padding: 15px 20px;
+    }
+
+    .sidebar-wrapper ul li span {
+        display: flex;
+        align-items: end;
+    }
+
+    .sidebar-wrapper ul li a i {
+        color: #2b3d51;
+        height: 20px;
+        width: 20px;
+        text-align: center;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        padding-right: 10px;
+        font-weight: 500;
+    }
+
+    .sidebar-wrapper ul li:hover {
+        background-color: #2b3d51;
+    }
+
+    .sidebar-wrapper ul li:hover a,
+    .sidebar-wrapper ul li:hover a i,
+    .sidebar-wrapper ul li.active a {
+        color: #fff;
+    }
+
+    .sidebar-wrapper ul li.active {
+        background-color: #ecf0fa;
+        border-left: 4px solid #2b3d51;
+    }
+
+    .sidebar-logo {
+        padding: 3px;
+    }
+
+    .sidebar-logo img {
+        height: 60px;
+    }
+
+    @media (max-width: 991px) {
+        .sidebar-wrapper {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            width: 250px;
+            height: 100vh;
+            transition: all 0.5s ease-in-out;
+            z-index: 10000;
+        }
+
+        .sidebar-wrapper.open {
+            left: 0;
+        }
+
+        .menu-bar {
+            padding: 12px 15px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .main-wrapper {
+            padding: 0px 5px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .header-top {
+            margin-left: 0px;
+        }
+    }
+
+
+    /* Responsive Design for Mobile and Tablet */
+</style>
+
+<div class="sidebar-wrapper">
+    <div class="sidebar-logo text-center">
+        <h2>Logo</h2>
+    </div>
+    <ul>
+        <li class=""><a href="/dashboard"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
+        <li class=""><a href="/subdepartment"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
+        <li class=""><a href="/department"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
+        <li class=""><a href="/familygroup"><span><i class="fa-solid fa-magnifying-glass-plus"></i>Inquiry</span></a></li>
+        <li class=""><a href="/familymember"><span><i class="fa-solid fa-headset"></i>Chat Boat</span></a></li>
     </ul>
 </div>
+
+
+
+{{-- <div class="sidebar-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+</div> --}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var currentUrl = window.location.href;
+
+        // Remove active class from all menu items first
+        $('.sidebar-wrapper ul li').removeClass('active');
+
+        $('.sidebar-wrapper ul li a').each(function () {
+            var link = $(this).attr('href'); // Get the link of the current anchor tag
+
+            // Check if current URL matches the link
+            if (currentUrl === link) {
+                $(this).parent().addClass('active');
+            }
+
+            // Check for Family Group active state
+            else if (link.includes("familygroup") && (currentUrl.includes("familygroup/create") || currentUrl.includes("familygroup"))) {
+                $(this).parent().addClass('active');
+            }
+
+            // Check for Family Member active state
+            else if (link.includes("familymember") && (currentUrl.includes("familymember/create") || currentUrl.includes("familymember"))) {
+                $(this).parent().addClass('active');
+            }
+        });
+    });
+
+</script>
