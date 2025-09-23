@@ -14,5 +14,6 @@ Route::middleware('admin.guest')->group(function () {
 Route::middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.main');
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });

@@ -5,11 +5,11 @@
                 <i class="bi bi-speedometer2 me-2"></i> Dashboard
             </a>
         </li>
-        <li>
-            <a href="{{ route('products.index') }}" class="nav-link {{ request()->routeIs('products.*') ? 'active' : 'text-dark' }}">
-                <i class="bi bi-box-seam me-2"></i> Products
-            </a>
-        </li>
+       <a href="{{ route('admin.products.index') }}"
+        class="nav-link {{ request()->routeIs('products.*') ? 'active' : 'text-dark' }}">
+        <i class="bi bi-box-seam me-2"></i> Products
+        </a>
+
         <li>
             <a href="#" class="nav-link {{ request()->routeIs('orders.*') ? 'active' : 'text-dark' }}">
                 <i class="bi bi-cart-check me-2"></i> Orders
