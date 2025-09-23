@@ -1,1 +1,18 @@
-ECHO is on.
+
+/vendor
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/.env
+/.env.local
+/.env.*.backup
+/.idea
+/.vscode
+/storage
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/.phpunit.result.cache
+
