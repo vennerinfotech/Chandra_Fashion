@@ -16,6 +16,7 @@
             $middleware->alias([
                 'admin'       => \App\Http\Middleware\AdminMiddleware::class,
                 'admin.guest' => \App\Http\Middleware\RedirectIfAdminAuthenticated::class,
+                'admin.auth' => \App\Http\Middleware\AdminMiddleware::class,
             ]);
         })
         ->withExceptions(function (Exceptions $exceptions): void {
