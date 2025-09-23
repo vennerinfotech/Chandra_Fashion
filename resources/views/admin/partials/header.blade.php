@@ -17,9 +17,13 @@
                     </a>
                 </li>
                 <li>
-                    <a type="submit" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        <span class="text nav-text">Logout</span>
-                    </a>
+                    <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0" style="border: none; background: none;">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span class="text nav-text">Logout</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
