@@ -9,7 +9,7 @@
         background-color: #ffffff;
         transition: left 0.3s ease;
         z-index: 1000;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+           box-shadow: 0 8px 24px rgba(168, 180, 208, 0.1);
     }
 
     .sidebar-wrapper.open {
@@ -23,10 +23,6 @@
         border-top: 1px solid #ddd;
     }
 
-    .sidebar-wrapper ul li {
-        border-left: 4px solid transparent;
-    }
-
     .sidebar-wrapper ul li a {
         font-size: 16px;
         font-weight: 400;
@@ -37,39 +33,32 @@
         color: #2b3d51;
         padding: 15px 20px;
     }
-
-    .sidebar-wrapper ul li span {
-        display: flex;
-        align-items: end;
-    }
-
-    .sidebar-wrapper ul li a i {
-        color: #2b3d51;
-        height: 20px;
-        width: 20px;
-        text-align: center;
-        align-items: center;
-        display: flex;
-        justify-content: center;
+    .sidebar-wrapper ul li a svg {
         padding-right: 10px;
-        font-weight: 500;
     }
 
     .sidebar-wrapper ul li:hover {
         background-color: #2b3d51;
     }
 
-    .sidebar-wrapper ul li:hover a,
-    .sidebar-wrapper ul li:hover a i,
-    .sidebar-wrapper ul li.active a {
+    .sidebar-wrapper ul li:hover a {
         color: #fff;
     }
 
-    .sidebar-wrapper ul li.active {
-        background-color: #ecf0fa;
-        border-left: 4px solid #2b3d51;
+    .sidebar-wrapper ul li:hover a svg {
+        fill: #fff;
     }
 
+    .sidebar-wrapper ul li.active {
+        background-color: #2b3d51;
+    }
+
+    .sidebar-wrapper ul li.active a{
+        color: #fff;
+    }
+     .sidebar-wrapper ul li.active svg{
+        fill: #fff;
+    }
     .sidebar-logo {
         padding: 3px;
     }
@@ -117,11 +106,11 @@
         <h2>Logo</h2>
     </div>
     <ul>
-        <li class=""><a href="/dashboard"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
-        <li class=""><a href="/subdepartment"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
-        <li class=""><a href="/department"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
-        <li class=""><a href="/familygroup"><span><i class="fa-solid fa-magnifying-glass-plus"></i>Inquiry</span></a></li>
-        <li class=""><a href="/familymember"><span><i class="fa-solid fa-headset"></i>Chat Boat</span></a></li>
+        <li class=""><a href="{{ route('admin.main') }}"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
+        <li class=""><a href="#"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
+        <li class=""><a href="{{ route('admin.products.index') }}"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
+        <li class=""><a href="{{ route('admin.inquiries.index') }}"><span><i class="fa-solid fa-magnifying-glass-plus"></i>Inquiry</span></a></li>
+        <li class=""><a href="#"><span><i class="fa-solid fa-headset"></i>Chat Boat</span></a></li>
     </ul>
 </div>
 

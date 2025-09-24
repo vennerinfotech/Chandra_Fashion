@@ -59,9 +59,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         // Decode JSON fields if stored as JSON strings
-        $product->gallery = json_decode($product->gallery, true);
-        $product->colors = json_decode($product->colors, true);
-        $product->sizes = json_decode($product->sizes, true);
+        // $product->gallery = json_decode($product->gallery, true);
+        // $product->colors = json_decode($product->colors, true);
+        // $product->sizes = json_decode($product->sizes, true);
 
         return view('products.show', compact('product'));
     }

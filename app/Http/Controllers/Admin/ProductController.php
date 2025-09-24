@@ -30,7 +30,7 @@ class ProductController extends Controller
      */
 
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -52,26 +52,29 @@ class ProductController extends Controller
         $data['sizes']  = $request->filled('sizes') ? explode(',', $request->input('sizes')) : [];
         $data['tags']   = $request->filled('tags') ? explode(',', $request->input('tags')) : [];
 
-        // Handle image upload
+        // Handle main image upload
         if ($request->hasFile('image')) {
-            $data['image_url'] = $request->file('image')->store('products', 'public');
+            $image = $request->file('image');
+            $imageName = time().'_'.$image->getClientOriginalName();
+            $image->move(public_path('uploads/products'), $imageName);
+            $data['image_url'] = 'uploads/products/'.$imageName; // save relative path
         }
 
         // Handle gallery upload
         if ($request->hasFile('gallery')) {
             $galleryPaths = [];
             foreach ($request->file('gallery') as $file) {
-                $galleryPaths[] = $file->store('products/gallery', 'public');
+                $fileName = time().'_'.$file->getClientOriginalName();
+                $file->move(public_path('uploads/products/gallery'), $fileName);
+                $galleryPaths[] = 'uploads/products/gallery/'.$fileName;
             }
-            $data['gallery'] = $galleryPaths;
+            $data['gallery'] = $galleryPaths; // save array of relative paths
         }
 
         Product::create($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
-
-
     /**
      * Display the specified resource.
      */

@@ -15,5 +15,6 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dashboard1', [DashboardController::class, 'index'])->name('admin.main');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
+    Route::resource('inquiries', \App\Http\Controllers\Admin\InquiryController::class, ['as' => 'admin'])->only(['index','show']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });

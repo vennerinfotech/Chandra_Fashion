@@ -57,9 +57,10 @@
         <label for="export_ready" class="form-check-label">Export Ready</label>
     </div>
 
-    {{-- Main Image --}}
-    <div class="mb-3">
-        <label for="image" class="form-label">Main Image</label>
+
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+           <label for="image" class="form-label">Main Image</label>
         <input type="file" name="image" id="image" class="form-control">
         @if(!empty($product->image_url))
             <div class="mt-2">
@@ -67,11 +68,9 @@
                      class="img-thumbnail" width="150">
             </div>
         @endif
-    </div>
-
-    {{-- Gallery --}}
-    <div class="mb-3">
-        <label for="gallery" class="form-label">Gallery Images</label>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="gallery" class="form-label">Gallery Images</label>
         <input type="file" name="gallery[]" id="gallery" class="form-control" multiple>
         @if(!empty($product->gallery))
             <div class="mt-3 d-flex flex-wrap">
@@ -81,6 +80,7 @@
                 @endforeach
             </div>
         @endif
+        </div>
     </div>
 
     {{-- Colors, Sizes, Tags --}}
@@ -106,8 +106,8 @@
     </div>
 
     {{-- Submit --}}
-    <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary">
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn">
             {{ isset($product) ? 'Update Product' : 'Create Product' }}
         </button>
     </div>
