@@ -20,5 +20,9 @@ class Product extends Model
         'export_ready' => 'boolean',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category');
+    }
 
 }

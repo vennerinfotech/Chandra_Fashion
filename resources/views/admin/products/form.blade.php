@@ -21,10 +21,17 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="category" class="form-label">Category</label>
-            <input type="text" name="category" id="category"
-                   class="form-control"
-                   value="{{ old('category', $product->category ?? '') }}" required>
+            <select name="category" id="category" class="form-control" required>
+                <option value="">Select Category</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}"
+                        {{ old('category', $product->category ?? '') == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
+
         <div class="col-md-6 mb-3">
             <label for="fabric" class="form-label">Fabric</label>
             <input type="text" name="fabric" id="fabric"
@@ -60,28 +67,39 @@
 
     <div class="row">
         <div class="col-lg-6 mb-3">
-           <label for="image" class="form-label">Main Image</label>
-        <input type="file" name="image" id="image" class="form-control">
-        @if(!empty($product->image_url))
-            <div class="mt-2">
-                <img src="{{ asset('storage/' . $product->image_url) }}" alt="Product Image"
-                     class="img-thumbnail" width="150">
-            </div>
-        @endif
+            <label for="image" class="form-label">Main Image</label>
+            <input type="file" name="image" id="image" class="form-control">
+                @if(!empty($product->image_url))
+                    <div class="mt-2">
+                        <img src="{{ url($product->image_url) }}"
+                            alt="Product Image" class="img-thumbnail" width="150">
+                    </div>
+                @endif
+
         </div>
+
         <div class="col-lg-6 mb-3">
             <label for="gallery" class="form-label">Gallery Images</label>
-        <input type="file" name="gallery[]" id="gallery" class="form-control" multiple>
-        @if(!empty($product->gallery))
-            <div class="mt-3 d-flex flex-wrap">
-                @foreach($product->gallery as $img)
-                    <img src="{{ asset('storage/' . $img) }}" alt="Gallery Image"
-                         class="img-thumbnail me-2 mb-2" width="100">
-                @endforeach
-            </div>
-        @endif
+            <input type="file" name="gallery[]" id="gallery" class="form-control" multiple>
+
+            @if(!empty($product->gallery))
+                @php
+                    $galleryImages = is_array($product->gallery) ? $product->gallery : json_decode($product->gallery, true);
+                @endphp
+
+                <div class="mt-3 d-flex flex-wrap">
+                    @if($galleryImages)
+                        @foreach($galleryImages as $img)
+                            <img src="{{ url($img) }}"
+                                alt="Gallery Image" class="img-thumbnail me-2 mb-2" width="100">
+                        @endforeach
+                    @endif
+                </div>
+            @endif
+
         </div>
     </div>
+
 
     {{-- Colors, Sizes, Tags --}}
     <div class="row">

@@ -14,6 +14,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Product</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -26,31 +27,19 @@
                         @forelse($inquiries as $inquiry)
                         <tr>
                             <td>{{ $inquiry->id }}</td>
-                            <td>
-                                {{-- Product name --}}
-                                {{ $inquiry->product->name ?? 'N/A' }}
 
-                                {{-- Main product image --}}
+                            {{-- Product Name --}}
+                            <td>{{ $inquiry->product->name ?? 'N/A' }}</td>
+
+                            {{-- Product Image --}}
+                            <td>
                                 @if($inquiry->product && $inquiry->product->image_url)
-                                    <img src="{{ $inquiry->product->image_url }}"
+                                    <img src="{{ asset($inquiry->product->image_url) }}"
                                         alt="Product Image"
-                                        class="img-thumbnail mt-2"
+                                        class="img-thumbnail"
                                         style="max-width: 150px;">
                                 @endif
-
-                                {{-- Gallery images --}}
-                                @if($inquiry->product && is_array($inquiry->product->gallery))
-                                    <div class="d-flex flex-wrap gap-2 mt-2">
-                                        @foreach($inquiry->product->gallery as $galleryImage)
-                                            <img src="{{ $galleryImage }}"
-                                                alt="Gallery Image"
-                                                class="img-thumbnail"
-                                                style="max-width: 100px;">
-                                        @endforeach
-                                    </div>
-                                @endif
                             </td>
-
 
                             <td>{{ $inquiry->name }}</td>
                             <td>{{ $inquiry->email }}</td>
@@ -58,10 +47,19 @@
                             <td>{{ $inquiry->country }}</td>
                             <td>{{ $inquiry->quantity }}</td>
                             <td>
+                                <!-- View Button -->
                                 <a href="{{ route('admin.inquiries.show', $inquiry->id) }}"
-                                   class="btn-action btn-sm" title="View">
-                                   <i class="fa fa-eye"></i>
+                                class="btn-action btn-sm" title="View">
+                                <i class="fa fa-eye"></i>
                                 </a>
+
+                                <!-- Delete Form -->
+                                <form action="{{ route('admin.inquiries.destroy', $inquiry->id) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Are you sure?')" title="Delete" class="btn-action btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+
                             </td>
                         </tr>
                         @empty

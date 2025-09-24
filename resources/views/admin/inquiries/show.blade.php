@@ -16,31 +16,36 @@
                     <tr>
                         <th>Product</th>
                         <td>
-                            {{-- Product name --}}
+                            {{-- Product Name --}}
                             {{ $inquiry->product->name ?? 'N/A' }}
 
-                            {{-- Main product image --}}
-                            @if($inquiry->product && $inquiry->product->image_url)
-                                <img src="{{ $inquiry->product->image_url }}"
-                                    alt="Product Image"
-                                    class="img-thumbnail mt-2"
-                                    style="max-width: 150px;">
-                            @endif
+                            {{-- Images --}}
+                            @if($inquiry->product)
+                                <div class="mt-2">
+                                    {{-- Main product image --}}
+                                    @if($inquiry->product->image_url)
+                                        <img src="{{ asset($inquiry->product->image_url) }}"
+                                            alt="Product Image"
+                                            class="img-thumbnail mb-2"
+                                            style="max-width: 150px;">
+                                    @endif
 
-                            {{-- Gallery images --}}
-                            @if($inquiry->product && is_array($inquiry->product->gallery))
-                                <div class="d-flex flex-wrap gap-2 mt-2">
-                                    @foreach($inquiry->product->gallery as $galleryImage)
-                                        <img src="{{ $galleryImage }}"
-                                            alt="Gallery Image"
-                                            class="img-thumbnail"
-                                            style="max-width: 100px;">
-                                    @endforeach
+                                    {{-- Gallery images --}}
+                                    @if(is_array($inquiry->product->gallery) && count($inquiry->product->gallery) > 0)
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @foreach($inquiry->product->gallery as $galleryImage)
+                                                <img src="{{ asset ($galleryImage) }}"
+                                                    alt="Gallery Image"
+                                                    class="img-thumbnail"
+                                                    style="max-width: 100px;">
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
                         </td>
-
                     </tr>
+
 
                     <tr>
                         <th>Name</th>

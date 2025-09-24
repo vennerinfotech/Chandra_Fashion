@@ -63,6 +63,15 @@ class InquiryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $inquiry = Inquiry::findOrFail($id);
+
+        try {
+            $inquiry->delete();
+            return redirect()->route('admin.inquiries.index')
+                            ->with('success', 'Inquiry deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.inquiries.index')
+                            ->with('error', 'Failed to delete inquiry.');
+        }
     }
 }

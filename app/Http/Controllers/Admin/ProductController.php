@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+
 class ProductController extends Controller
 {
     /**
@@ -22,8 +24,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::where('status', 1)->get();
+        return view('admin.products.create', compact('categories'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -89,8 +93,9 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
+        $categories = Category::where('status', 1)->get();
 
-        return view('admin.products.edit', compact('product'));
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
 

@@ -113,38 +113,16 @@
 
 
       @if($products->count())
-        {{-- <div class="row g-4">
-          @foreach($products as $product)
-            <div class="col-md-6 col-lg-6">
-              <div class="card h-100 shadow-sm">
-                <img src="{{ $product->image_url }}" class="card-img-top" alt="{{ $product->name }}">
-                <div class="card-body">
-                  <h5 class="card-title">{{ $product->name }}</h5>
-                  <p class="card-text">{{ $product->description }}</p>
-                  <p>
-                    <small class="badge bg-success">{{ $product->fabric }}</small>
-                    @if($product->export_ready)
-                      <small class="badge bg-info text-dark">Export Ready</small>
-                    @endif
-                    <small class="text-muted">MOQ: {{ $product->moq }}</small>
-                  </p>
-                  <a href="#" class="btn btn-dark w-100">Check Price</a>
-                </div>
-              </div>
-            </div>
-          @endforeach
-        </div> --}}
 
         <div class="row g-4">
             @foreach($products as $product)
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm rounded-3">
                         <div class="position-relative overflow-hidden">
-                            <img src="{{ $product->image_url }}"
+                            <img src="{{ url($product->image_url) }}"
                                 class="card-img-top rounded-top zoom-out-image"
                                 alt="{{ $product->name }}"
                                 style="height: 320px; object-fit: cover;">
-
 
                             @php
                                 $badge = null;
