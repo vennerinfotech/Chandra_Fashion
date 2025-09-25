@@ -21,7 +21,7 @@
         @include('admin.partials.sidebar')
         @include('admin.partials.header')
     </header>
-    <main class="main-wrapper" style="min-height: calc(100vh - 100px);">
+    <main class="main-wrapper" style="min-height: calc(100vh - 90px);">
         <div class="container-fluid">
             @yield('content')
         </div>

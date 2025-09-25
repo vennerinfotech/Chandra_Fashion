@@ -6,7 +6,7 @@
 
         <div class="dropdown">
             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user-tie"></i>
             </button>
             <ul class="dropdown-menu">
 

@@ -109,7 +109,7 @@
         <li class=""><a href="{{ route('admin.main') }}"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
         <li class=""><a href="{{ route('admin.categories.index') }}"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
         <li class=""><a href="{{ route('admin.products.index') }}"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
-        <li class=""><a href="{{ route('admin.inquiries.index') }}"><span><i class="fa-solid fa-magnifying-glass-plus"></i>Inquiry</span></a></li>
+        <li class=""><a href="{{ route('admin.inquiries.index') }}"><span><i class="fa-solid fa-user-pen"></i>Inquiry</span></a></li>
         <li class=""><a href="#"><span><i class="fa-solid fa-headset"></i>Chat Boat</span></a></li>
     </ul>
 </div>

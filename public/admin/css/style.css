@@ -31,6 +31,10 @@
     padding: 0;
 }
 
+.menu-bar .dropdown .btn:hover{
+        background: transparent;
+}
+
 .menu-bar .dropdown i{
     color: #fff;
     font-size: 18px;
@@ -94,14 +98,13 @@
 
 .sidebar-toggle{
     color: #fff;
-    display: flex;
-    align-items: center;
     padding: 10px;
     text-align: center;
-    height: 2.5rem;
-    width: 2.5rem;
     text-decoration: none;
-    justify-content: center;
+}
+
+.sidebar-toggle:hover{
+    color: #fff;
 }
 
 .admin-footer{
@@ -181,6 +184,7 @@
     color: #2b3d51;
     border: none;
     padding: 8px 10px;
+    margin-right: 5px;
 }
 
 .btn-action:hover{
