@@ -1,4 +1,4 @@
-<footer style="background-color:#273847; color:#b1b1b1; padding: 40px 20px; font-family: 'Georgia', serif;">
+<footer style="background-color:#273847; color:#b1b1b1; padding: 90px 20px;">
   <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap;">
 
     <!-- Column 1: Brand Info -->
