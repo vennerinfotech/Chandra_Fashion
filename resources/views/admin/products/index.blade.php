@@ -31,7 +31,7 @@
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->category }}</td>
+                <td>{{ $product->category->name ?? '-' }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>
                 <td>

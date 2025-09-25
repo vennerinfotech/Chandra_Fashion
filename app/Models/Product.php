@@ -7,22 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'name','description','category','fabric','moq','export_ready','price',
-        'image_url','colors','sizes','gallery','tags','sku','weight','weave',
-        'thread_count','shrinkage','collar_type','cuff_style','buttons','fit','delivery_time'
+        'name',
+        'description',
+        'category_id',
+        'materials',
+        'moq',
+        'export_ready',
+        'price',
+        'delivery_time',
+        'image',
     ];
 
     protected $casts = [
-        'colors' => 'array',
-        'sizes' => 'array',
-        'gallery' => 'array',
-        'tags' => 'array',
         'export_ready' => 'boolean',
     ];
 
-    public function category()
+    public function variants()
     {
-        return $this->belongsTo(Category::class, 'category');
+        return $this->hasMany(ProductVariant::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }
+
