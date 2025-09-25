@@ -33,17 +33,6 @@
         </div>
     </div>
 
-    <select name="category_id" id="category" class="form-control" required>
-        <option value="">Select Category</option>
-        @foreach($categories as $cat)
-            <option value="{{ $cat->id }}"
-                {{ old('category_id', $product->category_id ?? '') == $cat->id ? 'selected' : '' }}>
-                {{ $cat->name }}
-            </option>
-        @endforeach
-    </select>
-
-
     {{-- Price --}}
     <div class="mb-3">
         <label for="price" class="form-label">Base Price</label>
@@ -60,112 +49,133 @@
         <label for="export_ready" class="form-check-label">Export Ready</label>
     </div>
 
+    {{-- Main Image --}}
+    <div class="mb-3">
+        <label for="image" class="form-label">Main Image</label>
+        <input type="file" name="image" id="image" class="form-control">
+        @if(!empty($product->image_url))
+            <div class="mt-2">
+                <img src="{{ url($product->image_url) }}" alt="Product Image"
+                     class="img-thumbnail" width="150">
+            </div>
+        @endif
+    </div>
 
     <hr>
-    <h5 class="d-flex justify-content-between align-items-center">
-        Product Variants
-        {{-- <button type="button" id="add-variant" class="btn btn-sm btn-outline-primary">+ Add Variant</button> --}}
-    </h5>
+    <h5>Product Variants</h5>
 
-<div id="variants-wrapper">
-    @if(isset($product) && $product->variants)
-        @foreach($product->variants as $i => $variant)
-            <div class="variant-item border rounded p-3 mb-3 position-relative">
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <label class="form-label">Product Code</label>
-                        <input type="text" name="variants[{{ $i }}][product_code]" class="form-control"
-                               value="{{ old('variants.'.$i.'.product_code', $variant->product_code) }}" required>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Color</label>
-                        <input type="text" name="variants[{{ $i }}][color]" class="form-control"
-                               value="{{ old('variants.'.$i.'.color', $variant->color) }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Size</label>
-                        <input type="text" name="variants[{{ $i }}][size]" class="form-control"
-                               value="{{ old('variants.'.$i.'.size', $variant->size) }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">MOQ</label>
-                        <input type="number" name="variants[{{ $i }}][moq]" class="form-control"
-                               value="{{ old('variants.'.$i.'.moq', $variant->moq) }}">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Images <span class="text-danger">*</span></label>
-                        <input type="file"
-                               name="variants[{{ $i }}][images][]"
-                               class="form-control variant-images"
-                               multiple
-                               required>
-
-                        <div class="mt-2 preview-wrapper" id="preview-{{ $i }}">
-                            {{-- Show existing images if editing --}}
-                            @if(isset($variant->images) && $variant->images)
-                                @php
-                                    $images = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
-                                @endphp
-                                @foreach($images as $img)
-                                    <img src="{{ asset($img) }}" width="100" class="me-1 mb-1 img-thumbnail">
-                                @endforeach
+    <div id="variants-wrapper">
+        @if(isset($product) && $product->variants)
+            @foreach($product->variants as $i => $variant)
+                <div class="variant-item border rounded p-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Product Code</label>
+                            <input type="text" name="variants[{{ $i }}][product_code]" class="form-control"
+                                   value="{{ old('variants.'.$i.'.product_code', $variant->product_code) }}" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Color</label>
+                            <input type="text" name="variants[{{ $i }}][color]" class="form-control"
+                                   value="{{ old('variants.'.$i.'.color', $variant->color) }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Size</label>
+                            <input type="text" name="variants[{{ $i }}][size]" class="form-control"
+                                   value="{{ old('variants.'.$i.'.size', $variant->size) }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">MOQ</label>
+                            <input type="number" name="variants[{{ $i }}][moq]" class="form-control"
+                                   value="{{ old('variants.'.$i.'.moq', $variant->moq) }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" name="variants[{{ $i }}][image]" class="form-control">
+                            @if($variant->image_url)
+                                <img src="{{ url($variant->image_url) }}" width="100" class="mt-2 img-thumbnail">
                             @endif
-
                         </div>
                     </div>
                 </div>
+            @endforeach
+        @else
+            {{-- Default empty variant --}}
+            <div class="variant-item border rounded p-3 mb-3">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Product Code</label>
+                        <input type="text" name="variants[0][product_code]" class="form-control" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Color</label>
+                        <input type="text" name="variants[0][color]" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Size</label>
+                        <input type="text" name="variants[0][size]" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">MOQ</label>
+                        <input type="number" name="variants[0][moq]" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Image</label>
+                        <input type="file" name="variants[0][image]" class="form-control">
+                    </div>
+                </div>
             </div>
-        @endforeach
-    @else
-        {{-- Default single variant --}}
-        <div class="variant-item border rounded p-3 mb-3 position-relative">
-            <div class="row g-2">
+        @endif
+    </div>
+
+    {{-- Button to add more variants dynamically (JS required) --}}
+    <div class="mb-3">
+        <button type="button" id="add-variant" class="btn btn-outline-primary btn-sm">+ Add Variant</button>
+    </div>
+
+    {{-- Submit --}}
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-success">
+            {{ isset($product) ? 'Update Product' : 'Create Product' }}
+        </button>
+    </div>
+</div>
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('#add-variant').click(function() {
+        let wrapper = $('#variants-wrapper');
+        let index = wrapper.find('.variant-item').length;
+
+        let html = `
+        <div class="variant-item border rounded p-3 mb-3">
+            <div class="row">
                 <div class="col-md-3">
                     <label class="form-label">Product Code</label>
-                    <input type="text" name="variants[0][product_code]" class="form-control" required>
+                    <input type="text" name="variants[${index}][product_code]" class="form-control" required>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Color</label>
-                    <input type="text" name="variants[0][color]" class="form-control">
+                    <input type="text" name="variants[${index}][color]" class="form-control">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Size</label>
-                    <input type="text" name="variants[0][size]" class="form-control">
+                    <input type="text" name="variants[${index}][size]" class="form-control">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">MOQ</label>
-                    <input type="number" name="variants[0][moq]" class="form-control">
+                    <input type="number" name="variants[${index}][moq]" class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Images <span class="text-danger">*</span></label>
-                    <input type="file"
-                           name="variants[0][images][]"
-                           class="form-control variant-images"
-                           multiple
-                           required>
-                    <div class="mt-2 preview-wrapper" id="preview-0"></div>
-                </div>
-                <div class="col-md-3 d-flex align-items-center">
-                    {{-- Add variant icon --}}
-                    <a href="javascript:void(0);" title="Add" class="btn-action btn-sm me-2" id="add-variant">
-                        <i class="fa-solid fa-circle-plus text-success"></i>
-                    </a>
-
-                    {{-- Cancel variant icon --}}
-                    <a href="javascript:void(0);" title="Cancel" class="btn-action btn-sm remove-variant">
-                        <i class="fa-solid fa-circle-xmark text-danger"></i>
-                    </a>
+                    <label class="form-label">Image</label>
+                    <input type="file" name="variants[${index}][image]" class="form-control">
                 </div>
             </div>
         </div>
-    @endif
-</div>
+        `;
 
-{{-- Submit --}}
-<div class="d-flex justify-content-center">
-    <button type="submit" class="btn btn-success">
-        {{ isset($product) ? 'Update Product' : 'Create Product' }}
-    </button>
-</div>
-
-
+        wrapper.append(html);
+    });
+});
+</script>
+@endpush

@@ -10,12 +10,17 @@
             required>
     </div>
 
-
     {{-- Description --}}
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
         <textarea name="description" id="description" rows="3"
                   class="form-control">{{ old('description', $category->description ?? '') }}</textarea>
+    </div>
+
+     <!-- Image field -->
+    <div class="mb-3">
+        <label for="image" class="form-label">Category Image</label>
+        <input type="file" name="image" id="image" class="form-control">
     </div>
 
     {{-- Status --}}
@@ -26,6 +31,7 @@
             <option value="0" {{ old('status', $category->status ?? 1) == 0 ? 'selected' : '' }}>Inactive</option>
         </select>
     </div>
+
 
     {{-- Submit --}}
     <div class="d-flex justify-content-center">

@@ -7,15 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'name',
-        'description',
-        'category_id',
-        'materials',
-        'moq',
-        'export_ready',
-        'price',
-        'delivery_time',
-        'image',
+        'name','description','materials','export_ready','price',
+        'image_url','delivery_time'
     ];
 
     protected $casts = [
@@ -23,6 +16,10 @@ class Product extends Model
     ];
 
     public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+    public function category()
     {
         return $this->hasMany(ProductVariant::class);
     }
