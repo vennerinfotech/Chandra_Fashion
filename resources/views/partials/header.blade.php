@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+<nav class="header-wrapper navbar navbar-expand-lg">
   <div class="container">
     <!-- Logo + Brand Name -->
     <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-      <img src="{{ asset('uploads/products/cf-logo.jpg') }}" alt="Chandra Fashion Logo" width="180" height="120" class="me-2 rounded-circle">
+      <img src="{{ asset('/images/cf-logo-1.png') }}" alt="Chandra Fashion Logo" width="180" height="120" class="me-2">
       <span class="fw-bold">Chandra Fashion</span>
     </a>
 

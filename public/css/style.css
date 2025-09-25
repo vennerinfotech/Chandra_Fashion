@@ -1,25 +1,233 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
+    font-family: "Playfair Display", serif;
 }
 
-.header {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 1rem 0;
+.header-wrapper {
+    background-color: #f6f7f8;
+    padding: 12px 0;
 }
-.bg-light{
-    background-color: white !important;
+
+.header-wrapper .navbar-brand img {
+    height: 40px;
+    width: 40px;
 }
-.hero {
-  background-color: #ececec;
-  padding: 4rem 0;
-  text-align: center;
+
+.header-wrapper .navbar-brand span {
+    color: #1a1a1a;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+}
+
+.navbar-nav li {
+    padding: 0 15px;
+}
+
+.navbar-nav li a {
+    font-size: 16px;
+    font-weight: 400;
+    color: #374151;
+    line-height: 24px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    position: relative;
+}
+
+.navbar-nav li a:hover {
+    color: #273847;
+}
+
+.navbar-nav li a::before {
+    position: absolute;
+    content: "";
+    left: 0px;
+    bottom: 0;
+    width: 0%;
+    height: 3px;
+    background: #f0c040;
+    transition: all 0.5s ease-in-out;
+}
+
+.navbar-nav li a:hover::before {
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+/*Hero section*/
+
+.hero-section {
+    position: relative;
+    background: url("/images/hero-banner.png") no-repeat center center/cover;
+    color: #fff;
+    height: 525px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 90px 0px 120px 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(39 56 71 / 70%);
+}
+
+.hero-content {
+    position: relative;
+
+    z-index: 1;
+}
+
+.hero-content h1 {
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 70px;
+}
+
+.hero-content h1 span {
+    color: #f0c040;
+}
+
+.hero-content p {
+    margin: 40px 0 20px 0;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 33px;
+    color: #e5e7eb;
+    max-width: 600px;
+}
+
+.hero-sectoin-btn {
+    margin-top: 40px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.hero-sectoin-btn .btn {
+    text-decoration: none;
+    padding: 15px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #2b3d51;
+    font-size: 18px;
+}
+
+.hero-sectoin-btn .btn-yellow {
+    background: #f0c040;
+}
+
+.hero-sectoin-btn .btn-yellow:hover {
+    background: rgb(255 255 255 / 10%);
+    color: #fff;
+}
+
+.hero-sectoin-btn .btn-outline {
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+}
+
+.hero-sectoin-btn .btn-outline:hover {
+    background: #fff;
+    color: #000;
+}
+
+.hero-sectoin-btn .btn.btn-light {
+    color: #000;
+    background-color: rgb(255 255 255 / 10%);
+    border: none;
+    color: #fff;
+}
+
+.hero-sectoin-btn .btn.btn-light:hover {
+    background: #f0c040;
+    color: #2b3d51;
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
+
+/*Collection Css*/
+.collections-section {
+    text-align: center;
+    padding: 90px 20px;
+    background: #F8F6F3;
+}
+
+.collections-section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #2B3D51;
+}
+
+.collections-section p {
+    font-size: 18px;
+    color: #2B3D51;
+    margin-bottom: 40px;
+    max-width: 535px;
+    margin: 0 auto 60px;
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.collection-item {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.collection-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.collection-item img {
+    width: 100%;
+        height: 256px;
+    object-fit: cover;
+    display: block;
+    border-radius: 15px;
+}
+
+.collection-info {
+    padding: 15px;
+    text-align: left;
+}
+
+.collection-info h3 {
+    font-size: 20px;
+    margin: 5px 0;
+    font-weight: 700;
+    color: #2B3D51;
+}
+
+.collection-info p {
+    font-size: 16px;
+    color: #2B3D51;
+    margin: 0;
 }
 
 .product-card img {
-  object-fit: cover;
-  height: 200px;
+    object-fit: cover;
+    height: 200px;
 }
 
 /* Pagination Styling */
@@ -54,7 +262,6 @@ body {
     color: #fff;
     border-color: #000;
 }
-
 
 /* product page zoom img */
 .position-relative:hover .zoom-out-image {

@@ -4,34 +4,76 @@
 
 @section('content')
 
-<!-- Hero Section -->
-<section class="hero">
-  <div class="container">
-    <h1 class="display-4">Welcome to Chandra Fashion</h1>
-    <p class="lead">Your style, your statement.</p>
-    <a href="#" class="btn btn-primary btn-lg">Shop Now</a>
-  </div>
-</section>
 
-<!-- Product Cards -->
-<section class="py-5">
-  <div class="container">
-    <div class="row g-4">
-      <!-- Product Card Example -->
-      @for ($i = 0; $i < 3; $i++)
-      <div class="col-md-4">
-        <div class="card product-card">
-          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product">
-          <div class="card-body">
-            <h5 class="card-title">Product Title</h5>
-            <p class="card-text">Short description goes here.</p>
-            <a href="#" class="btn btn-outline-primary">View Details</a>
-          </div>
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Crafting Excellence in <br><span>Fashion Manufacturing</span></h1>
+                <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global
+                    fashion brands.</p>
+                <div class="hero-sectoin-btn">
+                    <a href="#" class="btn btn-yellow">Explore Collection</a>
+                    <a href="#" class="btn btn-outline">Check Price</a>
+                    <a href="#" class="btn btn-light">Get in Touch</a>
+                </div>
+            </div>
         </div>
-      </div>
-      @endfor
-    </div>
-  </div>
-</section>
+    </section>
+
+
+    <section class="collections-section">
+        <div class="container">
+            <div class="row">
+                <h2>Our Collections</h2>
+                <p>Specialized manufacturing across diverse fashion categories with uncompromising quality standards</p>
+            </div>
+            <div class="collection-grid">
+            <div class="collection-item">
+                <img src="/images/hero-banner.png" alt="Men's Collection">
+                <div class="collection-info">
+                    <h3>Men's</h3>
+                    <p>Formal & Casual</p>
+                </div>
+            </div>
+
+            <div class="collection-item">
+                <img src="/images/hero-banner.png" alt="Women's Collection">
+                <div class="collection-info">
+                    <h3>Women's</h3>
+                    <p>Contemporary</p>
+                </div>
+            </div>
+
+            <div class="collection-item">
+                <img src="/images/hero-banner.png" alt="Ethnic Collection">
+                <div class="collection-info">
+                    <h3>Ethnic</h3>
+                    <p>Traditional</p>
+                </div>
+            </div>
+
+            <div class="collection-item">
+                <img src="/images/hero-banner.png" alt="Casual Collection">
+                <div class="collection-info">
+                    <h3>Casual</h3>
+                    <p>Everyday</p>
+                </div>
+            </div>
+
+            <div class="collection-item">
+                <img src="/images/hero-banner.png" alt="Formal Collection">
+                <div class="collection-info">
+                    <h3>Formal</h3>
+                    <p>Business</p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+    </section>
+
 
 @endsection

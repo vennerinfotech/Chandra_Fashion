@@ -5,24 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title', 'Chandra Fashion')</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-  <!-- Font Awesome CSS -->
-  <!-- Font Awesome 6.5.2 (latest) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkfAm3T+Fs7U3zpT9NUwE5wllq8r0zj5XsoC+j2j5Crtkzjhz7xV3Kq3g=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkfAm3T+Fs7U3zpT9NUwE5wllq8r0zj5XsoC+j2j5Crtkzjhz7xV3Kq3g=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
+   {{-- Bootstrap CSS --}}
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+
+     {{-- Font Awesome CSS --}}
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
 
 
-  <!-- Custom CSS (optional if moved to public/css/style.css) -->
+    {{-- Custom Admin CSS --}}
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+
+     {{-- Bootstrap JS --}}
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
+    {{-- Font Awesome JS --}}
+    <script src="{{ asset('js/all.min.js') }}"></script>
+
+
+  <!-- Custom CSS -->
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Playfair Display", serif;
       background-color: #f8f9fa;
     }
     .header {
@@ -63,6 +71,7 @@
         z-index: 10000;
         display: flex;
         flex-direction: column;
+        display: none;
     }
     #chatbox .chat-header {
         background: #000;
@@ -103,7 +112,7 @@
 
   @include('partials.header')
 
-  <main class="py-4">
+  <main class="">
     @yield('content')
     <!-- Floating AI Chat Box -->
     <div id="chatbox">
