@@ -21,6 +21,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Category Name</th>
+                            <th>Image</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -30,14 +31,28 @@
                         <tr>
                             <td>{{ $category->id }}</td>
                             <td>{{ $category->name }}</td>
+
+                            {{-- Image Column --}}
+                            <td>
+                                @if($category->image)
+                                    <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" width="100" height="100">
+                                @endif
+                            </td>
+
+                            {{-- Status Column --}}
                             <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
 
+                            {{-- Actions --}}
                             <td>
-                                <a href="{{ route('admin.categories.edit', $category->id) }}" title="Edit" class="btn-action btn-sm"><i class="fa-solid fa-pencil"></i></a>
+                                <a href="{{ route('admin.categories.edit', $category->id) }}" title="Edit" class="btn-action btn-sm">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
                                 <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button onclick="return confirm('Are you sure?')" title="Delete" class="btn-action btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                    <button onclick="return confirm('Are you sure?')" title="Delete" class="btn-action btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>

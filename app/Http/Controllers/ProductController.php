@@ -2,25 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-
+use App\Models\ProductVariant;
 class ProductController extends Controller
 {
+
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::query()->with('variants', 'category'); // eager load relations
+
+        // --- Dynamic Filters ---
+
+        $categories = Category::where('status', 1)->pluck('name', 'id'); // key = id, value = name
+        $fabrics = Product::select('materials')
+                    ->distinct()
+                    ->whereNotNull('materials')
+                    ->pluck('materials');
+        $moqRanges = ['50-100', '100-500', '500+'];
+
+        // --- Apply Filters ---
 
         if ($request->filled('category')) {
-            $query->whereIn('category', $request->category);
+            $query->whereIn('category_id', $request->category); // use category_id instead of category
         }
 
         if ($request->filled('fabric')) {
-            $query->whereIn('fabric', $request->fabric);
+            $query->whereIn('materials', $request->fabric);
         }
 
         if ($request->filled('moq_range')) {
-            $query->where(function($q) use ($request) {
+            $query->whereHas('variants', function($q) use ($request) {
                 foreach ($request->moq_range as $range) {
                     if ($range === '50-100') {
                         $q->orWhereBetween('moq', [50, 100]);
@@ -37,10 +50,9 @@ class ProductController extends Controller
             $query->where('export_ready', true);
         }
 
-         $totalProducts = $query->count();
+        $totalProducts = $query->count();
 
-         $sort = $request->get('sort', 'latest');
-
+        $sort = $request->get('sort', 'latest');
         if ($sort == 'price_asc') {
             $query->orderBy('price', 'asc');
         } elseif ($sort == 'price_desc') {
@@ -51,19 +63,51 @@ class ProductController extends Controller
 
         $products = $query->paginate(6)->withQueryString();
 
-        return view('products.index', compact('products', 'totalProducts'));
+        return view('products.index', compact(
+            'products',
+            'totalProducts',
+            'categories',
+            'fabrics',
+            'moqRanges'
+        ));
     }
+
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['category', 'variants'])->findOrFail($id);
 
-        // Decode JSON fields if stored as JSON strings
-        // $product->gallery = json_decode($product->gallery, true);
-        // $product->colors = json_decode($product->colors, true);
-        // $product->sizes = json_decode($product->sizes, true);
+        $colors = $product->variants->pluck('color')->unique()->values()->all();
 
-        return view('products.show', compact('product'));
+        $colorImages = [];
+        $sizesByColor = [];
+        $skuByColor = [];
+
+        foreach ($product->variants as $variant) {
+            // Ensure images are arrays
+            $imgs = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
+
+            $colorImages[$variant->color] = $imgs;
+
+            // Collect sizes per color
+            $sizesByColor[$variant->color][] = $variant->size;
+
+            // Collect SKU per color
+            $skuByColor[$variant->color] = $variant->product_code;
+        }
+
+        // Pass everything to Blade
+        return view('products.show', compact(
+            'product',
+            'colors',
+            'colorImages',
+            'sizesByColor',
+            'skuByColor'
+        ));
+
     }
+
+
+
 
 }

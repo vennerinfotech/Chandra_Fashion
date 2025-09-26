@@ -6,29 +6,33 @@
 <div class="container my-5">
     <div class="row g-4">
         {{-- Left Side: Product Image & Thumbnails --}}
-        <div class="col-md-6">
-            {{-- Main Image --}}
-            <div class="mb-3 position-relative overflow-hidden zoom-container">
-                <img src="{{ asset($product->image_url) }}"
-                    id="mainProductImage"
-                    alt="{{ $product->name }}"
-                    class="img-fluid rounded shadow-sm w-100 zoom-image"
-                    style="max-height: 450px; object-fit: cover;">
-            </div>
+<div class="col-md-6">
+    {{-- Main Image --}}
+    <div class="mb-3 position-relative overflow-hidden zoom-container">
+        @php
+            $firstVariant = $product->variants->first();
+            $mainImage = $firstVariant
+                ? (is_array($firstVariant->images) ? $firstVariant->images[0] : json_decode($firstVariant->images, true)[0])
+                : $product->image_url;
+        @endphp
+        <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
+            id="mainProductImage"
+            class="img-fluid rounded shadow-sm w-100 zoom-image"
+            style="max-height: 450px; object-fit: cover;">
+    </div>
 
+    {{-- Gallery Thumbnails --}}
+    <div id="colorGallery" class="d-flex gap-2 mt-2 flex-wrap">
+        @foreach($colorImages[$colors[0]] as $img)
+            <img src="{{ asset('images/variants/' . basename($img)) }}"
+                class="img-thumbnail rounded gallery-thumb zoomable"
+                style="width:90px; height:90px; object-fit:cover; cursor:pointer;"
+                data-full="{{ asset('images/variants/' . basename($img)) }}">
+        @endforeach
+    </div>
 
-            {{-- Gallery Thumbnails --}}
-            @if(!empty($product->gallery) && is_iterable($product->gallery))
-                <div class="d-flex gap-2">
-                    @foreach($product->gallery as $thumb)
-                        <img src="{{ asset($thumb) }}"
-                            class="img-thumbnail rounded gallery-thumb"
-                            style="width: 90px; height: 90px; object-fit: cover; cursor: pointer;"
-                            data-full="{{ asset($thumb) }}">
-                    @endforeach
-                </div>
-            @endif
-        </div>
+</div>
+
 
 
         {{-- Right Side: Product Info --}}
@@ -40,8 +44,15 @@
 
             <h2 class="fw-bold">{{ $product->name }}</h2>
             <p class="text-muted">{{ $product->description }}</p>
-            <p class="small text-secondary mb-1">SKU: {{ $product->sku ?? 'N/A' }}</p>
-            <p class="small text-secondary">Category: {{ $product->category ?? 'N/A' }}</p>
+
+{{-- SKU --}}
+<p class="small text-secondary mb-1">SKU: <span id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span></p>
+
+
+            {{-- Category --}}
+            <p class="small text-secondary">
+                Category: {{ $product->category->name ?? 'N/A' }}
+            </p>
 
             {{-- Fabric & Materials --}}
             <div class="card shadow-sm p-3 mb-3">
@@ -58,46 +69,44 @@
                 </div>
             </div>
 
-
-            {{-- Available Colors --}}
-          <div class="mb-3">
-            <h6 class="fw-bold">Available Colors</h6>
-            @if(!empty($product->colors) && is_iterable($product->colors))
-                <div class="d-flex gap-2 align-items-center" id="colorSelector">
-                    @foreach($product->colors as $index => $color)
-                        @php
-                            $imageForColor = $product->color_images[$color] ?? null;
-                        @endphp
-                        <div class="color-circle rounded-circle border"
-                            style="width: 30px; height: 30px; background: {{ $color }}; cursor: pointer;"
-                            data-color="{{ $color }}"
-                            data-image="{{ $imageForColor ? asset($imageForColor) : '' }}"
-                            @if($index === 0) data-default="1" @endif>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <p class="text-muted">No colors available</p>
-            @endif
-          </div>
-
-
-
-
-
-            {{-- Sizes --}}
-            <div class="mb-3">
-                <h6 class="fw-bold">Available Sizes</h6>
-                @if(!empty($product->sizes) && is_iterable($product->sizes))
-                    <div class="d-flex gap-2">
-                        @foreach($product->sizes as $size)
-                            <button class="btn btn-outline-dark btn-sm">{{ $size }}</button>
-                        @endforeach
-                    </div>
-                @else
-                    <p class="text-muted">No sizes available</p>
-                @endif
+{{-- Available Colors --}}
+<div class="mb-3">
+    <h6 class="fw-bold">Available Colors</h6>
+    @if(!empty($colors))
+    <div class="d-flex gap-2 align-items-center" id="colorSelector">
+        @foreach($colors as $index => $color)
+            <div class="color-circle rounded-circle border"
+                style="width:30px; height:30px; background:{{ $color }}; cursor:pointer;"
+                data-color="{{ $color }}"
+                data-images='@json($colorImages[$color])'
+                @if($index === 0) data-default="1" @endif>
             </div>
+        @endforeach
+    </div>
+    @else
+        <p class="text-muted">No colors available</p>
+    @endif
+</div>
+
+
+{{-- Available Sizes --}}
+<div class="mb-3">
+    <h6 class="fw-bold">Available Sizes</h6>
+    <div class="d-flex gap-2 flex-wrap" id="sizeContainer">
+        @if(!empty($sizesByColor[$colors[0]]))
+            @foreach(explode(',', $sizesByColor[$colors[0]][0]) as $size)
+                <button class="btn btn-outline-dark btn-sm">{{ strtoupper(trim($size)) }}</button>
+            @endforeach
+        @else
+            <p class="text-muted">No sizes available</p>
+        @endif
+    </div>
+</div>
+
+
+
+
+
 
 
             {{-- MOQ & Delivery --}}
@@ -316,40 +325,56 @@ document.addEventListener("DOMContentLoaded", function () {
 // color click changes img
 document.addEventListener("DOMContentLoaded", function () {
     const mainImage = document.getElementById('mainProductImage');
-    const colorCircles = document.querySelectorAll('.color-circle');
+    const gallery = document.getElementById('colorGallery');
+    const sizeContainer = document.getElementById('sizeContainer');
+    const skuElement = document.getElementById('productSKU');
 
-    function setActiveColor(element) {
-        colorCircles.forEach(c => c.classList.remove('selected'));
-        element.classList.add('selected');
+    const sizesByColor = @json($sizesByColor);
+    const skuByColor = @json($skuByColor);
 
-        const image = element.getAttribute('data-image');
-
-        if (image) {
-            mainImage.src = image;
-        } else {
-            // Fallback to default color image
-            const defaultCircle = document.querySelector('.color-circle[data-default="1"]');
-            const defaultImage = defaultCircle?.getAttribute('data-image');
-            if (defaultImage) {
-                mainImage.src = defaultImage;
-            } else {
-                mainImage.src = "{{ asset($product->image_url) }}";
-            }
-        }
-    }
-
-    // Initial selection: first color
-    const firstCircle = document.querySelector('.color-circle[data-default="1"]');
-    if (firstCircle) {
-        setActiveColor(firstCircle);
-    }
-
-    // On click
-    colorCircles.forEach(circle => {
+    document.querySelectorAll('.color-circle').forEach(circle => {
         circle.addEventListener('click', function () {
-            setActiveColor(this);
+            const color = this.dataset.color;
+            const images = JSON.parse(this.dataset.images);
+
+            // Update main image
+            mainImage.src = '/images/variants/' + images[0].split('/').pop();
+
+            // Update gallery thumbnails
+            gallery.innerHTML = '';
+            images.forEach(img => {
+                const imgTag = document.createElement('img');
+                imgTag.src = '/images/variants/' + img.split('/').pop();
+                imgTag.className = 'img-thumbnail rounded gallery-thumb zoomable'; // <-- add zoomable class
+                imgTag.style = 'width:90px; height:90px; object-fit:cover; cursor:pointer;';
+                imgTag.dataset.full = '/images/variants/' + img.split('/').pop();
+                gallery.appendChild(imgTag);
+
+                imgTag.addEventListener('click', () => {
+                    mainImage.src = imgTag.dataset.full;
+                });
+            });
+
+
+            // Update sizes
+            sizeContainer.innerHTML = '';
+            (sizesByColor[color] || []).forEach(sizeString => {
+                sizeString.split(',').forEach(singleSize => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-outline-dark btn-sm';
+                    btn.textContent = singleSize.trim().toUpperCase();
+                    sizeContainer.appendChild(btn);
+                });
+            });
+
+            // Update SKU
+            skuElement.textContent = skuByColor[color] ?? 'N/A';
         });
     });
 });
+
+
+
+
 </script>
 @endpush

@@ -4,14 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/home', function () {
+//     return view('home');
+// })->name('home');
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Public product routes
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');

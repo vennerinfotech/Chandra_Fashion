@@ -62,15 +62,15 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time().'_'.$image->getClientOriginalName();
-            $image->move(public_path('uploads/products'), $imageName);
-            $data['image'] = 'uploads/products/'.$imageName;
+            $image->move(public_path('images/products'), $imageName);
+            $data['image'] = 'images/products/'.$imageName;
         }
 
         // Create product
         $product = Product::create($data);
 
         // Handle variants
-        foreach ($request->variants as $i => $variantData) {
+        foreach ($request->variants as $variantData) {
             $variant = ProductVariant::updateOrCreate(
                 ['id' => $variantData['id'] ?? null],
                 [
@@ -82,21 +82,22 @@ class ProductController extends Controller
                 ]
             );
 
-            // Handle images
+            // Handle variant images
             if(isset($variantData['images'])){
                 $images = [];
-                foreach ($variantData['images'] as $image) {
-                    $path = $image->store('uploads/variants', 'public');
-                    $images[] = $path;
+                foreach ($variantData['images'] as $imageFile) {
+                    $imageName = time().'_'.$imageFile->getClientOriginalName();
+                    $imageFile->move(public_path('images/variants'), $imageName);
+                    $images[] = 'images/variants/'.$imageName;
                 }
-                $variant->images = $images;
+                $variant->images = json_encode($images); // store as JSON
                 $variant->save();
             }
         }
 
-
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
+
 
     /**
      * Display the specified resource.
@@ -126,7 +127,7 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'fabric' => 'nullable|string|max:255',
             'moq' => 'nullable|integer',
             'export_ready' => 'boolean',
@@ -138,31 +139,28 @@ class ProductController extends Controller
             'gallery.*' => 'nullable|image|max:2048',
         ]);
 
-        //  Normalize arrays
-        $data['colors'] = $request->filled('colors')
-            ? (is_array($request->colors) ? $request->colors : explode(',', $request->colors))
-            : [];
+        // Normalize arrays
+        $data['colors'] = $request->filled('colors') ? (is_array($request->colors) ? $request->colors : explode(',', $request->colors)) : [];
+        $data['sizes'] = $request->filled('sizes') ? (is_array($request->sizes) ? $request->sizes : explode(',', $request->sizes)) : [];
+        $data['tags'] = $request->filled('tags') ? (is_array($request->tags) ? $request->tags : explode(',', $request->tags)) : [];
 
-        $data['sizes'] = $request->filled('sizes')
-            ? (is_array($request->sizes) ? $request->sizes : explode(',', $request->sizes))
-            : [];
-
-        $data['tags'] = $request->filled('tags')
-            ? (is_array($request->tags) ? $request->tags : explode(',', $request->tags))
-            : [];
-
-        //  Handle image upload
+        // Handle main image
         if ($request->hasFile('image')) {
-            $data['image_url'] = $request->file('image')->store('products', 'public');
+            $image = $request->file('image');
+            $imageName = time().'_'.$image->getClientOriginalName();
+            $image->move(public_path('images/products'), $imageName);
+            $data['image_url'] = 'images/products/'.$imageName;
         }
 
-        //  Handle gallery upload
+        // Handle gallery
         if ($request->hasFile('gallery')) {
             $galleryPaths = [];
             foreach ($request->file('gallery') as $file) {
-                $galleryPaths[] = $file->store('products/gallery', 'public');
+                $imageName = time().'_'.$file->getClientOriginalName();
+                $file->move(public_path('images/products/gallery'), $imageName);
+                $galleryPaths[] = 'images/products/gallery/'.$imageName;
             }
-            $data['gallery'] = $galleryPaths;
+            $data['gallery'] = json_encode($galleryPaths);
         }
 
         $product->update($data);
@@ -170,6 +168,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Product updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
