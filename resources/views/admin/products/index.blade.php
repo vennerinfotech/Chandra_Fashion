@@ -20,6 +20,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Image</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Export Ready</th>
@@ -31,6 +32,28 @@
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
+                <td>
+                    @php
+                        // Start with main product image
+                        $firstImage = $product->image ?? null;
+                        // If no main image, take first variant image
+                        if (!$firstImage) {
+                            foreach ($product->variants as $variant) {
+                                $images = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
+                                if (!empty($images)) {
+                                    $firstImage = $images[0];
+                                    break; // stop after first found
+                                }
+                            }
+                        }
+                    @endphp
+
+                    @if($firstImage)
+                        <img src="{{ asset($firstImage) }}" alt="{{ $product->name }}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
+                    @else
+                        <span>-</span>
+                    @endif
+                </td>
                 <td>{{ $product->category->name ?? '-' }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>

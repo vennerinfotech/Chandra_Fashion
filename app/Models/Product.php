@@ -4,11 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Product extends Model
 {
     protected $fillable = [
-        'name','description','materials','export_ready','price',
-        'image_url','delivery_time'
+        'name',
+        'description',
+        'materials',
+        'export_ready',
+        'price',
+        'image',
+        'delivery_time',
+        'category_id'
     ];
 
     protected $casts = [
@@ -19,10 +26,6 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
-    // public function category()
-    // {
-    //     return $this->hasMany(ProductVariant::class);
-    // }
 
     public function category()
     {
