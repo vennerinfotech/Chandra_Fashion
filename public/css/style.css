@@ -798,8 +798,15 @@ footer .chatbot-btn svg path {
       transition: all 0.5s ease-in-out;
 }
 
+.product-right-filter-img{
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+}
+
 .product-filter-right .card img{
     border-radius: 8px 8px 0 0;
+    transition: all 0.3s ease-in-out;
 }
 
 .product-filter-right .card .card-body{
@@ -827,14 +834,12 @@ footer .chatbot-btn svg path {
     font-weight: 500;
     font-size: 16px;
     padding: 12px;
-    transition: all 0.5s ease-in-out;
 }
 
 .product-filter-left .btn:hover,
 .product-filter-right .card:hover .btn{
     background: #f0c040;
     color: #000;
-    transition: all 0.5s ease-in-out;
 }
 
 .product-filter-left .btn:focus,

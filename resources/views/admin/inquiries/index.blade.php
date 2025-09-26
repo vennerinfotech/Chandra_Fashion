@@ -45,8 +45,7 @@
                                 @if($variantImage)
                                     <img src="{{ asset($variantImage) }}"
                                         alt="{{ $inquiry->product->name }}"
-                                        class="img-thumbnail"
-                                        style="max-width:80px;">
+                                        width="50" height="50" class="rounded"
                                 @else
                                     N/A
                                 @endif

@@ -112,7 +112,7 @@
                                 @foreach ($products as $product)
                                     <div class="col-md-6 col-lg-4">
                                         <div class="card h-100">
-                                            <div class="position-relative overflow-hidden">
+                                            <div class="product-right-filter-img">
                                                 @php
                                                     $mainImage = null;
 
@@ -135,10 +135,9 @@
                                                     }
                                                 @endphp
 
-                            <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
-                                class="card-img-top rounded-top zoom-out-image"
-                                alt="{{ $product->name }}"
-                                style="height: 320px; object-fit: cover;">
+                                                <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
+                                                    class="img-fluid"
+                                                    alt="{{ $product->name }}" style="height: 320px; object-fit: cover;">
 
                                             </div>
 
