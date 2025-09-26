@@ -57,4 +57,74 @@
         });
     });
 
+    // Add new variant js
+document.addEventListener('DOMContentLoaded', function() {
+    const wrapper = document.getElementById('variants-wrapper');
+
+    // Add new variant
+    document.getElementById('add-variant').addEventListener('click', function() {
+        const index = wrapper.querySelectorAll('.variant-item').length;
+        const html = `
+        <div class="variant-item border rounded p-3 mb-3 position-relative">
+            <a href="javascript:void(0);" title="Cancel" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+                <i class="fa-solid fa-circle-xmark text-danger"></i>
+            </a>
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <label class="form-label">Product Code</label>
+                    <input type="text" name="variants[${index}][product_code]" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Color</label>
+                    <input type="text" name="variants[${index}][color]" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Size</label>
+                    <input type="text" name="variants[${index}][size]" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">MOQ</label>
+                    <input type="number" name="variants[${index}][moq]" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Images</label>
+                    <input type="file" name="variants[${index}][images][]"
+                           class="form-control variant-images" multiple>
+                    <div class="mt-2 preview-wrapper"></div>
+                </div>
+            </div>
+        </div>
+        `;
+        wrapper.insertAdjacentHTML('beforeend', html);
+    });
+
+    // Remove variant
+    wrapper.addEventListener('click', function(e) {
+        if(e.target.closest('.remove-variant')) {
+            const item = e.target.closest('.variant-item');
+            if(item) item.remove();
+        }
+    });
+
+    // Preview images (works for static + dynamically added)
+    wrapper.addEventListener('change', function(e) {
+        if(e.target.classList.contains('variant-images')) {
+            const previewWrapper = e.target.closest('.col-md-3').querySelector('.preview-wrapper');
+            previewWrapper.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.width = 100;
+                    img.classList.add('me-1', 'mb-1', 'img-thumbnail');
+                    previewWrapper.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+});
+
+
 </script>

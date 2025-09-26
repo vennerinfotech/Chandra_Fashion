@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // primary key
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('category');      // Dresses, Tops & Blouses, etc.
-            $table->string('fabric');        // Cotton, Silk, Linen, etc.
-            $table->integer('moq');          // Minimum Order Quantity
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->string('materials')->nullable();
+            $table->integer('moq')->nullable(); // Minimum Order Quantity
             $table->boolean('export_ready')->default(false);
             $table->decimal('price', 8, 2)->nullable();
-            $table->string('image_url')->nullable();
+            $table->string('delivery_time')->nullable(); // Delivery time
             $table->timestamps();
         });
     }
