@@ -29,7 +29,7 @@
                 <p class="section-sub-title">Specialized manufacturing across diverse fashion categories with uncompromising
                     quality standards</p>
             </div>
-            <div class="collection-grid">
+            {{-- <div class="collection-grid">
                 <div class="collection-item">
                     <img src="/images/hero-banner.png" alt="Men's Collection">
                     <div class="collection-info">
@@ -69,7 +69,22 @@
                         <p>Business</p>
                     </div>
                 </div>
+            </div> --}}
+            <div class="collection-grid">
+                @foreach($categories as $category)
+                    <div class="collection-item">
+                        {{-- Image: show default if no image --}}
+                        <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                            alt="{{ $category->name }}">
+
+                        <div class="collection-info">
+                            <h3>{{ $category->name }}</h3>
+                            <p>{{ $category->description ?? '' }}</p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
+
         </div>
     </section>
 

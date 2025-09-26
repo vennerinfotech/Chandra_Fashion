@@ -128,6 +128,25 @@
             padding: 10px;
             border-top: 1px solid #ddd;
         }
+
+        .zoomable {
+            transition: transform 0.3s ease;
+        }
+
+        .zoomable:hover {
+            transform: scale(1.5); /* Zoom in */
+            z-index: 10; /* Bring above other elements */
+            position: relative;
+        }
+
+        .btn-selected {
+            color: #fff !important;
+            background-color: #212529 !important;
+            border-color: #212529 !important;
+        }
+
+
+
     </style>
 
     @stack('styles')
