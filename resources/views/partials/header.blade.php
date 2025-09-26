@@ -1,4 +1,4 @@
-<nav class="header-wrapper navbar navbar-expand-lg">
+<nav class="header-wrapper navbar navbar-expand-lg fixed-top">
   <div class="container">
     <!-- Logo + Brand Name -->
     <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
@@ -24,3 +24,5 @@
     </div>
   </div>
 </nav>
+
+

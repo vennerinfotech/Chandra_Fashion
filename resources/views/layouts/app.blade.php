@@ -134,8 +134,10 @@
         }
 
         .zoomable:hover {
-            transform: scale(1.5); /* Zoom in */
-            z-index: 10; /* Bring above other elements */
+            transform: scale(1.5);
+            /* Zoom in */
+            z-index: 10;
+            /* Bring above other elements */
             position: relative;
         }
 
@@ -144,9 +146,6 @@
             background-color: #212529 !important;
             border-color: #212529 !important;
         }
-
-
-
     </style>
 
     @stack('styles')
@@ -217,6 +216,17 @@
                 body.style.display = "none";
                 footer.style.display = "none";
                 this.innerText = "+";
+            }
+        });
+    </script>
+    <script>
+        // Add "scrolled" class on scroll
+        window.addEventListener("scroll", function() {
+            const header = document.querySelector(".header-wrapper");
+            if (window.scrollY > 50) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
             }
         });
     </script>
