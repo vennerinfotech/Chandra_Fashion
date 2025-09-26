@@ -5,6 +5,7 @@ body {
 .header-wrapper {
     background-color: #f6f7f8;
     padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
 }
 
 .header-wrapper .navbar-brand img {
@@ -304,7 +305,7 @@ body {
     border-radius: 15px;
     width: 100%;
     transform: scale(1);
-     transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 .featured-collection-grid .featured-content {
@@ -324,29 +325,29 @@ body {
 }
 
 .featured-collection-grid .featured-content p {
-    color: #E5E7EB;
+    color: #e5e7eb;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
 }
 
-.featured-collection-grid:hover .featured-img img{
+.featured-collection-grid:hover .featured-img img {
     transform: scale(1.1);
     transition: all 0.5s ease-in-out;
 }
 
 /*Heritage Css*/
 
-.heritage-section{
-    background: #2B3D51;
+.heritage-section {
+    background: #2b3d51;
 }
 
-.heritage-content{
+.heritage-content {
     text-align: left;
-        max-width: 560px;
+    max-width: 560px;
 }
 
-.heritage-content h2{
+.heritage-content h2 {
     color: #fff;
     font-size: 26px;
     line-height: 46px;
@@ -354,68 +355,67 @@ body {
 }
 
 .heritage-content p {
-    color: #D1D5DB;
+    color: #d1d5db;
     font-size: 20px;
     font-weight: 400;
     line-height: 32px;
     margin-bottom: 30px;
 }
 
-.btn-yellow{
+.btn-yellow {
     background: #f0c040;
     text-decoration: none;
     padding: 15px 30px;
     border-radius: 8px;
     transition: all 0.3s ease;
     font-weight: 600;
-    color: #2B3D51;
+    color: #2b3d51;
     font-size: 16px;
 }
 
-.btn-yellow:hover{
+.btn-yellow:hover {
     background: transparent;
     border: 1px solid #f0c040;
     color: #fff;
 }
 
 /*Client Css*/
-.client-card{
-    background: #F8F6F3;
+.client-card {
+    background: #f8f6f3;
     padding: 30px;
     border-radius: 12px;
 }
 
-.client-card .client-img{
-     display: flex;
-     gap: 15px;
+.client-card .client-img {
+    display: flex;
+    gap: 15px;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.client-card .client-img img{
+.client-card .client-img img {
     height: 50px;
     width: 50px;
     border-radius: 50px;
 }
 
-.client-card .client-title .name{
-    color: #2B3D51;
+.client-card .client-title .name {
+    color: #2b3d51;
     font-size: 16px;
     line-height: 24px;
     font-weight: 700;
-        margin-bottom: 0;
+    margin-bottom: 0;
 }
 
-.client-card .client-title .designation{
-     color: #4B5563;
+.client-card .client-title .designation {
+    color: #4b5563;
     font-size: 14px;
     line-height: 24px;
     font-weight: 400;
-
 }
 
-.client-quote .quote{
-      color: #374151;
+.client-quote .quote {
+    color: #374151;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
@@ -425,67 +425,332 @@ body {
 
 /*Subscribe Css*/
 .subscription-section {
-  background-color: #D4AF37;
-  padding: 90px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    background-color: #d4af37;
+    padding: 90px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .subscription-content {
-  text-align: center;
-  width: 100%;
+    text-align: center;
+    width: 100%;
 }
 
 .subscription-content h2 {
-  font-size: 36px;
-  color: #2B3D51;
-  font-weight: 700;
-  line-height: 46px;
-  margin-bottom: 0px;
+    font-size: 36px;
+    color: #2b3d51;
+    font-weight: 700;
+    line-height: 46px;
+    margin-bottom: 0px;
 }
 
 .subscription-content p {
-  font-size:20px;
-  font-weight: 400;
-  color: #2B3D51;
-  margin: 20px 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #2b3d51;
+    margin: 20px 0;
 }
 
 .subscription-content form {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .subscription-content input {
-  padding: 15px;
-  font-size: 16px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 8px;
-  width: 300px;
+    padding: 15px;
+    font-size: 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 8px;
+    width: 300px;
 }
 
 .subscription-content button {
-  padding: 10px 20px;
-  background-color: #1D2A44;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.5s ease-in-out;
+    padding: 10px 20px;
+    background-color: #1d2a44;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
 }
 
 .subscription-content button:hover {
-  background-color: #f0c040;
-  color: #000;
-  transition: all 0.5s ease-in-out;
+    background-color: #f0c040;
+    color: #000;
+    transition: all 0.5s ease-in-out;
 }
 
 /*Footer Css*/
+footer {
+    background-color: #2b3d51;
+    color: #b1b1b1;
+    padding: 90px 20px 70px;
+}
+footer .brand-info h3 {
+    color: white;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+}
+
+footer h4 {
+    color: white;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+footer .brand-info p {
+    font-size: 16px;
+    line-height: 24px;
+    color: #d1d5db;
+    margin-bottom: 20px;
+}
+
+.brand-info,
+.quick-links,
+.services,
+.contact-info {
+    margin-bottom: 30px;
+}
+
+footer .social-links a {
+    color: #fff;
+}
+
+footer .social-links a svg {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 22px;
+    line-height: 24px;
+}
+
+footer .social-links a svg:hover {
+    color: #f0c040;
+}
+
+footer .quick-links ul,
+footer .services ul,
+footer .contact-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer .quick-links ul li,
+footer .services ul li,
+footer .contact-info ul li {
+    margin-bottom: 15px;
+}
+
+footer .quick-links ul li a,
+footer .services ul li a,
+footer .contact-info ul li a {
+    color: #d1d5db;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+}
+
+footer .quick-links ul li a:hover,
+footer .services ul li a:hover,
+footer .contact-info ul li a:hover {
+    color: #f0c040;
+}
+
+footer .contact-info ul li svg {
+    margin-right: 8px;
+}
+footer .bottom-text {
+    font-size: 16px;
+    color: #9ca3af;
+    line-height: 24px;
+    margin-top: 30px;
+}
+
+footer .chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #c3a846;
+    border: none;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer .chatbot-btn svg {
+    stroke: #2b3d51;
+    height: 20px;
+    width: 20px;
+}
+
+footer .chatbot-btn svg path {
+    stroke-width: 1px;
+}
+
+/*Contact Page Css*/
+.contact-page-wrapper {
+    background: #fcfdfd;
+}
+
+.contact-top-img {
+    width: 80px;
+    margin: 0 auto 20px;
+}
+
+.contact-page-form .card{
+    text-align: left;
+    padding: 30px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.19), 0 6px 6px rgb(0 0 0 / 1%);
+    border-radius: 16px;
+}
+
+.contact-page-form .card .card-title{
+        font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    color: #1F2937;
+    margin-bottom: 20px;
+}
+
+.contact-page-form .card  .form-label{
+    font-size: 16px;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.contact-page-form .card .form-control,
+.contact-page-form .card .form-select{
+       padding: 12px 15px;
+}
+
+.contact-page-form .card .form-control:focus,
+.contact-page-form .card .form-select:focus{
+    border-color: #000000;
+    box-shadow: none;
+}
+
+.form-control::placeholder{
+    color: #ADAEBC;
+}
+
+.contact-page-form .card .btn{
+    background: #1F2937;
+    color: #fff;
+    height: 50px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.contact-page-form .card .btn:hover{
+    background: #f0c040;
+    color: #2b3d51;
+    transition: all 0.3s ease-in-out;
+}
+
+.contact-page-form .card.mb{
+    margin-bottom: 35px;
+}
+
+.contact-page-info .contact-info-inner{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.contact-page-info .contact-info-inner:last-child{
+    margin-bottom: 0px;
+}
+
+.contact-page-info .contact-info-inner .icon svg{
+      height: 25px;
+    background: #FBF7EB;
+    color: #f0c040;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 15px;
+    border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+}
+
+.contact-page-info .contact-info-inner h6{
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0px;
+}
+
+.contact-page-info .contact-info-inner p{
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #4B5563;
+    width: 250px;
+    margin-bottom: 0px;
+}
+
+.contact-info-inner:hover .icon svg{
+    background: #f0c040;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.contact-page-form .contact-follow{
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.contact-page-form .contact-follow.bg-facebook{
+    background: #2563EB;
+}
+
+.contact-page-form .contact-follow.bg-instagram{
+    background: #DB2777;
+}
 
 
+.contact-page-form .contact-follow.bg-linkedin{
+    background: #3B82F6;
+}
+
+
+.contact-page-form .contact-follow.bg-twitter{
+    background: #60A5FA;
+}
+
+
+.contact-page-form .contact-follow svg{
+    fill: #fff;
+}
+
+.map-wrapper {
+    background-image: #f9fafb;
+}
+
+.map-wrapper iframe{
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.19), 0 6px 6px rgb(0 0 0 / 1%);
+}
 
 /* Pagination Styling */
 .pagination {
