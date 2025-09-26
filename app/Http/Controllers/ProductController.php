@@ -11,7 +11,11 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::query()->with('variants', 'category'); // eager load relations
+        $query = Product::query()->with('variants', 'category')
+            ->whereHas('category', function($q) {
+                $q->where('status', 1);
+            });
+
 
         // --- Dynamic Filters ---
 
@@ -33,18 +37,29 @@ class ProductController extends Controller
         }
 
         if ($request->filled('moq_range')) {
-            $query->whereHas('variants', function($q) use ($request) {
-                foreach ($request->moq_range as $range) {
-                    if ($range === '50-100') {
-                        $q->orWhereBetween('moq', [50, 100]);
-                    } elseif ($range === '100-500') {
-                        $q->orWhereBetween('moq', [100, 500]);
-                    } elseif ($range === '500+') {
-                        $q->orWhere('moq', '>=', 500);
+            $query->where(function($q) use ($request) {
+                // Check variants
+                $q->whereHas('variants', function($q2) use ($request) {
+                    $q2->where(function($q3) use ($request) {
+                        foreach ($request->moq_range as $range) {
+                            if ($range === '50-100') $q3->orWhereBetween('moq', [50, 100]);
+                            elseif ($range === '100-500') $q3->orWhereBetween('moq', [100, 500]);
+                            elseif ($range === '500+') $q3->orWhere('moq', '>=', 500);
+                        }
+                    });
+                })
+                // Or check product itself if no variants
+                ->orWhere(function($q2) use ($request) {
+                    foreach ($request->moq_range as $range) {
+                        if ($range === '50-100') $q2->orWhereBetween('moq', [50, 100]);
+                        elseif ($range === '100-500') $q2->orWhereBetween('moq', [100, 500]);
+                        elseif ($range === '500+') $q2->orWhere('moq', '>=', 500);
                     }
-                }
+                });
             });
         }
+
+
 
         if ($request->has('export_ready_only')) {
             $query->where('export_ready', true);

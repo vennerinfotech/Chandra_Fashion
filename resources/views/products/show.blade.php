@@ -156,7 +156,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Company</label>
-                    <input type="text" name="company" class="form-control">
+                    <input type="text" name="company" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
@@ -166,7 +166,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Phone</label>
-                    <input type="text" name="phone" class="form-control">
+                    <input type="text" name="phone" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
