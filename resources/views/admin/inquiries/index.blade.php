@@ -33,11 +33,22 @@
 
                             {{-- Product Image --}}
                             <td>
-                                @if($inquiry->product && $inquiry->product->image_url)
-                                    <img src="{{ asset($inquiry->product->image_url) }}"
-                                        alt="Product Image"
+                                @php
+                                    $variantImage = null;
+                                    if($inquiry->product && $inquiry->product->variants->count() > 0) {
+                                        $firstVariant = $inquiry->product->variants->first();
+                                        $images = is_array($firstVariant->images) ? $firstVariant->images : json_decode($firstVariant->images, true);
+                                        $variantImage = $images[0] ?? null;
+                                    }
+                                @endphp
+
+                                @if($variantImage)
+                                    <img src="{{ asset($variantImage) }}"
+                                        alt="{{ $inquiry->product->name }}"
                                         class="img-thumbnail"
-                                        style="max-width: 150px;">
+                                        style="max-width:80px;">
+                                @else
+                                    N/A
                                 @endif
                             </td>
 

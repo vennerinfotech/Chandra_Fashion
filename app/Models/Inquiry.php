@@ -16,5 +16,9 @@ class Inquiry extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function firstVariant()
+    {
+        return $this->hasOne(ProductVariant::class, 'product_id', 'product_id')->orderBy('id');
+    }
 
 }

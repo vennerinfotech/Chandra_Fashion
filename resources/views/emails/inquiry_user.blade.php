@@ -1,19 +1,19 @@
 @component('mail::message')
-# Thank you {{ $user_name }}
+# Thank you {{ $data['user_name'] ?? 'Customer' }}
 
 We received your inquiry for the product:
 
-- **Product Name:** {{ $product->name ?? 'N/A' }}
-- **Product ID:** {{ $product->id ?? 'N/A' }}
-- **Quantity Interested:** {{ $quantity }}
+- **Product Name:** {{ $data['product']->name ?? 'N/A' }}
+- **Product ID:** {{ $data['product']->id ?? 'N/A' }}
+- **Quantity Interested:** {{ $data['quantity'] ?? 'N/A' }}
 
 **Your Details:**
 
-- Name: {{ $user_name }}
-- Company: {{ $company }}
-- Email: {{ $user_email }}
-- Phone: {{ $phone }}
-- Country: {{ $country }}
+- Name: {{ $data['user_name'] ?? 'N/A' }}
+- Company: {{ $data['company'] ?? 'N/A' }}
+- Email: {{ $data['user_email'] ?? 'N/A' }}
+- Phone: {{ $data['phone'] ?? 'N/A' }}
+- Country: {{ $data['country'] ?? 'N/A' }}
 
 We will contact you soon with price details.
 
