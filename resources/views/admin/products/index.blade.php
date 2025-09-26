@@ -49,7 +49,7 @@
                     @endphp
 
                     @if($firstImage)
-                        <img src="{{ asset($firstImage) }}" alt="{{ $product->name }}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
+                        <img src="{{ asset($firstImage) }}" alt="{{ $product->name }}" width="50" height="50" class="rounded">
                     @else
                         <span>-</span>
                     @endif
