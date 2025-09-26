@@ -3,7 +3,7 @@ body {
 }
 
 .header-wrapper {
-    background-color: #f6f7f8;
+    background-color: #fff;
     padding: 12px 0;
     border-bottom: 1px solid #f3f4f6;
 }
@@ -188,7 +188,7 @@ body {
 
 .collection-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
 
@@ -606,22 +606,22 @@ footer .chatbot-btn svg path {
     margin: 0 auto 20px;
 }
 
-.contact-page-form .card{
+.contact-page-form .card {
     text-align: left;
     padding: 30px;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.19), 0 6px 6px rgb(0 0 0 / 1%);
     border-radius: 16px;
 }
 
-.contact-page-form .card .card-title{
-        font-size: 30px;
+.contact-page-form .card .card-title {
+    font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    color: #1F2937;
+    color: #1f2937;
     margin-bottom: 20px;
 }
 
-.contact-page-form .card  .form-label{
+.contact-page-form .card .form-label {
     font-size: 16px;
     color: #374151;
     font-weight: 600;
@@ -629,22 +629,22 @@ footer .chatbot-btn svg path {
 }
 
 .contact-page-form .card .form-control,
-.contact-page-form .card .form-select{
-       padding: 12px 15px;
+.contact-page-form .card .form-select {
+    padding: 12px 15px;
 }
 
 .contact-page-form .card .form-control:focus,
-.contact-page-form .card .form-select:focus{
+.contact-page-form .card .form-select:focus {
     border-color: #000000;
     box-shadow: none;
 }
 
-.form-control::placeholder{
-    color: #ADAEBC;
+.form-control::placeholder {
+    color: #adaebc;
 }
 
-.contact-page-form .card .btn{
-    background: #1F2937;
+.contact-page-form .card .btn {
+    background: #1f2937;
     color: #fff;
     height: 50px;
     border-radius: 8px;
@@ -654,17 +654,17 @@ footer .chatbot-btn svg path {
     width: 100%;
 }
 
-.contact-page-form .card .btn:hover{
+.contact-page-form .card .btn:hover {
     background: #f0c040;
     color: #2b3d51;
     transition: all 0.3s ease-in-out;
 }
 
-.contact-page-form .card.mb{
+.contact-page-form .card.mb {
     margin-bottom: 35px;
 }
 
-.contact-page-info .contact-info-inner{
+.contact-page-info .contact-info-inner {
     display: flex;
     align-items: flex-start;
     width: 100%;
@@ -672,23 +672,23 @@ footer .chatbot-btn svg path {
     margin-bottom: 25px;
 }
 
-.contact-page-info .contact-info-inner:last-child{
+.contact-page-info .contact-info-inner:last-child {
     margin-bottom: 0px;
 }
 
-.contact-page-info .contact-info-inner .icon svg{
-      height: 25px;
-    background: #FBF7EB;
+.contact-page-info .contact-info-inner .icon svg {
+    height: 25px;
+    background: #fbf7eb;
     color: #f0c040;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 15px;
     border-radius: 8px;
-      transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
-.contact-page-info .contact-info-inner h6{
+.contact-page-info .contact-info-inner h6 {
     font-size: 18px;
     line-height: 26px;
     font-weight: 600;
@@ -696,22 +696,22 @@ footer .chatbot-btn svg path {
     margin-bottom: 0px;
 }
 
-.contact-page-info .contact-info-inner p{
+.contact-page-info .contact-info-inner p {
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
-    color: #4B5563;
+    color: #4b5563;
     width: 250px;
     margin-bottom: 0px;
 }
 
-.contact-info-inner:hover .icon svg{
+.contact-info-inner:hover .icon svg {
     background: #f0c040;
     color: #fff;
     transition: all 0.3s ease-in-out;
 }
 
-.contact-page-form .contact-follow{
+.contact-page-form .contact-follow {
     height: 50px;
     width: 50px;
     text-align: center;
@@ -721,26 +721,23 @@ footer .chatbot-btn svg path {
     border-radius: 8px;
 }
 
-.contact-page-form .contact-follow.bg-facebook{
-    background: #2563EB;
+.contact-page-form .contact-follow.bg-facebook {
+    background: #2563eb;
 }
 
-.contact-page-form .contact-follow.bg-instagram{
-    background: #DB2777;
+.contact-page-form .contact-follow.bg-instagram {
+    background: #db2777;
 }
 
-
-.contact-page-form .contact-follow.bg-linkedin{
-    background: #3B82F6;
+.contact-page-form .contact-follow.bg-linkedin {
+    background: #3b82f6;
 }
 
-
-.contact-page-form .contact-follow.bg-twitter{
-    background: #60A5FA;
+.contact-page-form .contact-follow.bg-twitter {
+    background: #60a5fa;
 }
 
-
-.contact-page-form .contact-follow svg{
+.contact-page-form .contact-follow svg {
     fill: #fff;
 }
 
@@ -748,8 +745,105 @@ footer .chatbot-btn svg path {
     background-image: #f9fafb;
 }
 
-.map-wrapper iframe{
+.map-wrapper iframe {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.19), 0 6px 6px rgb(0 0 0 / 1%);
+}
+
+/*Product Filter*/
+.product-filter-left {
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 8px;
+}
+
+.product-filter-left h5 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.product-filter-left h6 {
+    color: #111827;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product-filter-left .form-check-label {
+    font-size: 16px;
+    color: #374151;
+    line-height: 24px;
+    margin-bottom: 5px;
+}
+
+.product-filter-right .title h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.product-filter-right .title span{
+    font-size: 16px;
+    color: #4B5563;
+}
+
+.product-filter-right .card{
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.16), 0 2px 4px rgba(0,0,0,0.10);
+        transition: all 0.5s ease-in-out;
+}
+
+.product-filter-right .card:hover{
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+      transition: all 0.5s ease-in-out;
+}
+
+.product-filter-right .card img{
+    border-radius: 8px 8px 0 0;
+}
+
+.product-filter-right .card .card-body{
+    padding: 25px;
+}
+
+.product-filter-right .card .card-title {
+    font-size: 16px;
+    color: #111827;
+    line-height: 24px;
+}
+
+.product-filter-right .card .card-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 20px;
+    font-weight: 400;
+}
+.product-filter-left .btn,
+.product-filter-right .card .btn {
+    background: #000;
+    color: #fff;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 12px;
+    transition: all 0.5s ease-in-out;
+}
+
+.product-filter-left .btn:hover,
+.product-filter-right .card:hover .btn{
+    background: #f0c040;
+    color: #000;
+    transition: all 0.5s ease-in-out;
+}
+
+.product-filter-left .btn:focus,
+.product-filter-right .card .btn:focus{
+    box-shadow: none;
+}
+
+.form-select:focus{
+    box-shadow: none;
 }
 
 /* Pagination Styling */
