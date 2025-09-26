@@ -35,7 +35,7 @@
                             {{-- Image Column --}}
                             <td>
                                 @if($category->image)
-                                    <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" width="100" height="100">
+                                    <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" width="50" height="50" class="rounded">
                                 @endif
                             </td>
 

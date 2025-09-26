@@ -219,7 +219,8 @@
     padding: 15px;
 }
 
-.create-form-wrapper .card  .form-control:focus {
+.create-form-wrapper .card  .form-control:focus,
+.create-form-wrapper .card  .form-select:focus {
     border-color: #2b3d51;
     box-shadow: none;
 }

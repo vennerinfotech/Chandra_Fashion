@@ -19,7 +19,7 @@
         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
         <li class="nav-item"><a href="{{ route('products.index') }}" class="nav-link">Products</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Sustainability</a></li>
-        <li class="nav-item"><a href="{{ route('contact') }}" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="{{ route('contact') }}" class="nav-link">Contact Us</a></li>
       </ul>
     </div>
   </div>
