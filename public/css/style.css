@@ -6,6 +6,12 @@ body {
     background-color: #fff;
     padding: 12px 0;
     border-bottom: 1px solid #f3f4f6;
+     z-index: 1000;
+  transition: all 0.3s ease-in-out;
+}
+
+.header-wrapper.scrolled {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .header-wrapper .navbar-brand img {
