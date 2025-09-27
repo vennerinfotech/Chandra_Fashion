@@ -168,7 +168,6 @@ body {
 
 .top-section-padding {
     padding: 150px 20px 90px;
-    text-align: center;
 }
 
 .section-padding {
@@ -181,6 +180,7 @@ body {
     margin-bottom: 20px;
     font-weight: 700;
     color: #2b3d51;
+    text-align: center;
 }
 
 .section-sub-title {
@@ -189,6 +189,7 @@ body {
     margin-bottom: 40px;
     max-width: 535px;
     margin: 0 auto 60px;
+    text-align: center;
 }
 
 /*Collection Css*/
@@ -940,6 +941,302 @@ footer .chatbot-btn svg path {
 }
 
 .form-select:focus {
+    box-shadow: none;
+}
+
+/*Product detail*/
+.product-detail-left {
+    position: relative;
+}
+.product-detail-left .img-thumbnail-main img {
+    width: 135px;
+    height: 135px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid #e5e7eb;
+    padding: 0px;
+    border-radius: 8px;
+}
+
+.product-detail-left .img-thumbnail-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 15px;
+}
+
+.product-detail-left .left-img.zoom-container {
+    height: auto;
+}
+
+.product-detail-left .left-img img {
+    object-fit: cover;
+    height: auto;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.product-detail-left .badge-top {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+}
+
+.product-detail-left .badge-top .badge {
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.product-detail-left .badge-top .bg-danger {
+    background-color: #ef4444;
+}
+
+.product-detail-left .badge-top .bg-warning {
+    background-color: #eab308;
+}
+
+.product-detail-right {
+    padding-left: 20px;
+}
+
+.product-detail-right .product-title {
+    font-size: 36px;
+    color: #111827;
+    font-weight: 600;
+    line-height: 44px;
+}
+
+.product-detail-right .product-desc {
+    color: #4b5563;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 400;
+}
+
+.product-detail-right .sku-category {
+    display: flex;
+    gap: 30px;
+}
+
+.product-detail-right .sku-category p {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 20px;
+}
+
+.product-detail-right .color-variation {
+    margin-bottom: 30px;
+}
+
+.product-detail-right .size-variaton h6,
+.product-detail-right .fabric h6,
+.product-detail-right .color-variation h6 {
+    font-size: 18px;
+    color: #000;
+    font-weight: 500;
+}
+
+.product-detail-right .color-variation .color .btn {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #d1d5db;
+    cursor: pointer;
+    border-radius: 50px;
+}
+
+.product-detail-right .color-variation .color .btn-red {
+    background: red;
+}
+
+.product-detail-right .color-variation .color .btn-blue {
+    background: blue;
+}
+
+.product-detail-right .color-variation .color .btn-green {
+    background: green;
+}
+
+.product-detail-right .color-variation .color .btn.selected {
+    border-color: #000;
+}
+
+.product-detail-right .fabric {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+.product-detail-right .size-variaton {
+    margin-bottom: 30px;
+}
+.product-detail-right
+    .color-variation
+    .color
+    .product-detail-right
+    .size-variaton
+    .size {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.product-detail-right .size-variaton .size .btn {
+    height: 50px;
+    width: 50px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.product-detail-right .size-variaton .size .btn:hover,
+.product-detail-right .size-variaton .size .btn.selected {
+    background: #111827;
+    border-color: #111827;
+    color: #fff;
+}
+
+.product-detail-right .moq {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    gap: 0;
+    align-items: center;
+    background: #f4f5f7;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+
+.product-detail-right .moq h4 {
+    font-size: 30px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.product-detail-right .moq p {
+    color: #4b5563;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.product-detail-right .btn-price {
+    font-size: 18px;
+    color: #fff;
+    background: #111827;
+    border-radius: 16px;
+    width: 100%;
+    padding: 15px;
+}
+
+.product-detail-right .btn-price:hover{
+    background: #D4AF37;
+    color: #2B3D51;
+}
+
+.product-description {
+    background: #fff;
+    padding: 25px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    margin-top: 50px;
+    border-radius: 16px;
+}
+
+.product-description .nav-tabs .nav-item {
+    padding: 10px 20px 15px 0;
+}
+
+.product-description .nav-tabs .nav-link {
+    padding: 0;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #fff;
+    border: none;
+}
+
+.product-description .nav-tabs .nav-link {
+    position: relative;
+    border: none;
+    color: #111827;
+    font-size: 16px;
+}
+
+.product-description .nav-tabs .nav-link:focus {
+    border: none;
+}
+
+.product-description .nav-tabs .nav-link::before {
+    position: absolute;
+    content: "";
+    bottom: -15px;
+    left: 0;
+    background: #111827;
+    height: 2px;
+    width: 100%;
+    display: none;
+}
+
+.nav-tabs .nav-link.active::before {
+    display: block;
+}
+
+.additional-info{
+        background: #fff;
+    padding: 40px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    margin-top: 50px;
+    border-radius: 16px;
+}
+
+.additional-info .section-title{
+    font-size: 30px;
+}
+
+.additional-info .section-sub-title{
+    font-size: 16px;
+}
+
+.additional-info .feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+.additional-info .bg-green {
+    background-color: #d4f8e8;
+}
+.additional-info .bg-blue {
+    background-color: #e0ecff;
+}
+.additional-info .bg-purple {
+    background-color: #f2e8ff;
+}
+.additional-info .feature-box {
+    text-align: center;
+    padding: 0 20px;
+}
+.additional-info .feature-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.additional-info .main-heading {
+    font-weight: bold;
+}
+
+.additional-info .feature-box p{
+    font-size: 14px;
+    color: #4B5563;
+    margin-bottom: 0px;
+}
+
+.btn:focus {
     box-shadow: none;
 }
 
