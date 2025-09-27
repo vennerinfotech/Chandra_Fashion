@@ -6,12 +6,12 @@ body {
     background-color: #fff;
     padding: 12px 0;
     border-bottom: 1px solid #f3f4f6;
-     z-index: 1000;
-  transition: all 0.3s ease-in-out;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
 }
 
 .header-wrapper.scrolled {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .header-wrapper .navbar-brand img {
@@ -66,12 +66,11 @@ body {
     position: relative;
     background: url("/images/hero-banner.png") no-repeat center center/cover;
     color: #fff;
-    height: 525px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 90px 0px 120px 0;
+    padding: 150px 0px 120px 0;
 }
 
 .hero-overlay {
@@ -165,6 +164,11 @@ body {
     .hero-content p {
         font-size: 1rem;
     }
+}
+
+.top-section-padding {
+    padding: 150px 20px 90px;
+    text-align: center;
 }
 
 .section-padding {
@@ -760,17 +764,18 @@ footer .chatbot-btn svg path {
     background: #fff;
     padding: 30px 20px;
     border-radius: 8px;
+    text-align: left;
 }
 
 .product-filter-left h5 {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 20px;
 }
 
 .product-filter-left h6 {
     color: #111827;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
     margin-bottom: 10px;
 }
@@ -782,40 +787,117 @@ footer .chatbot-btn svg path {
     margin-bottom: 5px;
 }
 
+.product-filter-right {
+    text-align: left;
+}
+
 .product-filter-right .title h4 {
     font-size: 24px;
     font-weight: 600;
     color: #111827;
 }
 
-.product-filter-right .title span{
+.product-filter-right .title span {
     font-size: 16px;
-    color: #4B5563;
+    color: #4b5563;
 }
 
-.product-filter-right .card{
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.16), 0 2px 4px rgba(0,0,0,0.10);
-        transition: all 0.5s ease-in-out;
+.product-filter-right .sort-by {
+    font-size: 14px;
+    color: #4b5563;
+    width: -webkit-fill-available;
+    text-align: end;
 }
 
-.product-filter-right .card:hover{
-      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-      transition: all 0.5s ease-in-out;
+.product-filter-right .form-select,
+.product-filter-right .form-select option {
+    font-size: 14px;
 }
 
-.product-right-filter-img{
+.product-filter-right .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease-in-out;
+    margin-bottom: 30px;
+}
+
+.product-filter-right .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transition: all 0.5s ease-in-out;
+}
+
+.product-filter-right .card .trending-feature-list {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.product-filter-right .card .feature {
+    color: #fff;
+    padding: 5px 15px;
+    width: max-content;
+    border-radius: 50px;
+    font-size: 12px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.trending-feature {
+    background: #ef4444;
+}
+
+.premium-feature {
+    background: #a855f7;
+}
+
+.new-feature {
+    background: #3b82f6;
+}
+
+.product-right-filter-img {
     position: relative;
     overflow: hidden;
     border-radius: 8px 8px 0 0;
 }
 
-.product-filter-right .card img{
+.product-filter-right .card img {
     border-radius: 8px 8px 0 0;
     transition: all 0.3s ease-in-out;
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
 }
 
-.product-filter-right .card .card-body{
+.product-filter-right .material-list {
+    margin-bottom: 15px;
+}
+
+.product-filter-right .material-list .badge-material {
+    background: #f3f4f6;
+    font-size: 12px;
+    padding: 5px;
+    font-weight: 500;
+    border-radius: 4px;
+    color: #000;
+}
+
+.product-filter-right .material-list .badge-export {
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    padding: 5px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin: 0 10px;
+}
+
+.product-filter-right .material-list .badge-moq {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.product-filter-right .card .card-body {
     padding: 25px;
 }
 
@@ -830,6 +912,10 @@ footer .chatbot-btn svg path {
     color: #4b5563;
     line-height: 20px;
     font-weight: 400;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
 }
 .product-filter-left .btn,
 .product-filter-right .card .btn {
@@ -843,17 +929,17 @@ footer .chatbot-btn svg path {
 }
 
 .product-filter-left .btn:hover,
-.product-filter-right .card:hover .btn{
+.product-filter-right .card:hover .btn {
     background: #f0c040;
     color: #000;
 }
 
 .product-filter-left .btn:focus,
-.product-filter-right .card .btn:focus{
+.product-filter-right .card .btn:focus {
     box-shadow: none;
 }
 
-.form-select:focus{
+.form-select:focus {
     box-shadow: none;
 }
 
@@ -862,9 +948,23 @@ footer .chatbot-btn svg path {
     justify-content: center;
 }
 
+.pagination .page-item {
+    margin-right: 5px;
+}
+
+.pagination .page-item:first-child .page-link {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.pagination .page-item:last-child .page-link {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
 .page-item .page-link {
     border-radius: 8px;
-    margin: 0 4px;
+    margin-left: 0 !important;
     padding: 8px 16px;
     color: #000;
     border: 1px solid #dee2e6;
@@ -872,16 +972,22 @@ footer .chatbot-btn svg path {
     transition: all 0.2s ease;
 }
 
+.page-item .page-link:focus {
+    box-shadow: none;
+}
+
 .page-item.active .page-link {
     background-color: #000;
     color: #fff;
     border-color: #000;
+    margin: 0;
 }
 
 .page-item.disabled .page-link {
     color: #bbb;
     background-color: #f8f9fa;
     border-color: #dee2e6;
+    margin: 0;
 }
 
 .page-link:hover {
