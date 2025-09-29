@@ -3,8 +3,8 @@
 @section('title', 'Chandra Fashion - Manufacturer of Lycra Fabric & Polyester Lycra Fabrics')
 
 @section('content')
-    <div class="product-filter-wrapper">
-        <div class="container my-5">
+    <div class="product-filter-wrapper top-section-padding">
+        <div class="container">
             <div class="row">
                 <!-- Filter Sidebar -->
                 <aside class="col-md-3">
@@ -92,8 +92,10 @@
                                             <input type="hidden" name="{{ $key }}" value="{{ $values }}">
                                         @endif
                                     @endforeach
-
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <span class="sort-by">Sort by:</span>
                                     <select name="sort" class="form-select" onchange="this.form.submit()">
+
                                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest
                                         </option>
                                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>
@@ -101,6 +103,7 @@
                                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>
                                             Price: High to Low</option>
                                     </select>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -108,10 +111,10 @@
 
                         @if ($products->count())
 
-                            <div class="row g-4">
+                            <div class="row">
                                 @foreach ($products as $product)
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="card h-100">
+                                    <div class="col-md-6 col-lg-6 col-xl-4">
+                                        <div class="card">
                                             <div class="product-right-filter-img">
                                                 @php
                                                     $mainImage = null;
@@ -136,26 +139,30 @@
                                                 @endphp
 
                                                 <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
-                                                    class="img-fluid"
-                                                    alt="{{ $product->name }}" style="height: 320px; object-fit: cover;">
+                                                    class="img-fluid" alt="{{ $product->name }}" >
 
+                                            </div>
+
+                                            <div class="trending-feature-list">
+                                                <p class="feature trending-feature">Trending</p>
+                                                {{-- <p class="feature premium-feature">Premium</p>
+                                                <p class="feature new-feature">New</p> --}}
                                             </div>
 
                                             <div class="card-body">
                                                 <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                                                <p class="card-text" style="font-size: 0.9rem;">{{ $product->description }}
+                                                <p class="card-text">{{ $product->description }}
                                                 </p>
 
-                                                <div class="mb-2">
+                                                <div class="material-list">
                                                     {{-- Materials --}}
                                                     @if ($product->materials)
-                                                        <small
-                                                            class="badge bg-info text-dark me-2">{{ $product->materials }}</small>
+                                                        <small class="badge-material">{{ $product->materials }}</small>
                                                     @endif
 
                                                     {{-- Export Ready --}}
                                                     @if ($product->export_ready)
-                                                        <small class="badge bg-success text-white me-2">Export Ready</small>
+                                                        <small class="badge-export">Export Ready</small>
                                                     @endif
 
                                                     {{-- MOQ --}}
@@ -166,7 +173,7 @@ $moq = $product->variants->count()
                                                             : $product->moq;
                                                     @endphp
                                                     @if ($moq)
-                                                        <small class="text-muted">MOQ: {{ $moq }}</small>
+                                                        <small class="badge-moq">MOQ: {{ $moq }}</small>
                                                     @endif
                                                 </div>
 
@@ -187,6 +194,19 @@ $moq = $product->variants->count()
                             <p>No products found matching the filters.</p>
                         @endif
                     </div>
+                    <div class="">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item disabled" aria-disabled="true" aria-label="« Previous">
+                                <span class="page-link" aria-hidden="true">‹</span>
+                            </li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="" rel="next" aria-label="Next »">›</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <section class="contact-page-wrapper section-padding">
+    <section class="contact-page-wrapper top-section-padding">
         <div class="container contact-page-form">
             <div class="row">
                 <img src="{{ asset('images/contact-top.png') }}" alt="Contact Icon" class="img-fluid contact-top-img">

@@ -220,7 +220,6 @@
         });
     </script>
     <script>
-        // Add "scrolled" class on scroll
         window.addEventListener("scroll", function() {
             const header = document.querySelector(".header-wrapper");
             if (window.scrollY > 50) {

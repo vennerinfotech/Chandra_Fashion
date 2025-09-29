@@ -185,6 +185,7 @@
     border: none;
     padding: 8px 10px;
     margin-right: 5px;
+        text-decoration: none;
 }
 
 .btn-action:hover{
