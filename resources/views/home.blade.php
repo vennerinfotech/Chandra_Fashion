@@ -29,47 +29,7 @@
                 <p class="section-sub-title">Specialized manufacturing across diverse fashion categories with uncompromising
                     quality standards</p>
             </div>
-            {{-- <div class="collection-grid">
-                <div class="collection-item">
-                    <img src="/images/hero-banner.png" alt="Men's Collection">
-                    <div class="collection-info">
-                        <h3>Men's</h3>
-                        <p>Formal & Casual</p>
-                    </div>
-                </div>
 
-                <div class="collection-item">
-                    <img src="/images/hero-banner.png" alt="Women's Collection">
-                    <div class="collection-info">
-                        <h3>Women's</h3>
-                        <p>Contemporary</p>
-                    </div>
-                </div>
-
-                <div class="collection-item">
-                    <img src="/images/hero-banner.png" alt="Ethnic Collection">
-                    <div class="collection-info">
-                        <h3>Ethnic</h3>
-                        <p>Traditional</p>
-                    </div>
-                </div>
-
-                <div class="collection-item">
-                    <img src="/images/hero-banner.png" alt="Casual Collection">
-                    <div class="collection-info">
-                        <h3>Casual</h3>
-                        <p>Everyday</p>
-                    </div>
-                </div>
-
-                <div class="collection-item">
-                    <img src="/images/hero-banner.png" alt="Formal Collection">
-                    <div class="collection-info">
-                        <h3>Formal</h3>
-                        <p>Business</p>
-                    </div>
-                </div>
-            </div> --}}
             <div class="collection-grid">
                 @foreach($categories as $category)
                     <div class="collection-item">

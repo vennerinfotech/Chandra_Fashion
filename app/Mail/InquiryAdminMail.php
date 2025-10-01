@@ -38,7 +38,9 @@ class InquiryAdminMail extends Mailable
     {
         return new Content(
             markdown: 'emails.inquiry_admin',
-            with: $this->data // Pass keys directly
+            with: [
+                'data' => $this->data
+            ]
         );
     }
 

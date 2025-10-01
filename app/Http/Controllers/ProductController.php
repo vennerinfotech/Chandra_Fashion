@@ -97,11 +97,12 @@ class ProductController extends Controller
         $colorImages = [];
         $sizesByColor = [];
         $skuByColor = [];
+        $moqByColor = [];
+        $deliveryByColor = [];
 
         foreach ($product->variants as $variant) {
             // Ensure images are arrays
             $imgs = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
-
             $colorImages[$variant->color] = $imgs;
 
             // Collect sizes per color
@@ -109,6 +110,12 @@ class ProductController extends Controller
 
             // Collect SKU per color
             $skuByColor[$variant->color] = $variant->product_code;
+
+            // Collect MOQ per color (fallback to product MOQ)
+            $moqByColor[$variant->color] = $variant->moq ?? $product->moq ?? 100;
+
+            // Collect Delivery per color (fallback to product delivery_time)
+            $deliveryByColor[$variant->color] = $variant->delivery_time ?? $product->delivery_time ?? '15-20';
         }
 
         // Pass everything to Blade
@@ -117,10 +124,12 @@ class ProductController extends Controller
             'colors',
             'colorImages',
             'sizesByColor',
-            'skuByColor'
+            'skuByColor',
+            'moqByColor',
+            'deliveryByColor'
         ));
-
     }
+
 
 
 

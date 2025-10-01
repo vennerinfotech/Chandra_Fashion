@@ -66,59 +66,68 @@
                             </div>
                         </div>
 
-                        {{-- Available Colors --}}
-                        <div class="color-variation">
-                            <h6>Available Colors</h6>
-                            <div class="color" id="">
-                                <button class="btn btn-red selected"></button>
-                                <button class="btn btn-blue"></button>
-                                <button class="btn btn-green"></button>
-                            </div>
-                            {{-- @if (!empty($colors))
-                                <div class="d-flex gap-2 align-items-center" id="colorSelector">
-                                    @foreach ($colors as $index => $color)
-                                        <div class="color-circle active" style="background:{{ $color }};"
-                                            data-color="{{ $color }}" data-images='@json($colorImages[$color])'
-                                            @if ($index === 0) data-default="1" @endif>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <p class="text-muted">No colors available</p>
-                            @endif --}}
-                        </div>
+{{-- Available Colors --}}
+<div class="color-variation">
+    <h6>Available Colors</h6>
+    <div class="color" id="colorContainer">
+        @foreach($colors as $index => $color)
+            @php
+                // Keep original CSS classes for design
+                $colorClass = match(strtolower($color)) {
+                    'red' => 'btn-red',
+                    'blue' => 'btn-blue',
+                    'green' => 'btn-green',
+                    default => 'btn-dark' // fallback
+                };
+            @endphp
+            <button
+                class="btn {{ $colorClass }} {{ $index === 0 ? 'selected' : '' }} color-circle"
+                data-color="{{ $color }}"
+                data-images='@json($colorImages[$color])'
+                title="{{ $color }}">
+            </button>
+        @endforeach
+    </div>
+</div>
 
 
-                        {{-- Available Sizes --}}
-                        <div class="size-variaton">
-                            <h6 class="">Available Sizes</h6>
-                            <div class="size" id="sizeContainer">
-                                <button class="btn selected">M</button>
-                                <button class="btn">L</button>
-                                <button class="btn">XL</button>
-                                <button class="btn">XXL</button>
 
-                                {{-- @if (!empty($sizesByColor[$colors[0]]))
-                                    @foreach (explode(',', $sizesByColor[$colors[0]][0]) as $size)
-                                        <button class="btn btn-outline-dark btn-sm">{{ strtoupper(trim($size)) }}</button>
-                                    @endforeach
-                                @else
-                                    <p class="text-muted">No sizes available</p>
-                                @endif --}}
-                            </div>
-                        </div>
+{{-- Available Sizes --}}
+<div class="size-variaton">
+    <h6 class="">Available Sizes</h6>
+    <div class="size" id="sizeContainer">
+        @php
+            $firstColor = $colors[0] ?? null;
+            $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
+        @endphp
+
+        @if(!empty($initialSizes))
+            @foreach($initialSizes as $sizeString)
+                @foreach(explode(',', $sizeString) as $size)
+                    <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
+                        {{ strtoupper(trim($size)) }}
+                    </button>
+                @endforeach
+            @endforeach
+        @else
+            <p class="text-muted">No sizes available</p>
+        @endif
+    </div>
+</div>
 
                         {{-- MOQ & Delivery --}}
+
                         <div class="moq">
                             <div class="moq-order">
-                                <h4>{{ $product->moq ?? '100' }}</h4>
-                                <p>Minimum Order Qty</small>
+                                <h4 id="moqValue">{{ $product->moq ?? '100' }}</h4>
+                                <p>Minimum Order Qty</p>
                             </div>
                             <div class="moq-delivery">
-                                <h4>15-20</h4>
+                                <h4 id="deliveryValue">{{ $product->delivery_time ?? '15-20' }}</h4>
                                 <p>Days Delivery</p>
                             </div>
                         </div>
+
                         {{-- <div class="d-flex gap-4 mb-3">
                             <div class="card shadow-sm p-3 text-center">
                                 <h4 class="fw-bold">{{ $product->moq ?? '100' }}</h4>
@@ -383,10 +392,16 @@
             const sizesByColor = @json($sizesByColor);
             const skuByColor = @json($skuByColor);
 
+            // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
                 circle.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
+
+                    // Remove selected from all colors
+                    document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
+                    // Add selected to clicked color
+                    this.classList.add('selected');
 
                     // Update main image
                     mainImage.src = '/images/variants/' + images[0].split('/').pop();
@@ -396,10 +411,8 @@
                     images.forEach(img => {
                         const imgTag = document.createElement('img');
                         imgTag.src = '/images/variants/' + img.split('/').pop();
-                        imgTag.className =
-                            'img-thumbnail rounded gallery-thumb zoomable'; // <-- add zoomable class
-                        imgTag.style =
-                            'width:90px; height:90px; object-fit:cover; cursor:pointer;';
+                        imgTag.className = 'img-thumbnail gallery-thumb zoomable';
+                        imgTag.style = 'width:90px; height:90px; object-fit:cover; cursor:pointer;';
                         imgTag.dataset.full = '/images/variants/' + img.split('/').pop();
                         gallery.appendChild(imgTag);
 
@@ -408,14 +421,24 @@
                         });
                     });
 
-
-                    // Update sizes
+                    // Update sizes dynamically
                     sizeContainer.innerHTML = '';
-                    (sizesByColor[color] || []).forEach(sizeString => {
-                        sizeString.split(',').forEach(singleSize => {
+                    (sizesByColor[color] || []).forEach((sizeString, i) => {
+                        sizeString.split(',').forEach((singleSize, j) => {
                             const btn = document.createElement('button');
-                            btn.className = 'btn btn-outline-dark btn-sm';
+                            btn.className = 'btn'; // base class
                             btn.textContent = singleSize.trim().toUpperCase();
+
+                            // Make first size selected
+                            if (i === 0 && j === 0) btn.classList.add('selected');
+
+                            // Click to select size
+                            btn.addEventListener('click', () => {
+                                // Remove selected from all sizes
+                                sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove('selected'));
+                                btn.classList.add('selected');
+                            });
+
                             sizeContainer.appendChild(btn);
                         });
                     });
@@ -424,6 +447,34 @@
                     skuElement.textContent = skuByColor[color] ?? 'N/A';
                 });
             });
+
+            // Optional: handle size selection on initial page load
+            sizeContainer.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
         });
+
+
+        const moqByColor = @json($moqByColor);
+        const deliveryByColor = @json($deliveryByColor);
+
+        document.querySelectorAll('.color-circle').forEach(circle => {
+            circle.addEventListener('click', function() {
+                const color = this.dataset.color;
+
+                // Existing updates (images, gallery, sizes, SKU)...
+
+                // Update MOQ & Delivery dynamically
+                const moqElement = document.getElementById('moqValue');
+                const deliveryElement = document.getElementById('deliveryValue');
+
+                moqElement.textContent = moqByColor[color] ?? '{{ $product->moq ?? "100" }}';
+                deliveryElement.textContent = deliveryByColor[color] ?? '{{ $product->delivery_time ?? "15-20" }}';
+            });
+        });
+
     </script>
 @endpush

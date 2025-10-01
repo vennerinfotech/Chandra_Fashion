@@ -11,6 +11,10 @@ class Inquiry extends Model
 
     protected $fillable = ['product_id','name','company','email','phone','country','quantity'];
 
+    protected $casts = [
+        'selected_images' => 'array',
+        'variant_details' => 'array',
+    ];
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');

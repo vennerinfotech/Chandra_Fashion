@@ -11,11 +11,16 @@
             <ul class="dropdown-menu">
 
                 <li>
-                    <a href="#">
+                    <a href="{{ route('admin.inquiries.index') }}">
                         <i class="fas fa-bell"></i>
                         <span class="text nav-text">Notification</span>
+
+                        @if($newInquiryCount > 0)
+                            <span class="badge bg-danger">{{ $newInquiryCount }}</span>
+                        @endif
                     </a>
                 </li>
+
                 <li>
                     <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
                         @csrf

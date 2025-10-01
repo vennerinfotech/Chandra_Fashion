@@ -39,8 +39,16 @@ class InquiryController extends Controller
     public function show(string $id)
     {
         $inquiry = Inquiry::with('product')->findOrFail($id);
+
+        // Mark as read
+        if (!$inquiry->is_read) {
+            $inquiry->is_read = true;
+            $inquiry->save();
+        }
+
         return view('admin.inquiries.show', compact('inquiry'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
