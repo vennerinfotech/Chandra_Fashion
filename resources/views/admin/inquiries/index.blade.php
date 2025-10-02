@@ -33,21 +33,15 @@
 
                             {{-- Product Image --}}
                             <td>
-                                @php
-                                    $variantImage = null;
-                                    if($inquiry->product && $inquiry->product->variants->count() > 0) {
-                                        $firstVariant = $inquiry->product->variants->first();
-                                        $images = is_array($firstVariant->images) ? $firstVariant->images : json_decode($firstVariant->images, true);
-                                        $variantImage = $images[0] ?? null;
-                                    }
-                                @endphp
-
-                                @if($variantImage)
-                                    <img src="{{ asset($variantImage) }}"
-                                        alt="{{ $inquiry->product->name }}"
-                                        width="50" height="50" class="rounded"
-                                @else
-                                    N/A
+                                {{-- Selected Images --}}
+                                @if(!empty($inquiry->selected_images))
+                                    <div class="mt-2 d-flex flex-wrap gap-2">
+                                        @foreach($inquiry->selected_images as $image)
+                                            <img src="{{ asset($image) }}"
+                                                alt="{{ $inquiry->product->name }}"
+                                                width="50" height="50" class="rounded">
+                                        @endforeach
+                                    </div>
                                 @endif
                             </td>
 

@@ -4,27 +4,30 @@
 We received your inquiry for the product:
 
 - **Product Name:** {{ $data['product']['name'] ?? 'N/A' }}
-- **Product ID:** {{ $data['product']['id'] ?? 'N/A' }}
 - **Description:** {{ $data['product']['description'] ?? 'N/A' }}
+- **Materials:** {{ $data['product']['materials'] ?? 'N/A' }}
 - **Delivery Days:** {{ $data['product']['delivery_days'] ?? 'N/A' }}
 
-@isset($data['product']['variants'])
+@if(!empty($data['product']['variants']))
 **Variants:**
 @foreach($data['product']['variants'] as $variant)
-- **Product Code:** {{ $variant['product_code'] }}
-- **Color:** {{ $variant['color'] }}
-- **Size:** {{ $variant['size'] }}
-- **Minimum Order Qty:** {{ $variant['min_order_qty'] }}
+- **Product Code:** {{ $variant['product_code'] ?? 'N/A' }}
+- **Color:** {{ $variant['color'] ?? 'N/A' }}
+- **Size:** {{ is_array($variant['size']) ? implode(', ', $variant['size']) : $variant['size'] }}
+- **Minimum Order Qty:** {{ $variant['min_order_qty'] ?? 'N/A' }}
 - **Images:**
-    @if(!empty($variant['images']))
-        @foreach($variant['images'] as $img)
-            ![image]({{ asset($img) }})
-        @endforeach
-    @else
-        N/A
-    @endif
+    @foreach($variant['images'] ?? [] as $img)
+        <br><img src="{{ asset($img) }}" style="max-width:200px;"/>
+    @endforeach
 @endforeach
-@endisset
+@endif
+
+@if(!empty($data['selected_images']))
+**Selected Images:**
+@foreach($data['selected_images'] as $img)
+    <br><img src="{{ asset($img) }}" style="max-width:200px;"/>
+@endforeach
+@endif
 
 **Your Details:**
 
@@ -33,8 +36,7 @@ We received your inquiry for the product:
 - Email: {{ $data['user_email'] ?? 'N/A' }}
 - Phone: {{ $data['phone'] ?? 'N/A' }}
 - Country: {{ $data['country'] ?? 'N/A' }}
-
-We will contact you soon with price details.
+- Quantity Interested: {{ $data['quantity'] ?? 'N/A' }}
 
 Thanks,<br>
 {{ config('app.name') }}

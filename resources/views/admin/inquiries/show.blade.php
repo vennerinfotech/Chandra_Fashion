@@ -13,55 +13,25 @@
                         <td>{{ $inquiry->id }}</td>
                     </tr>
 
-                    <tr>
+                   <tr>
                         <th>Product</th>
                         <td>
                             {{-- Product Name --}}
                             {{ $inquiry->product->name ?? 'N/A' }}
 
-                            {{-- Images --}}
-                            {{-- Product Images --}}
-                            @if($inquiry->product)
-                                <div class="mt-2">
-                                    @php
-                                        $variantImage = null;
-                                        $galleryImages = [];
-
-                                        if($inquiry->product->variants->count() > 0) {
-                                            $firstVariant = $inquiry->product->variants->first();
-                                            // Decode JSON images column
-                                            $images = is_array($firstVariant->images) ? $firstVariant->images : json_decode($firstVariant->images, true);
-
-                                            if(!empty($images)) {
-                                                $variantImage = $images[0]; // first image
-                                                $galleryImages = $images; // all images for gallery
-                                            }
-                                        }
-                                    @endphp
-
-                                    {{-- Main image --}}
-                                    @if($variantImage)
-                                        <img src="{{ asset($variantImage) }}"
+                            {{-- Selected Images --}}
+                            @if(!empty($inquiry->selected_images))
+                                <div class="mt-2 d-flex flex-wrap gap-2">
+                                    @foreach($inquiry->selected_images as $image)
+                                        <img src="{{ asset($image) }}"
                                             alt="{{ $inquiry->product->name }}"
-                                            class="img-thumbnail mb-2"
-                                            style="max-width:80px;">
-                                    @endif
-
-                                    {{-- Gallery images --}}
-                                    {{-- @if(!empty($galleryImages))
-                                        <div class="d-flex flex-wrap gap-2 mt-2">
-                                            @foreach($galleryImages as $galleryImage)
-                                                <img src="{{ asset($galleryImage) }}"
-                                                    alt="{{ $inquiry->product->name }}"
-                                                    class="img-thumbnail"
-                                                    style="max-width: 100px;">
-                                            @endforeach
-                                        </div>
-                                    @endif --}}
+                                            width="80" height="80" class="rounded">
+                                    @endforeach
                                 </div>
                             @endif
                         </td>
                     </tr>
+
 
                     <tr>
                         <th>Name</th>

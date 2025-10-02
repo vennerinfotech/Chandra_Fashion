@@ -2,66 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use App\Models\Inquiry;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Mail\InquiryUserMail;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\InquiryAdminMail;
 use App\Jobs\SendInquiryEmails;
+use Illuminate\Support\Facades\Mail;
+
 class InquiryController extends Controller
 {
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name'       => 'required|string|max:255',
-        'email'      => 'required|email',
-        'country'    => 'required|string',
-        'quantity'   => 'required|integer',
-        'product_id' => 'nullable|exists:products,id',
-    ]);
+    public function create()
+    {
+        $countries = Country::orderBy('name')->get();
+        return view('products.inquiry_form', compact('countries'));
+    }
+    public function store(Request $request)
+    {
+        // Validate request
+        $request->validate([
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|email',
+            'company'        => 'nullable|string|max:255',
+            'phone'          => 'nullable|string|max:50',
+            'country'        => 'required|string',
+            'quantity'       => 'required|integer',
+            'product_id'     => 'nullable|exists:products,id',
+            'selected_size'  => 'nullable|string', // JSON string
+            'selected_images'=> 'nullable|string', // JSON string
+            'variant_details'=> 'nullable|string', // JSON string
+        ]);
 
-    $inquiry = Inquiry::create($request->all());
-    $product = $request->product_id ? Product::with('variants')->find($request->product_id) : null;
+        // Store inquiry in DB
+        $inquiry = Inquiry::create([
+            'name'            => $request->name,
+            'company'         => $request->company,
+            'email'           => $request->email,
+            'phone'           => $request->phone,
+            'country'         => $request->country,
+            'quantity'        => $request->quantity,
+            'product_id'      => $request->product_id,
+            'selected_size'   => $request->selected_size ? json_decode($request->selected_size, true) : [],
+            'selected_images' => $request->selected_images ? json_decode($request->selected_images, true) : [],
+            'variant_details' => $request->variant_details ? json_decode($request->variant_details, true) : [],
+        ]);
 
-    $productData = null;
+        // Dispatch email job to send both admin & user emails
+        SendInquiryEmails::dispatch($inquiry);
 
-    if ($product) {
-        $variantsData = $product->variants->map(function($variant) {
-            return [
-                'product_code'    => $variant->product_code,
-                'color'           => $variant->color,
-                'size'            => $variant->size,
-                'min_order_qty'   => $variant->moq,
-                'images'          => json_decode($variant->images, true), // decode JSON images
-            ];
-        })->toArray();
-
-        $productData = [
-            'id'          => $product->id,
-            'name'        => $product->name,
-            'description' => $product->description ?? '',
-            'variants'    => $variantsData,
-            'delivery_days' => $product->delivery_time ?? 'N/A',
-        ];
+        return redirect()->back()->with('success', 'Your inquiry has been submitted successfully!');
     }
 
-    $data = [
-        'user_name'  => $request->name,
-        'user_email' => $request->email,
-        'company'    => $request->company ?? '',
-        'phone'      => $request->phone ?? '',
-        'country'    => $request->country,
-        'quantity'   => $request->quantity,
-        'product'    => $productData,
-    ];
-
-    // Dispatch job to send emails
-    SendInquiryEmails::dispatch($data);
-
-    return redirect()->back()->with('success', 'Your inquiry has been submitted successfully!');
-}
 
 
 

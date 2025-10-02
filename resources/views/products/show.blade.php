@@ -24,8 +24,7 @@
 
                         <div id="colorGallery" class="img-thumbnail-main">
                             @foreach ($colorImages[$colors[0]] as $img)
-                                <img src="{{ asset('images/variants/' . basename($img)) }}"
-                                    class="img-thumbnail gallery-thumb"
+                                <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-thumbnail gallery-thumb"
                                     data-full="{{ asset('images/variants/' . basename($img)) }}">
                             @endforeach
                         </div>
@@ -66,54 +65,46 @@
                             </div>
                         </div>
 
-{{-- Available Colors --}}
-<div class="color-variation">
-    <h6>Available Colors</h6>
-    <div class="color" id="colorContainer">
-        @foreach($colors as $index => $color)
-            @php
-                // Keep original CSS classes for design
-                $colorClass = match(strtolower($color)) {
-                    'red' => 'btn-red',
-                    'blue' => 'btn-blue',
-                    'green' => 'btn-green',
-                    default => 'btn-dark' // fallback
-                };
-            @endphp
-            <button
-                class="btn {{ $colorClass }} {{ $index === 0 ? 'selected' : '' }} color-circle"
-                data-color="{{ $color }}"
-                data-images='@json($colorImages[$color])'
-                title="{{ $color }}">
-            </button>
-        @endforeach
-    </div>
-</div>
+                        {{-- Available Colors --}}
+                        <div class="color-variation">
+                            <h6>Available Colors</h6>
+                            <div class="color" id="colorContainer">
+                                @foreach($colors as $index => $color)
+                                    <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
+                                        data-color="{{ $color }}" data-images='@json($colorImages[$color])'
+                                        data-sizes='@json($sizesByColor[$color] ?? [])'
+                                        data-code='{{ $skuByColor[$color] ?? $product->variants->first()->product_code }}'
+                                        data-moq='{{ $moqByColor[$color] ?? $product->moq }}' title="{{ $color }}"
+                                        style="background-color: {{ $color }};">
+                                    </button>
+                                @endforeach
+                            </div>
+
+                        </div>
 
 
+                        {{-- Available Sizes --}}
+                        <div class="size-variaton">
+                            <h6 class="">Available Sizes</h6>
+                            <div class="size" id="sizeContainer">
+                                @php
+                                    $firstColor = $colors[0] ?? null;
+                                    $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
+                                @endphp
 
-{{-- Available Sizes --}}
-<div class="size-variaton">
-    <h6 class="">Available Sizes</h6>
-    <div class="size" id="sizeContainer">
-        @php
-            $firstColor = $colors[0] ?? null;
-            $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
-        @endphp
-
-        @if(!empty($initialSizes))
-            @foreach($initialSizes as $sizeString)
-                @foreach(explode(',', $sizeString) as $size)
-                    <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
-                        {{ strtoupper(trim($size)) }}
-                    </button>
-                @endforeach
-            @endforeach
-        @else
-            <p class="text-muted">No sizes available</p>
-        @endif
-    </div>
-</div>
+                                @if(!empty($initialSizes))
+                                    @foreach($initialSizes as $sizeString)
+                                        @foreach(explode(',', $sizeString) as $size)
+                                            <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
+                                                {{ strtoupper(trim($size)) }}
+                                            </button>
+                                        @endforeach
+                                    @endforeach
+                                @else
+                                    <p class="text-muted">No sizes available</p>
+                                @endif
+                            </div>
+                        </div>
 
                         {{-- MOQ & Delivery --}}
 
@@ -140,9 +131,10 @@
                         </div> --}}
 
                         {{-- CTA Button --}}
-                        {{-- <a href="#" class="btn btn-dark w-100 py-3 fw-bold" data-bs-toggle="modal" data-bs-target="#inquiryModal">
-                    <i class="bi bi-cart-check"></i> Check Price & Get Quote
-                </a> --}}
+                        {{-- <a href="#" class="btn btn-dark w-100 py-3 fw-bold" data-bs-toggle="modal"
+                            data-bs-target="#inquiryModal">
+                            <i class="bi bi-cart-check"></i> Check Price & Get Quote
+                        </a> --}}
                         <a href="#" class="btn btn-price" data-bs-toggle="modal" data-bs-target="#inquiryModal"
                             data-product="{{ $product->id }}">
                             <i class="bi bi-cart-check"></i> Check Price & Get Quote
@@ -153,41 +145,37 @@
 
 
             <!-- Modal -->
-            <div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true">
+            <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content p-3">
                         <div class="modal-header">
                             <h5 class="modal-title fw-bold">Check Price Inquiry</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-
                             <form id="inquiryForm" method="POST" action="{{ route('inquiries.store') }}">
                                 @csrf
-                                {{-- hidded values product_id --}}
                                 <input type="hidden" name="product_id" id="product_id">
-
+                                <input type="hidden" name="selected_size" id="selected_size">
+                                <input type="hidden" name="selected_images" id="selected_images">
+                                <input type="hidden" name="variant_details" id="variant_details">
 
                                 <div class="mb-3">
                                     <label class="form-label">Name</label>
                                     <input type="text" name="name" class="form-control" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Company</label>
-                                    <input type="text" name="company" class="form-control" required>
+                                    <input type="text" name="company" class="form-control">
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
                                     <input type="email" name="email" class="form-control" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Phone</label>
-                                    <input type="text" name="phone" class="form-control" required>
+                                    <input type="text" name="phone" class="form-control">
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Country</label>
                                     <select name="country" class="form-select" required>
@@ -197,7 +185,6 @@
                                         <option value="UK">UK</option>
                                     </select>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Quantity Interested</label>
                                     <input type="number" name="quantity" class="form-control" required>
@@ -205,11 +192,11 @@
 
                                 <button type="submit" class="btn btn-primary w-100">Submit to Check Price</button>
                             </form>
-
                         </div>
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -221,8 +208,7 @@
                             role="tab">Specifications</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert"
-                            role="tab">Certifications</a>
+                        <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert" role="tab">Certifications</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care
@@ -265,14 +251,15 @@
             </div>
             <div class="additional-info">
                 <div class="row">
-                <h2 class="section-title">Why Choose Chandra Fashion</h2>
-                <p class="section-sub-title">Trusted by leading brands worldwide for premium quality and sustainable manufacturing</p>
-            </div>
+                    <h2 class="section-title">Why Choose Chandra Fashion</h2>
+                    <p class="section-sub-title">Trusted by leading brands worldwide for premium quality and sustainable
+                        manufacturing</p>
+                </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="feature-box">
                             <div class="feature-icon bg-green">
-                               <img src="{{ asset('/images/vector.png') }}" alt="vector" class="img-fluid">
+                                <img src="{{ asset('/images/vector.png') }}" alt="vector" class="img-fluid">
                             </div>
                             <div class="feature-title">Sustainable Manufacturing</div>
                             <p>GOTS certified organic materials and eco-friendly processes</p>
@@ -306,23 +293,194 @@
 
 @push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var productId = button.getAttribute('data-product');
-                var inputProduct = inquiryModal.querySelector('#product_id');
-                inputProduct.value = productId;
+ document.addEventListener("DOMContentLoaded", function () {
+    var inquiryModal = document.getElementById('inquiryModal');
+    inquiryModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var productId = button.getAttribute('data-product');
+        var inputProduct = inquiryModal.querySelector('#product_id');
+        inputProduct.value = productId;
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const colorButtons = document.querySelectorAll('.color-circle');
+    const mainImage = document.getElementById('mainProductImage');
+    const gallery = document.getElementById('colorGallery');
+    const sizeContainer = document.getElementById('sizeContainer');
+
+    const selectedSizeInput = document.getElementById('selected_size');
+    const selectedImagesInput = document.getElementById('selected_images');
+    const variantDetailsInput = document.getElementById('variant_details');
+
+    // Current selection
+    let currentSelection = {
+        size: null,
+        image: null, // only main image
+        variant: {}
+    };
+
+    function updateHiddenInputs() {
+        if (!currentSelection.size || !currentSelection.image || !currentSelection.variant) return;
+
+        // Ensure variant object always has correct values
+        currentSelection.variant.size = [currentSelection.size];
+        currentSelection.variant.images = [currentSelection.image];
+
+        selectedSizeInput.value = currentSelection.size;
+        selectedImagesInput.value = JSON.stringify([currentSelection.image]);
+        variantDetailsInput.value = JSON.stringify(currentSelection.variant);
+
+        console.log("Saving:", {
+            size: selectedSizeInput.value,
+            images: selectedImagesInput.value,
+            variant: variantDetailsInput.value
+        });
+    }
+
+    // Gallery image click
+    gallery.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG') {
+            const newImage = e.target.dataset.full;
+            mainImage.src = newImage;
+            currentSelection.image = newImage;
+            updateHiddenInputs();
+        }
+    });
+
+    // Size button click
+    sizeContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+            e.target.classList.add('selected');
+
+            currentSelection.size = e.target.textContent.trim();
+            updateHiddenInputs();
+        }
+    });
+
+
+    function selectColor(colorBtn) {
+        const color = colorBtn.dataset.color;
+        const images = JSON.parse(colorBtn.dataset.images);
+        const sizes = JSON.parse(colorBtn.dataset.sizes || "[]");
+        const productCode = colorBtn.dataset.code;
+        const moq = parseInt(colorBtn.dataset.moq || 1);
+
+        // Highlight selected color
+        colorButtons.forEach(c => c.classList.remove('selected'));
+        colorBtn.classList.add('selected');
+
+        // ✅ Set main image (relative path only)
+        let firstImg = '/images/variants/' + images[0].split('/').pop();
+        mainImage.src = firstImg;
+        currentSelection.image = firstImg;
+
+        // Update gallery
+        gallery.innerHTML = '';
+        images.forEach(img => {
+            let relPath = '/images/variants/' + img.split('/').pop();
+            const imgTag = document.createElement('img');
+            imgTag.src = relPath;
+            imgTag.className = 'img-thumbnail gallery-thumb zoomable';
+            imgTag.dataset.full = relPath;
+            gallery.appendChild(imgTag);
+
+            imgTag.addEventListener('click', () => {
+                mainImage.src = relPath;
+                currentSelection.image = relPath;
+                if (currentSelection.size) {
+                    currentSelection.variant = {
+                        product_code: productCode,
+                        color: color,
+                        size: [currentSelection.size],
+                        min_order_qty: moq,
+                        images: [relPath]
+                    };
+                }
+                updateHiddenInputs();
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
+        // Update sizes
+        sizeContainer.innerHTML = '';
+        if (sizes.length === 0) {
+            sizeContainer.innerHTML = '<p class="text-muted">No sizes available</p>';
+            currentSelection.size = null;
+            currentSelection.variant = {};
+            updateHiddenInputs();
+            return;
+        }
+
+        sizes.forEach((sizeString, i) => {
+            sizeString.split(',').forEach((size, j) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-sm btn-outline-primary m-1';
+                btn.textContent = size.trim().toUpperCase();
+
+                // Select first size by default
+                if (i === 0 && j === 0) {
+                    btn.classList.add('selected');
+                    currentSelection.size = size.trim();
+                    currentSelection.variant = {
+                        product_code: productCode,
+                        color: color,
+                        size: [size.trim()],
+                        min_order_qty: moq,
+                        images: [firstImg]
+                    };
+                    updateHiddenInputs();
+                }
+
+                btn.addEventListener('click', () => {
+                    sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+
+                    currentSelection.size = size.trim();
+                    currentSelection.variant = {
+                        product_code: productCode,
+                        color: color,
+                        size: [size.trim()],
+                        min_order_qty: moq,
+                        images: [currentSelection.image]
+                    };
+                    updateHiddenInputs();
+                });
+
+                sizeContainer.appendChild(btn);
+            });
+        });
+
+        updateHiddenInputs();
+    }
+
+    // Auto-select first color
+    if (colorButtons.length > 0) {
+        selectColor(colorButtons[0]);
+    }
+
+    const inquiryForm = document.getElementById('inquiryForm');
+    if (inquiryForm) {
+        inquiryForm.addEventListener('submit', function () {
+            updateHiddenInputs();
+        });
+    }
+
+    colorButtons.forEach(btn => {
+        btn.addEventListener('click', () => selectColor(btn));
+    });
+});
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function() {
+                btn.addEventListener("click", function () {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -336,13 +494,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                            <div class="card" style="width:120px;">
-                                <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                <div class="card-body p-2 text-center">
-                                    <small>${p.name}</small>
+                                <div class="card" style="width:120px;">
+                                    <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                    <div class="card-body p-2 text-center">
+                                        <small>${p.name}</small>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
                             });
                         });
                 });
@@ -350,12 +508,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function() {
+                thumb.addEventListener('click', function () {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -364,7 +522,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function(e) {
+            container.addEventListener("mousemove", function (e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -376,14 +534,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function() {
+            container.addEventListener("mouseleave", function () {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -394,7 +552,7 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function() {
+                circle.addEventListener('click', function () {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
@@ -462,7 +620,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function() {
+            circle.addEventListener('click', function () {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -476,5 +634,57 @@
             });
         });
 
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // Store selections
+            let selectedSizes = [];
+            let selectedImages = [];
+            let variantDetails = [];
+
+            // Example: user clicks on a variant color box
+            const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
+            variantBoxes.forEach(box => {
+                box.addEventListener('click', function () {
+                    const color = this.dataset.color;
+                    const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
+                    const images = JSON.parse(this.dataset.images); // array of image URLs
+                    const productCode = this.dataset.code;
+                    const minOrderQty = this.dataset.moq;
+
+                    // Example: select a size from size options
+                    const size = prompt(`Available sizes: ${sizeOptions.join(', ')}\nEnter your size:`);
+
+                    if (!size || !sizeOptions.includes(size)) {
+                        alert('Invalid size selected!');
+                        return;
+                    }
+
+                    // Add to selection arrays
+                    selectedSizes.push(size);
+                    selectedImages.push(images[0]); // choose first image for this variant
+                    variantDetails.push({
+                        product_code: productCode,
+                        color: color,
+                        size: [size],
+                        min_order_qty: parseInt(minOrderQty),
+                        images: images
+                    });
+
+                    // Update hidden inputs
+                    document.getElementById('selected_size').value = JSON.stringify(selectedSizes);
+                    document.getElementById('selected_images').value = JSON.stringify(selectedImages);
+                    document.getElementById('variant_details').value = JSON.stringify(variantDetails);
+
+                    alert(`Selected ${color} - ${size}`);
+                });
+            });
+
+        });
+
     </script>
 @endpush
+
+
+
+

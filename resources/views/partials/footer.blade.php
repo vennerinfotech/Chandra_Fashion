@@ -62,4 +62,15 @@
       </svg>
     </button>
   </div>
+  <!-- Chat Window (hidden by default) -->
+<div id="chat-window" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; height:400px; background:white; border:1px solid #ccc; border-radius:10px; box-shadow:0px 4px 10px rgba(0,0,0,0.2); overflow:hidden; flex-direction:column;">
+    <div style="background:#273847; color:white; padding:10px; font-weight:bold;">
+        AI Assistant
+    </div>
+    <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto; font-size:14px;"></div>
+    <div style="display:flex; border-top:1px solid #ccc;">
+        <input type="text" id="chat-input" placeholder="Type a message..." style="flex:1; border:none; padding:10px; font-size:14px;">
+        <button id="send-btn" style="background:#273847; color:white; border:none; padding:10px;">Send</button>
+    </div>
+</div>
 </footer>

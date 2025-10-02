@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+     protected $table = 'products';
     protected $fillable = [
         'name',
         'description',
@@ -24,7 +25,7 @@ class Product extends Model
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(\App\Models\ProductVariant::class, 'product_id', 'id');
     }
 
     public function category()

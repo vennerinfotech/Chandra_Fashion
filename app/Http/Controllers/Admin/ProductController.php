@@ -50,14 +50,20 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
 
             // Variants
-            'variants' => 'required|array',
+            'variants' => 'required|array|min:1',
             'variants.*.product_code' => 'required|string|max:255',
-            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.color' => 'required|string|max:100',
             'variants.*.size' => 'nullable|string|max:50',
             'variants.*.moq' => 'nullable|integer',
             'variants.*.images' => 'nullable|array',
             'variants.*.images.*' => 'nullable|image|max:5120',
         ]);
+
+        // Check for duplicate colors
+        $colors = array_map(fn($v) => strtolower(trim($v['color'])), $data['variants']);
+        if (count($colors) !== count(array_unique($colors))) {
+            return back()->withInput()->withErrors(['variants' => 'Each variant must have a unique color.']);
+        }
 
         // Handle main product image
         if ($request->hasFile('image')) {
@@ -71,11 +77,11 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         // Handle variants
-        foreach ($request->variants as $variantData) {
+        foreach ($data['variants'] as $variantData) {
             $variant = ProductVariant::create([
                 'product_id' => $product->id,
                 'product_code' => $variantData['product_code'],
-                'color' => $variantData['color'] ?? null,
+                'color' => $variantData['color'],
                 'size' => $variantData['size'] ?? null,
                 'moq' => $variantData['moq'] ?? null,
             ]);
@@ -95,6 +101,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
+
 
 
 

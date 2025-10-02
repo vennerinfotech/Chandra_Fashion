@@ -53,9 +53,9 @@
                                 <label class="form-label">Country</label>
                                 <select name="country" class="form-select">
                                     <option value="">Select your country</option>
-                                    <option value="India">India</option>
-                                    <option value="USA">USA</option>
-                                    <option value="UK">UK</option>
+                                    @foreach($countries as $country)
+                                        <option value="{{ $country->name }}">{{ $country->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 

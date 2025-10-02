@@ -9,9 +9,21 @@ class Inquiry extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id','name','company','email','phone','country','quantity'];
+    protected $fillable = [
+        'product_id',
+        'name',
+        'company',
+        'email',
+        'phone',
+        'country',
+        'quantity',
+        'selected_size',
+        'selected_images',
+        'variant_details',
+    ];
 
-    protected $casts = [
+   protected $casts = [
+        'selected_size' => 'array',
         'selected_images' => 'array',
         'variant_details' => 'array',
     ];

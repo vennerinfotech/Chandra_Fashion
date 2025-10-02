@@ -24,6 +24,7 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+
 Route::post('/inquiries/store', [InquiryController::class, 'store'])->name('inquiries.store');
 
-Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('chat.send');
+Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('send.chat');

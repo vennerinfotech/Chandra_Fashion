@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title', 'Chandra Fashion')</title>
 
     {{-- Bootstrap CSS --}}
@@ -78,7 +80,7 @@
         }
 
         /* Floating Chatbox - Right Corner */
-        #chatbox {
+        /* #chatbox {
             position: fixed;
             bottom: 80px;
             right: 19px;
@@ -127,7 +129,61 @@
         #chatbox .chat-footer {
             padding: 10px;
             border-top: 1px solid #ddd;
-        }
+        } */
+
+
+/* Chat bubbles */
+.chat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.chat-message.user {
+    background: #007bff;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.chat-message.bot {
+    background: #f1f1f1;
+    color: #000;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+/* Typing animation */
+.typing {
+    display: flex;
+    gap: 4px;
+}
+
+.typing span {
+    width: 8px;
+    height: 8px;
+    background: #ccc;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}
+
+/* Scroll container */
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: auto;
+}
 
         .zoomable {
             transition: transform 0.3s ease;
@@ -157,78 +213,86 @@
 
     <main class="">
         @yield('content')
-        <!-- Floating AI Chat Box -->
-        <div id="chatbox">
-            <div class="chat-header">
-                <i class="fa-solid fa-robot me-2"></i> AI Assistant
-                <span id="chat-toggle" class="float-end" style="cursor:pointer;">−</span>
-            </div>
-            <div class="chat-body" id="chat-body">
-                <div class="chat-message bot">👋 Hi! How can I help you today?</div>
-            </div>
-            <div class="chat-footer">
-                <input type="text" id="chat-input" class="form-control" placeholder="Type a message...">
-                <button id="chat-send" class="btn btn-dark btn-sm mt-2 w-100">Send</button>
-            </div>
-        </div>
-
     </main>
 
     @include('partials.footer')
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script>
-        document.getElementById("chat-send").addEventListener("click", function() {
-            let input = document.getElementById("chat-input");
-            let message = input.value.trim();
-            if (message !== "") {
-                let body = document.getElementById("chat-body");
 
-                // Show user message
-                let userMsg = document.createElement("div");
-                userMsg.className = "chat-message user";
-                userMsg.innerText = message;
-                body.appendChild(userMsg);
+    document.addEventListener("DOMContentLoaded", function() {
+        const chatBtn = document.querySelector(".chatbot-btn");
+        const chatWindow = document.getElementById("chat-window");
+        const chatInput = document.getElementById("chat-input");
+        const chatMessages = document.getElementById("chat-messages");
+        const sendBtn = document.getElementById("send-btn");
 
-                // Auto-reply (dummy AI)
-                let botMsg = document.createElement("div");
-                botMsg.className = "chat-message bot";
-                botMsg.innerText = "🤖 This is a demo AI reply!";
-                setTimeout(() => {
-                    body.appendChild(botMsg);
-                    body.scrollTop = body.scrollHeight;
-                }, 600);
-
-                input.value = "";
-                body.scrollTop = body.scrollHeight;
-            }
+        // Toggle chat window
+        chatBtn.addEventListener("click", function() {
+            chatWindow.style.display = (chatWindow.style.display === "none" || chatWindow.style.display === "") ? "flex" : "none";
         });
 
-        // Toggle minimize/maximize
-        document.getElementById("chat-toggle").addEventListener("click", function() {
-            let body = document.getElementById("chat-body");
-            let footer = document.querySelector("#chatbox .chat-footer");
-            if (body.style.display === "none") {
-                body.style.display = "block";
-                footer.style.display = "block";
-                this.innerText = "−";
-            } else {
-                body.style.display = "none";
-                footer.style.display = "none";
-                this.innerText = "+";
-            }
+        // Append message
+        function appendMessage(sender, text){
+            const msg = document.createElement("div");
+            msg.classList.add("chat-message", sender);
+            msg.textContent = text;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Typing indicator
+        function appendTyping(){
+            const typing = document.createElement("div");
+            typing.classList.add("chat-message", "bot");
+            typing.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+            chatMessages.appendChild(typing);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typing;
+        }
+
+        // Send message
+        function sendMessage(){
+            const message = chatInput.value.trim();
+            if(!message) return;
+
+            // User message
+            appendMessage("user", message);
+            chatInput.value = "";
+
+            // Typing indicator
+            const typingIndicator = appendTyping();
+
+            // Fetch backend response (Laravel route)
+            fetch("{{ route('send.chat') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                typingIndicator.remove();
+                appendMessage("bot", data.reply);
+            })
+            .catch(err => {
+                typingIndicator.remove();
+                appendMessage("bot", "Error: " + err.message);
+            });
+        }
+
+        // Event listeners
+        sendBtn.addEventListener("click", sendMessage);
+        chatInput.addEventListener("keypress", function(e){
+            if(e.key === "Enter") sendMessage();
         });
+    });
+
+
     </script>
-    <script>
-        window.addEventListener("scroll", function() {
-            const header = document.querySelector(".header-wrapper");
-            if (window.scrollY > 50) {
-                header.classList.add("scrolled");
-            } else {
-                header.classList.remove("scrolled");
-            }
-        });
-    </script>
+
 
     @stack('scripts')
 </body>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -10,7 +11,8 @@ class ContactController extends Controller
      // Show contact form
     public function index()
     {
-        return view('contact');
+        $countries = Country::orderBy('name')->get(); // Fetch all countries
+        return view('contact', compact('countries'));
     }
 
     // Store form data into DB
