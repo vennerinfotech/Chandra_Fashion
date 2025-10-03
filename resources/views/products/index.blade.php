@@ -181,19 +181,6 @@
                     <p>No products found matching the filters.</p>
                     @endif
                 </div>
-                <div class="">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item disabled" aria-disabled="true" aria-label="« Previous">
-                                <span class="page-link" aria-hidden="true">‹</span>
-                            </li>
-                            <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="" rel="next" aria-label="Next »">›</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
     </div>

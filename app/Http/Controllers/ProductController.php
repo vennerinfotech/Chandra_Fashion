@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Country;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
+
 class ProductController extends Controller
 {
 
@@ -91,8 +93,8 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::with(['category', 'variants'])->findOrFail($id);
-
         $colors = $product->variants->pluck('color')->unique()->values()->all();
+        $countries = Country::orderBy('name', 'asc')->get();
 
         $colorImages = [];
         $sizesByColor = [];
@@ -122,6 +124,7 @@ class ProductController extends Controller
         return view('products.show', compact(
             'product',
             'colors',
+            'countries',
             'colorImages',
             'sizesByColor',
             'skuByColor',

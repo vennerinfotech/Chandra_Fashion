@@ -117,7 +117,6 @@
         </div>
     </section>
 
-
     <section class="featured-section section-padding">
         <div class="container">
             <div class="row">
@@ -125,43 +124,23 @@
                 <p class="section-sub-title">Discover our latest designs and seasonal highlights</p>
             </div>
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="featured-collection-grid">
-                        <div class="featured-img">
-                            <img src="/images/img.png" alt="Men's Collection">
-                        </div>
-                        <div class="featured-content">
-                            <h2>Executive Collection</h2>
-                            <p>Premium business attire</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="featured-collection-grid">
-                        <div class="featured-img">
-                            <img src="/images/img(1).png" alt="Men's Collection">
-                        </div>
-                        <div class="featured-content">
-                            <h2>Modern Elegance</h2>
-                            <p>Contemporary women's wear</p>
+                @foreach($featuredCollections as $collection)
+                    <div class="col-lg-4">
+                        <div class="featured-collection-grid">
+                            <div class="featured-img">
+                                <img src="{{ asset($collection->image) }}" alt="{{ $collection->title }}">
+                            </div>
+                            <div class="featured-content">
+                                <h2>{{ $collection->title }}</h2>
+                                <p>{{ $collection->subtitle }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="featured-collection-grid">
-                        <div class="featured-img">
-                            <img src="/images/img(2).png" alt="Men's Collection">
-                        </div>
-                        <div class="featured-content">
-                            <h2>Eco Conscious</h2>
-                            <p>Sustainable fashion line</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
-        </div>
     </section>
+
 
     <section class="heritage-section section-padding">
         <div class="container">

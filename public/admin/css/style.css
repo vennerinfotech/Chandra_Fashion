@@ -1,46 +1,47 @@
 /*Header*/
-.sidebar-logo img{
+.sidebar-logo img {
     height: 50px;
 }
 
-.sidebar-logo h2{
+.sidebar-logo h2 {
     margin-bottom: 0px;
-        padding: 7px 0;
+    padding: 7px 0;
 }
 
-.menu-bar{
-     background: #2b3d51;
+.menu-bar {
+    background: #2b3d51;
     padding: 10px 20px 10px 260px;
 }
 
-.header-top{
+.header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-left: 5px;
 }
 
-.menu-bar form{
+.menu-bar form {
     margin-bottom: 0px;
 }
 
-.menu-bar .dropdown .btn{
+.menu-bar .dropdown .btn {
     color: #fff;
     border: none;
     font-size: 16px;
     padding: 0;
 }
 
-.menu-bar .dropdown .btn:hover{
-        background: transparent;
+.menu-bar .dropdown .btn:hover {
+    background: transparent;
 }
 
-.menu-bar .dropdown i{
+.menu-bar .dropdown i {
     color: #fff;
     font-size: 18px;
 }
 
-.menu-bar .dropdown .dropdown-menu button, .menu-bar .dropdown .dropdown-menu a{
+.menu-bar .dropdown .dropdown-menu button,
+.menu-bar .dropdown .dropdown-menu a {
     border: none;
     background: none;
     color: #333;
@@ -52,38 +53,41 @@
     text-decoration: none;
 }
 
-.menu-bar .dropdown .dropdown-menu button i, .menu-bar .dropdown .dropdown-menu a i{
+.menu-bar .dropdown .dropdown-menu button i,
+.menu-bar .dropdown .dropdown-menu a i {
     color: #333;
     font-size: 14px;
 }
 
-.menu-bar .dropdown .dropdown-menu.show{
+.menu-bar .dropdown .dropdown-menu.show {
     padding: 0px;
 }
 
-.menu-bar .dropdown .dropdown-menu.show li{
+.menu-bar .dropdown .dropdown-menu.show li {
     padding: 10px;
 }
 
-.menu-bar .dropdown .dropdown-menu.show li:hover{
+.menu-bar .dropdown .dropdown-menu.show li:hover {
     background: #f9f9f9;
 }
 
 /* Add transition for smooth padding change */
-.menu-bar, .main-wrapper {
-    transition: padding-left 0.3s ease;  /* Adjust the timing as needed */
+.menu-bar,
+.main-wrapper {
+    transition: padding-left 0.3s ease;
+    /* Adjust the timing as needed */
 }
 
-.sidebar-wrapper.open + .menu-bar {
+.sidebar-wrapper.open+.menu-bar {
     padding-left: 15px;
 }
 
-.sidebar-wrapper.open + .main-wrapper {
+.sidebar-wrapper.open+.main-wrapper {
     padding-left: 0px;
 }
 
-.main-wrapper{
-    padding:30px 10px 30px 260px;
+.main-wrapper {
+    padding: 30px 10px 30px 260px;
     background: #f0f0f5;
 }
 
@@ -96,52 +100,53 @@
 }
 
 
-.sidebar-toggle{
+.sidebar-toggle {
     color: #fff;
     padding: 10px;
     text-align: center;
     text-decoration: none;
 }
 
-.sidebar-toggle:hover{
+.sidebar-toggle:hover {
     color: #fff;
 }
 
-.admin-footer{
+.admin-footer {
     background: #fff;
     text-align: center;
 }
 
-.admin-footer p{
+.admin-footer p {
     color: #333;
     margin: 0;
     padding: 10px 0;
 }
 
-.btn-check:focus+.btn, .btn:focus{
+.btn-check:focus+.btn,
+.btn:focus {
     box-shadow: none !important;
 }
 
 /*Table Css*/
-.admin-title{
+.admin-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.admin-title h1{
+.admin-title h1 {
     font-size: 30px;
     margin-bottom: 0;
     color: #222;
 }
 
-.admin-title .btn svg{
-        height: 15px;
+.admin-title .btn svg {
+    height: 15px;
     padding-right: 5px;
 }
 
-.btn{
+.btn {
     background: #2b3d51;
     color: #fff;
     font-size: 16px;
@@ -150,7 +155,7 @@
     border: 1px solid #2b3d51;
 }
 
-.btn:hover{
+.btn:hover {
     color: #2b3d51;
     background: #fff;
 }
@@ -164,14 +169,14 @@
     padding: 10px 15px;
     text-align: left;
     border: 1px solid #e1e4e8;
-        vertical-align: baseline;
+    vertical-align: baseline;
 }
 
 .custom-table th {
     font-weight: bold;
 }
 
-.custom-table tr th{
+.custom-table tr th {
     border-bottom: none;
 }
 
@@ -179,23 +184,23 @@
     background-color: #f5f5f5;
 }
 
-.btn-action{
-        background: #f5f5f5;
+.btn-action {
+    background: #f5f5f5;
     color: #2b3d51;
     border: none;
     padding: 8px 10px;
     margin-right: 5px;
-        text-decoration: none;
+    text-decoration: none;
 }
 
-.btn-action:hover{
+.btn-action:hover {
     color: #2b3d51;
 }
 
 /* Pagination Styling */
 .pagination {
     justify-content: center;
-       padding: 0;
+    padding: 0;
     margin-bottom: 0;
     margin-top: 20px;
 }
@@ -208,6 +213,7 @@
 .pagination a:hover {
     color: #2b3d51;
 }
+
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
@@ -216,12 +222,16 @@
 }
 
 /*Form Css*/
-.create-form-wrapper .card .form-control{
+.create-form-wrapper .card .form-control {
     padding: 15px;
 }
 
-.create-form-wrapper .card  .form-control:focus,
-.create-form-wrapper .card  .form-select:focus {
+.create-form-wrapper .card .form-control:focus,
+.create-form-wrapper .card .form-select:focus {
     border-color: #2b3d51;
     box-shadow: none;
 }
+
+
+
+

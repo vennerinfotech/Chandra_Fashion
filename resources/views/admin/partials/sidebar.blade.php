@@ -106,7 +106,7 @@
         <h2>Logo</h2>
     </div>
     <ul>
-        <li class=""><a href="{{ route('admin.main') }}"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
+        <li class=""><a href="{{ route('admin.dashboard') }}"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
         <li class=""><a href="{{ route('admin.categories.index') }}"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
         <li class=""><a href="{{ route('admin.products.index') }}"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
         <li class=""><a href="{{ route('admin.inquiries.index') }}"><span><i class="fa-solid fa-user-pen"></i>Inquiry</span></a></li>
@@ -114,41 +114,6 @@
     </ul>
 </div>
 
-
-
-{{-- <div class="sidebar-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-</div> --}}
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        var currentUrl = window.location.href;
 
-        // Remove active class from all menu items first
-        $('.sidebar-wrapper ul li').removeClass('active');
-
-        $('.sidebar-wrapper ul li a').each(function () {
-            var link = $(this).attr('href'); // Get the link of the current anchor tag
-
-            // Check if current URL matches the link
-            if (currentUrl === link) {
-                $(this).parent().addClass('active');
-            }
-
-            // Check for Family Group active state
-            else if (link.includes("familygroup") && (currentUrl.includes("familygroup/create") || currentUrl.includes("familygroup"))) {
-                $(this).parent().addClass('active');
-            }
-
-            // Check for Family Member active state
-            else if (link.includes("familymember") && (currentUrl.includes("familymember/create") || currentUrl.includes("familymember"))) {
-                $(this).parent().addClass('active');
-            }
-        });
-    });
-
-</script>
