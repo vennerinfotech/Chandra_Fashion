@@ -53,8 +53,9 @@
 
 <div class="login-box text-center">
     <div class="mb-3">
-         <img src="{{ asset('uploads/products/cf-logo.jpg') }}" width="150" alt="Chandra-Fashion Logo">
+        <img src="{{ asset('images/cf-logo-1.png') }}" width="150" alt="Chandra-Fashion Logo">
     </div>
+
     <h3 class="mb-1">Admin Login</h3>
     {{-- <p class="brand-title">Chandra-Fashion</p> --}}
 

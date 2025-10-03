@@ -8,6 +8,10 @@
             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-user-tie"></i>
             </button>
+
+            @if($newInquiryCount > 0)
+                 <span class="badge bg-danger">{{ $newInquiryCount }}</span>
+            @endif
             <ul class="dropdown-menu">
 
                 <li>
