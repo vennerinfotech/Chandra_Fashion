@@ -5,7 +5,7 @@
 @section('content')
 
 
-    <section class="hero-section">
+    {{-- <section class="hero-section">
         <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
@@ -19,15 +19,43 @@
                 </div>
             </div>
         </div>
+    </section> --}}
+
+    <section class="hero-section" @if(!empty($hero->background_image))
+    style="background-image:url('{{ asset('storage/' . $hero->background_image) }}');" @endif>
+
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>{{ $hero->title ?? 'Crafting Excellence in' }} <br>
+                    <span>{{ $hero->subtitle ?? 'Fashion Manufacturing' }}</span>
+                </h1>
+                <p>{{ $hero->subtitle ?? 'Premium B2B clothing manufacturer with 35+ years of expertise.' }}</p>
+                <div class="hero-sectoin-btn">
+                    <a href="{{ $hero->btn1_link ?? '#' }}"
+                        class="btn btn-yellow">{{ $hero->btn1_text ?? 'Explore Collection' }}</a>
+                    <a href="{{ $hero->btn2_link ?? '#' }}"
+                        class="btn btn-outline">{{ $hero->btn2_text ?? 'Check Price' }}</a>
+                    <a href="{{ $hero->btn3_link ?? '#' }}"
+                        class="btn btn-light">{{ $hero->btn3_text ?? 'Get in Touch' }}</a>
+                </div>
+            </div>
+        </div>
     </section>
 
 
     <section class="collections-section section-padding">
         <div class="container">
-            <div class="row">
+            {{-- <div class="row">
                 <h2 class="section-title">Our Collections</h2>
                 <p class="section-sub-title">Specialized manufacturing across diverse fashion categories with uncompromising
                     quality standards</p>
+            </div> --}}
+            <div class="row">
+                <h2 class="section-title">{{ $collections->title ?? 'Our Collections' }}</h2>
+                <p class="section-sub-title">
+                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with uncompromising quality standards' }}
+                </p>
             </div>
 
             <div class="collection-grid">
@@ -48,7 +76,7 @@
         </div>
     </section>
 
-    <section class="card-section section-padding">
+    {{-- <section class="card-section section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">
@@ -115,9 +143,60 @@
                 </div>
             </div>
         </div>
+    </section> --}}
+
+    <section class="card-section section-padding">
+        <div class="container">
+            <div class="row">
+
+                @php
+                    // Fetch 3 cards or use empty placeholders if DB has less
+                    $cards = $featureCards->take(3)->all();
+                    $staticSvgs = [
+                        asset('images/svg/static1.svg'),
+                        asset('images/svg/static2.svg'),
+                        asset('images/svg/static3.svg'),
+                    ];
+                @endphp
+
+                @for($i = 0; $i < 3; $i++)
+                            @php
+                                $card = $cards[$i] ?? null;
+                            @endphp
+                            <div class="col-lg-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+
+                                        <div class="svg-wrapper">
+                                            @if($card && $card->svg_path)
+                                                <img src="{{ asset('storage/' . $card->svg_path) }}" alt="{{ $card->title }}">
+                                            @else
+                                                <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                            @endif
+                                        </div>
+
+                                        <h5 class="card-title m-0">
+                                            {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                        </h5>
+
+                                        <p class="card-text">
+                                            {{ $card->description ?? [
+                                                'Flexible minimum order quantities starting from 100 pieces per style',
+                                                'Serving 25+ countries across Europe, North America, and Asia',
+                                                'ISO certified facility with rigorous quality control processes.'
+                                            ][$i] }}
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                @endfor
+
+            </div>
+        </div>
     </section>
 
-    <section class="featured-section section-padding">
+    {{-- <section class="featured-section section-padding">
         <div class="container">
             <div class="row">
                 <h2 class="section-title">Featured Collections</h2>
@@ -139,10 +218,42 @@
                 @endforeach
             </div>
         </div>
+    </section> --}}
+
+    <section class="featured-section section-padding">
+        <div class="container">
+            <div class="row">
+             <h2 class="section-title">
+                    {{ $featured->main_title ?? 'Featured Collections' }}
+                </h2>
+                <p class="section-sub-title">
+                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
+                </p>
+            </div>
+            <div class="row">
+                @foreach($featuredCollections as $card)
+                    <div class="col-lg-4">
+                        <div class="featured-collection-grid">
+                            <div class="featured-img">
+                                @if($card->image)
+                                <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
+                                @endif
+                            </div>
+                            <div class="featured-content">
+                                <h2 >{{ $card->title }}</h2>
+                                <p>{{ $card->subtitle }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </section>
 
 
-    <section class="heritage-section section-padding">
+
+
+    {{-- <section class="heritage-section section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -164,9 +275,43 @@
                 </div>
             </div>
         </div>
+    </section> --}}
+
+
+    {{-- Heritage Section --}}
+    <section class="heritage-section section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="heritage-content">
+                        <h2>{{ $heritage->title ?? 'Heritage of Excellence' }}</h2>
+
+                        <p>{{ $heritage->paragraph1 ?? 'For over three decades, Chandra Fashion has been at the forefront of premium clothing manufacturing, blending traditional craftsmanship with modern innovation.' }}</p>
+
+                        <p>{{ $heritage->paragraph2 ?? 'Our commitment to quality, sustainability, and customer satisfaction has made us a trusted partner for fashion brands worldwide.' }}</p>
+
+                        @if($heritage->button_text)
+                            <a href="#" class="btn btn-yellow">{{ $heritage->button_text }}</a>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="featured-collection-grid">
+                        <div class="heritage-img">
+                            @if($heritage->image)
+                                <img src="{{ asset('storage/'.$heritage->image) }}" alt="{{ $heritage->title }}">
+                            @else
+                                <img src="/images/Heritage.png" alt="Heritage Image">
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="client-section section-padding">
+    {{-- <section class="client-section section-padding">
         <div class="container">
             <div class="row">
                 <h2 class="section-title">Client Trust</h2>
@@ -219,12 +364,73 @@
 
             </div>
         </div>
+    </section> --}}
+
+
+    {{-- Clients Section --}}
+    <section class="client-section section-padding">
+        <div class="container">
+            <div class="row">
+                <h2 class="section-title">Client Trust</h2>
+                <p class="section-sub-title">What our global partners say about us</p>
+            </div>
+
+            <div class="row">
+                <div class="owl-carousel client-carousel">
+                    @forelse($clients as $client)
+                        <div class="client-card">
+                            <div class="client-img">
+                                @if($client->image)
+                                    <img src="{{ asset('storage/' . $client->image) }}" alt="{{ $client->name }}">
+                                @else
+                                    <img src="/images/client.png" alt="{{ $client->name }}">
+                                @endif
+                                <div class="client-title">
+                                    <h5 class="name">{{ $client->name }}</h5>
+                                    <h6 class="designation">{{ $client->designation }}</h6>
+                                </div>
+                            </div>
+                            <div class="client-quote">
+                                <p class="quote">{{ $client->quote }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="client-card">
+                            <div class="client-img">
+                                <img src="/images/client.png" alt="Default Client">
+                                <div class="client-title">
+                                    <h5 class="name">John Doe</h5>
+                                    <h6 class="designation">CEO</h6>
+                                </div>
+                            </div>
+                            <div class="client-quote">
+                                <p class="quote">"No clients added yet."</p>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="subscription-section">
+
+    {{-- <section class="subscription-section">
         <div class="subscription-content">
             <h2>Join Our Buyers Network</h2>
             <p>Get exclusive access to new collections, industry insights, and special offers</p>
+            <form action="#">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section> --}}
+
+
+    {{-- Subscription Section --}}
+    <section class="subscription-section">
+        <div class="subscription-content">
+            <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
+            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}</p>
             <form action="#">
                 <input type="email" placeholder="Enter your email" required>
                 <button type="submit">Subscribe</button>
@@ -236,7 +442,7 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".client-carousel").owlCarousel({
                 loop: true,
                 margin: 20,

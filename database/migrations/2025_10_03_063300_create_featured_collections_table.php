@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('featured_collections', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('subtitle')->nullable();
-            $table->string('image'); // path to image
+            $table->string('main_title');     // Section main title (eg: "Featured Collections")
+            $table->string('main_subtitle')->nullable(); // Section main subtitle
+            $table->string('title');          // Each collection card title
+            $table->string('subtitle')->nullable(); // Each collection card subtitle
+            $table->string('image');          // Path to image
             $table->timestamps();
         });
     }

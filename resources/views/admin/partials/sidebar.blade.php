@@ -102,15 +102,52 @@
 </style>
 
 <div class="sidebar-wrapper">
-    <div class="sidebar-logo text-center">
-        <h2>Logo</h2>
+    <div class="sidebar-logo text-center py-3">
+        <h2>Chandra Admin</h2>
     </div>
     <ul>
-        <li class=""><a href="{{ route('admin.dashboard') }}"><span><i class="fa-solid fa-gauge"></i>Dashboard</span></a></li>
-        <li class=""><a href="{{ route('admin.categories.index') }}"><span><i class="fa-solid fa-list"></i>Category</span></a></li>
-        <li class=""><a href="{{ route('admin.products.index') }}"><span><i class="fa-solid fa-cart-shopping"></i>Products</span></a></li>
-        <li class=""><a href="{{ route('admin.inquiries.index') }}"><span><i class="fa-solid fa-user-pen"></i>Inquiry</span></a></li>
-        <li class=""><a href="#"><span><i class="fa-solid fa-headset"></i>Chat Boat</span></a></li>
+        <!-- Dashboard -->
+        <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}">
+                <i class="fa-solid fa-gauge me-2"></i> Dashboard
+            </a>
+        </li>
+
+        <!-- Categories -->
+        <li class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.categories.index') }}">
+                <i class="fa-solid fa-list me-2"></i> Categories
+            </a>
+        </li>
+
+        <!-- Products -->
+        <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.products.index') }}">
+                <i class="fa-solid fa-cart-shopping me-2"></i> Products
+            </a>
+        </li>
+
+        <!-- Inquiries -->
+        <li class="{{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.inquiries.index') }}">
+                <i class="fa-solid fa-user-pen me-2"></i> Inquiries
+            </a>
+        </li>
+
+        <!-- Settings -->
+        <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.settings.manage') }}">
+                <i class="fa-solid fa-gear me-2"></i> Settings
+            </a>
+        </li>
+
+
+        <!-- Chat Bot -->
+        <li>
+            <a href="#">
+                <i class="fa-solid fa-headset me-2"></i> Chat Bot
+            </a>
+        </li>
     </ul>
 </div>
 

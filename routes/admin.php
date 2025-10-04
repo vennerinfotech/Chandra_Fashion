@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-
+use App\Http\Controllers\Admin\SettingController;
 
 // Guest routes (only when not logged in as admin)
 Route::middleware('admin.guest')->group(function () {
@@ -18,6 +18,10 @@ Route::middleware('admin.auth')->group(function () {
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
     Route::resource('inquiries', \App\Http\Controllers\Admin\InquiryController::class, ['as' => 'admin']);
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class, ['as' => 'admin']);
+
+    Route::get('/settings', [SettingController::class, 'manage'])->name('admin.settings.manage');
+    Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
