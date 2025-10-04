@@ -22,7 +22,7 @@
     </section> --}}
 
     <section class="hero-section" @if(!empty($hero->background_image))
-    style="background-image:url('{{ asset('storage/' . $hero->background_image) }}');" @endif>
+    style="background-image:url('{{ asset($hero->background_image) }}');" @endif>
 
         <div class="hero-overlay"></div>
         <div class="container">
@@ -72,6 +72,8 @@
                     </div>
                 @endforeach
             </div>
+
+
 
         </div>
     </section>
@@ -169,7 +171,7 @@
 
                                         <div class="svg-wrapper">
                                             @if($card && $card->svg_path)
-                                                <img src="{{ asset('storage/' . $card->svg_path) }}" alt="{{ $card->title }}">
+                                                <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
                                             @else
                                                 <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
                                             @endif
@@ -300,9 +302,9 @@
                     <div class="featured-collection-grid">
                         <div class="heritage-img">
                             @if($heritage->image)
-                                <img src="{{ asset('storage/'.$heritage->image) }}" alt="{{ $heritage->title }}">
+                                <img src="{{ asset($heritage->image) }}" alt="{{ $heritage->title }}">
                             @else
-                                <img src="/images/Heritage.png" alt="Heritage Image">
+                                <img src="{{ asset('images/Heritage.png') }}" alt="Heritage Image">
                             @endif
                         </div>
                     </div>
@@ -381,9 +383,9 @@
                         <div class="client-card">
                             <div class="client-img">
                                 @if($client->image)
-                                    <img src="{{ asset('storage/' . $client->image) }}" alt="{{ $client->name }}">
+                                    <img src="{{ asset($client->image) }}" alt="{{ $client->name }}">
                                 @else
-                                    <img src="/images/client.png" alt="{{ $client->name }}">
+                                    <img src="{{ asset('images/client.png') }}" alt="{{ $client->name }}">
                                 @endif
                                 <div class="client-title">
                                     <h5 class="name">{{ $client->name }}</h5>

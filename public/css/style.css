@@ -373,6 +373,12 @@ body {
     margin-bottom: 30px;
 }
 
+.heritage-img img{
+    height: 385px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
 .btn-yellow {
     background: #f0c040;
     text-decoration: none;

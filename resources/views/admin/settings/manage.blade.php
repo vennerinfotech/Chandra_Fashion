@@ -72,7 +72,7 @@
                         <label>Hero Background Image</label>
                         <input type="file" name="hero_image" class="form-control-file">
                         @if(!empty($hero->background_image))
-                            <img src="{{ asset('storage/' . $hero->background_image) }}" style="height:90px;margin-top:8px;">
+                            <img src="{{ asset( $hero->background_image) }}" style="height:90px;margin-top:8px;">
                         @endif
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                                                 accept=".svg">
                                             @if(!empty($cards[$i]->svg_path ?? ''))
                                                 <div class="mt-2">
-                                                    <img src="{{ asset('storage/' . $cards[$i]->svg_path) }}" style="height:50px;">
+                                                    <img src="{{ asset( $cards[$i]->svg_path) }}" style="height:50px;">
                                                 </div>
                                             @endif
                                         </div>
@@ -188,7 +188,7 @@
                                     <label>Card Image</label>
                                     <input type="file" name="cards[{{ $index }}][image]" class="form-control">
                                     @if($card->image)
-                                        <img src="{{ asset('storage/' . $card->image) }}" alt="Card Image" class="mt-2"
+                                        <img src="{{ asset( $card->image) }}" alt="Card Image" class="mt-2"
                                             style="max-width: 150px;">
                                     @endif
                                 </div>
@@ -242,7 +242,7 @@
                         <label>Heritage Image</label>
                         <input type="file" name="heritage_image" class="form-control-file">
                         @if(!empty($heritage->image))
-                            <img src="{{ asset('storage/' . $heritage->image) }}" style="height:120px;margin-top:8px;">
+                            <img src="{{ asset( $heritage->image) }}" style="height:120px;margin-top:8px;">
                         @endif
                     </div>
                 </div>
@@ -266,7 +266,8 @@
                                         <input type="file" name="clients[existing][image][{{ $client->id }}]"
                                             class="form-control-file">
                                         @if($client->image)
-                                            <img src="{{ asset('storage/' . $client->image) }}" style="height:80px;margin-top:5px;">
+                                            <img src="{{ asset( $client->image) }}" style="height:80px;margin-top:5px;">
+
                                         @endif
                                     </div>
                                     <div class="col-md-3 mb-2">
