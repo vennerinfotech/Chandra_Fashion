@@ -21,8 +21,8 @@
         </div>
     </section> --}}
 
-    <section class="hero-section" @if(!empty($hero->background_image))
-    style="background-image:url('{{ asset($hero->background_image) }}');" @endif>
+    <section class="hero-section"
+        @if (!empty($hero->background_image)) style="background-image:url('{{ asset($hero->background_image) }}');" @endif>
 
         <div class="hero-overlay"></div>
         <div class="container">
@@ -43,9 +43,114 @@
         </div>
     </section>
 
+    <section class="featured-section section-padding">
+        <div class="container-fluid">
+            <div class="row">
+                <h2 class="section-title">
+                    {{ $featured->main_title ?? 'Featured Collections' }}
+                </h2>
+                <p class="section-sub-title">
+                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
+                </p>
+            </div>
+            <div class="row">
+                @foreach ($featuredCollections as $card)
+                    <div class="col-lg-4">
+                        <div class="featured-collection-grid">
+                            <div class="featured-img">
+                                @if ($card->image)
+                                    <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
+                                @endif
+                            </div>
+                            <div class="featured-content">
+                                <h2>{{ $card->title }}</h2>
+                                <p>{{ $card->subtitle }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="new-arriaval section-padding">
+        <div class="container">
+            <div class="row">
+                <h2 class="section-title">
+                    New Arrivals
+                </h2>
+                <p class="section-sub-title">
+                    Discover our latest designs and seasonal highlights
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    <div class="new-arrival-box card">
+                        <div class="new-arrival-box-img">
+                             <img src="/images/product1.webp" alt="" class="img-fluid">
+                        </div>
+                        <div class="arrival-list">
+                            <p class="">TRENDING</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Casual Cloths</h5>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <div class="material-list">
+                                <small class="badge-material">Cotton</small>
+                                <small class="badge-moq">MOQ: 10</small>
+                            </div>
+                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
+                                Price</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="new-arrival-box card">
+                        <div class="new-arrival-box-img">
+                             <img src="/images/product1.webp" alt="" class="img-fluid">
+                        </div>
+                        <div class="arrival-list">
+                            <p class="">20% OFF</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Casual Cloths</h5>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <div class="material-list">
+                                <small class="badge-material">Cotton</small>
+                                <small class="badge-moq">MOQ: 10</small>
+                            </div>
+                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
+                                Price</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="new-arrival-box card">
+                        <div class="new-arrival-box-img">
+                             <img src="/images/product1.webp" alt="" class="img-fluid">
+                        </div>
+                        <div class="arrival-list">
+                            <p class="">TRENDING</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Casual Cloths</h5>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <div class="material-list">
+                                <small class="badge-material">Cotton</small>
+                                <small class="badge-moq">MOQ: 10</small>
+                            </div>
+                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
+                                Price</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <section class="collections-section section-padding">
-        <div class="container">
+        <div class="container-fluid">
             {{-- <div class="row">
                 <h2 class="section-title">Our Collections</h2>
                 <p class="section-sub-title">Specialized manufacturing across diverse fashion categories with uncompromising
@@ -59,7 +164,7 @@
             </div>
 
             <div class="collection-grid">
-                @foreach($categories as $category)
+                @foreach ($categories as $category)
                     <div class="collection-item">
                         {{-- Image: show default if no image --}}
                         <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
@@ -161,37 +266,38 @@
                     ];
                 @endphp
 
-                @for($i = 0; $i < 3; $i++)
-                            @php
-                                $card = $cards[$i] ?? null;
-                            @endphp
-                            <div class="col-lg-4 mb-4">
-                                <div class="card">
-                                    <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                @for ($i = 0; $i < 3; $i++)
+                    @php
+                        $card = $cards[$i] ?? null;
+                    @endphp
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
-                                        <div class="svg-wrapper">
-                                            @if($card && $card->svg_path)
-                                                <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
-                                            @else
-                                                <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
-                                            @endif
-                                        </div>
-
-                                        <h5 class="card-title m-0">
-                                            {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
-                                        </h5>
-
-                                        <p class="card-text">
-                                            {{ $card->description ?? [
-                                                'Flexible minimum order quantities starting from 100 pieces per style',
-                                                'Serving 25+ countries across Europe, North America, and Asia',
-                                                'ISO certified facility with rigorous quality control processes.'
-                                            ][$i] }}
-                                        </p>
-
-                                    </div>
+                                <div class="svg-wrapper">
+                                    @if ($card && $card->svg_path)
+                                        <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
+                                    @else
+                                        <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                    @endif
                                 </div>
+
+                                <h5 class="card-title m-0">
+                                    {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                </h5>
+
+                                <p class="card-text">
+                                    {{ $card->description ??
+                                        [
+                                            'Flexible minimum order quantities starting from 100 pieces per style',
+                                            'Serving 25+ countries across Europe, North America, and Asia',
+                                            'ISO certified facility with rigorous quality control processes.',
+                                        ][$i] }}
+                                </p>
+
                             </div>
+                        </div>
+                    </div>
                 @endfor
 
             </div>
@@ -205,7 +311,7 @@
                 <p class="section-sub-title">Discover our latest designs and seasonal highlights</p>
             </div>
             <div class="row">
-                @foreach($featuredCollections as $collection)
+                @foreach ($featuredCollections as $collection)
                     <div class="col-lg-4">
                         <div class="featured-collection-grid">
                             <div class="featured-img">
@@ -222,35 +328,7 @@
         </div>
     </section> --}}
 
-    <section class="featured-section section-padding">
-        <div class="container">
-            <div class="row">
-             <h2 class="section-title">
-                    {{ $featured->main_title ?? 'Featured Collections' }}
-                </h2>
-                <p class="section-sub-title">
-                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
-                </p>
-            </div>
-            <div class="row">
-                @foreach($featuredCollections as $card)
-                    <div class="col-lg-4">
-                        <div class="featured-collection-grid">
-                            <div class="featured-img">
-                                @if($card->image)
-                                <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
-                                @endif
-                            </div>
-                            <div class="featured-content">
-                                <h2 >{{ $card->title }}</h2>
-                                <p>{{ $card->subtitle }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+
 
 
 
@@ -288,11 +366,13 @@
                     <div class="heritage-content">
                         <h2>{{ $heritage->title ?? 'Heritage of Excellence' }}</h2>
 
-                        <p>{{ $heritage->paragraph1 ?? 'For over three decades, Chandra Fashion has been at the forefront of premium clothing manufacturing, blending traditional craftsmanship with modern innovation.' }}</p>
+                        <p>{{ $heritage->paragraph1 ?? 'For over three decades, Chandra Fashion has been at the forefront of premium clothing manufacturing, blending traditional craftsmanship with modern innovation.' }}
+                        </p>
 
-                        <p>{{ $heritage->paragraph2 ?? 'Our commitment to quality, sustainability, and customer satisfaction has made us a trusted partner for fashion brands worldwide.' }}</p>
+                        <p>{{ $heritage->paragraph2 ?? 'Our commitment to quality, sustainability, and customer satisfaction has made us a trusted partner for fashion brands worldwide.' }}
+                        </p>
 
-                        @if($heritage->button_text)
+                        @if ($heritage->button_text)
                             <a href="#" class="btn btn-yellow">{{ $heritage->button_text }}</a>
                         @endif
                     </div>
@@ -301,7 +381,7 @@
                 <div class="col-lg-6">
                     <div class="featured-collection-grid">
                         <div class="heritage-img">
-                            @if($heritage->image)
+                            @if ($heritage->image)
                                 <img src="{{ asset($heritage->image) }}" alt="{{ $heritage->title }}">
                             @else
                                 <img src="{{ asset('images/Heritage.png') }}" alt="Heritage Image">
@@ -382,7 +462,7 @@
                     @forelse($clients as $client)
                         <div class="client-card">
                             <div class="client-img">
-                                @if($client->image)
+                                @if ($client->image)
                                     <img src="{{ asset($client->image) }}" alt="{{ $client->name }}">
                                 @else
                                     <img src="{{ asset('images/client.png') }}" alt="{{ $client->name }}">
@@ -432,7 +512,8 @@
     <section class="subscription-section">
         <div class="subscription-content">
             <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
-            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}</p>
+            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}
+            </p>
             <form action="#">
                 <input type="email" placeholder="Enter your email" required>
                 <button type="submit">Subscribe</button>
@@ -444,14 +525,14 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".client-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
-                nav: true,
+                nav: false,
                 dots: true,
-                autoplay: true,
-                autoplayTimeout: 1000,
+                autoplay: false,
+                autoplayTimeout: 2000,
                 responsive: {
                     0: {
                         items: 1
