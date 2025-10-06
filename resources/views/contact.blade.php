@@ -73,44 +73,34 @@
                 <div class="col-md-6">
                     <div class="card mb">
                         <h4 class="card-title">Get in touch</h4>
-                       <div class="contact-page-info">
-                            <div class="contact-info-inner">
-                                <div class="icon">
-                                    <i class="fa-solid fa-location-dot"></i>
+                            <div class="contact-page-info">
+                                @foreach($contact_infos as $contact)
+                                <div class="contact-info-inner">
+                                    <div class="icon">
+                                        @switch($contact->type)
+                                            @case('address')
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                @break
+                                            @case('email')
+                                                <i class="fa-solid fa-envelope"></i>
+                                                @break
+                                            @case('phone')
+                                                <i class="fa-solid fa-phone"></i>
+                                                @break
+                                            @case('hours')
+                                                <i class="fa-solid fa-clock"></i>
+                                                @break
+                                            @default
+                                                <i class="fa-solid fa-info-circle"></i>
+                                        @endswitch
+                                    </div>
+                                    <div class="info">
+                                        <h6>{{ $contact->title }}</h6>
+                                        <p>{!! nl2br(e($contact->details)) !!}</p>
+                                    </div>
                                 </div>
-                                <div class="info">
-                                    <h6>Office Address</h6>
-                                    <p>123 Fashion District Mumbai, Maharashtra 400001 India</p>
-                                </div>
+                                @endforeach
                             </div>
-                            <div class="contact-info-inner">
-                                <div class="icon">
-                                   <i class="fa-solid fa-envelope"></i>
-                                </div>
-                                <div class="info">
-                                    <h6>Email</h6>
-                                    <p>info@chandrafashion.com <br>sales@chandrafashion.com</p>
-                                </div>
-                            </div>
-                            <div class="contact-info-inner">
-                                <div class="icon">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                                <div class="info">
-                                    <h6>Phone</h6>
-                                    <p>+91 12345 67890 <br>+91 98765 43210</p>
-                                </div>
-                            </div>
-                             <div class="contact-info-inner">
-                                <div class="icon">
-                                    <i class="fa-solid fa-clock"></i>
-                                </div>
-                                <div class="info">
-                                    <h6>Business Hours</h6>
-                                    <p>Mon - Fri: 9:00 AM - 6:00 PM<br>Sat: 9:00 AM - 2:00 PM</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="card">

@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Heritage;
 use App\Models\QuickLink;
+use App\Models\ContactInfo;
 use App\Models\FeatureCard;
 use App\Models\HeroSection;
 use Illuminate\Http\Request;
@@ -17,42 +18,55 @@ use App\Http\Controllers\Controller;
 
 class SettingController extends Controller
 {
-    // --- Helper to store images directly in public/images/<subFolder> ---
+    // --- Helper to store images in public/images/<subFolder> ---
     protected function storeImagePublic($file, $subFolder)
     {
-        $filename = time().'_'.$file->getClientOriginalName();
-        $path = public_path('images/'.$subFolder);
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = public_path('images/' . $subFolder);
         if (!file_exists($path)) mkdir($path, 0755, true);
         $file->move($path, $filename);
-        return 'images/'.$subFolder.'/'.$filename;
+        return 'images/' . $subFolder . '/' . $filename;
     }
 
-    // Manage all homepage settings
+    // Manage homepage settings
     public function manage()
     {
         $hero          = HeroSection::firstOrNew([]);
-        $cards         = FeatureCard::orderBy('id', 'desc')->get();
+        $cards         = FeatureCard::orderBy('id', 'desc')->get(); // Feature Cards
         $heritage      = Heritage::firstOrNew([]);
         $clients       = Client::orderBy('id', 'desc')->take(3)->get();
         $subscription  = SubscriptionSection::firstOrNew([]);
         $footer        = Setting::firstOrNew([]);
         $quick_links   = QuickLink::all();
         $services      = Service::all();
-        $featured      = FeaturedCollection::first();
-        $featuredCards = FeaturedCollection::all();
-        $collections   = CollectionSection::latest()->first();
 
+        $featured      = FeaturedCollection::find(1); // Main section (row 1)
+        $featuredCards = FeaturedCollection::all();   // All featured collection cards
+
+        $collections   = CollectionSection::latest()->first();
+        $contact_infos = ContactInfo::orderBy('id')->get();
         return view('admin.settings.manage', compact(
-            'hero','cards','heritage','clients','subscription','footer','quick_links','services','featured','featuredCards','collections'
+            'hero',
+            'cards',
+            'heritage',
+            'clients',
+            'subscription',
+            'footer',
+            'quick_links',
+            'services',
+            'featured',
+            'featuredCards',
+            'collections',
+            'contact_infos'
         ));
     }
 
     // Update homepage settings
     public function update(Request $request)
     {
-        // --- HERO SECTION ---
+        /* ================= HERO SECTION ================= */
         $hero = HeroSection::firstOrNew([]);
-        $hero->title = $request->hero_title;
+        $hero->title    = $request->hero_title;
         $hero->subtitle = $request->hero_subtitle;
         $hero->btn1_text = $request->hero_btn1_text;
         $hero->btn1_link = $request->hero_btn1_link;
@@ -69,13 +83,13 @@ class SettingController extends Controller
         }
         $hero->save();
 
-        // --- COLLECTIONS SECTION ---
+        /* ================= COLLECTIONS ================= */
         $collections = CollectionSection::firstOrNew([]);
         $collections->title = $request->collections_title;
         $collections->subtitle = $request->collections_subtitle;
         $collections->save();
 
-        // --- HERITAGE SECTION ---
+        /* ================= HERITAGE ================= */
         $heritage = Heritage::firstOrNew([]);
         $heritage->title = $request->heritage_title;
         $heritage->paragraph1 = $request->heritage_paragraph1;
@@ -90,13 +104,13 @@ class SettingController extends Controller
         }
         $heritage->save();
 
-        // --- SUBSCRIPTION SECTION ---
+        /* ================= SUBSCRIPTION ================= */
         $subscription = SubscriptionSection::firstOrNew([]);
         $subscription->title = $request->subscription_title;
         $subscription->subtitle = $request->subscription_subtitle;
         $subscription->save();
 
-        // --- FOOTER SETTINGS ---
+        /* ================= FOOTER ================= */
         $footer = Setting::firstOrNew([]);
         $footer->footer_brand_name = $request->footer_brand_name;
         $footer->footer_brand_desc = $request->footer_brand_desc;
@@ -109,161 +123,142 @@ class SettingController extends Controller
         $footer->footer_copyright  = $request->footer_copyright;
         $footer->save();
 
-        // --- QUICK LINKS ---
-        if ($request->footer_quick && isset($request->footer_quick['text'])) {
-            foreach ($request->footer_quick['text'] as $index => $text) {
+        /* ================= QUICK LINKS ================= */
+        if ($request->has('footer_quick')) {
+            // update existing
+            foreach ($request->footer_quick['existing'] ?? [] as $id => $data) {
+                $ql = QuickLink::find($id);
+                if ($ql) $ql->update(['text' => $data['text'], 'url' => $data['url']]);
+            }
+            // add new
+            foreach ($request->footer_quick['new']['text'] ?? [] as $index => $text) {
                 if (!empty($text)) {
                     QuickLink::create([
                         'text' => $text,
-                        'url'  => $request->footer_quick['url'][$index] ?? '#',
+                        'url'  => $request->footer_quick['new']['url'][$index] ?? '#',
                     ]);
                 }
             }
         }
 
-        // --- SERVICES ---
-        if ($request->footer_service && isset($request->footer_service['text'])) {
-            foreach ($request->footer_service['text'] as $index => $text) {
+        /* ================= SERVICES ================= */
+        if ($request->has('footer_service')) {
+            foreach ($request->footer_service['existing'] ?? [] as $id => $data) {
+                $service = Service::find($id);
+                if ($service) $service->update(['text' => $data['text'], 'url' => $data['url']]);
+            }
+            foreach ($request->footer_service['new']['text'] ?? [] as $index => $text) {
                 if (!empty($text)) {
                     Service::create([
                         'text' => $text,
-                        'url'  => $request->footer_service['url'][$index] ?? '#',
+                        'url'  => $request->footer_service['new']['url'][$index] ?? '#',
                     ]);
                 }
             }
         }
 
-        // --- FEATURE CARDS ---
+        /* ================= FEATURE CARDS ================= */
         if ($request->has('cards')) {
-            foreach ($request->cards as $cardIndex => $cardData) {
-                if (!empty($cardData['title'])) {
-                    $featureCard = FeatureCard::firstOrNew(['id' => $cardData['id'] ?? null]);
+            foreach ($request->cards as $cardData) {
+                if (empty($cardData['title'])) continue;
+
+                $featureCard = !empty($cardData['id']) ? FeatureCard::find($cardData['id']) : new FeatureCard();
+                if ($featureCard) {
                     $featureCard->title = $cardData['title'];
                     $featureCard->description = $cardData['description'] ?? '';
-
                     if (isset($cardData['svg']) && $cardData['svg']) {
+                        if ($featureCard->svg_path && file_exists(public_path($featureCard->svg_path))) {
+                            unlink(public_path($featureCard->svg_path));
+                        }
                         $featureCard->svg_path = $this->storeImagePublic($cardData['svg'], 'cards');
                     }
-
                     $featureCard->save();
                 }
             }
         }
 
-        // --- CLIENTS ---
+        /* ================= FEATURED COLLECTIONS ================= */
+        $main = FeaturedCollection::find(1);
+        if ($main) {
+            $main->main_title = $request->featured_main_title;
+            $main->main_subtitle = $request->featured_main_subtitle;
+            $main->save();
+        }
+
+        if ($request->has('featured_collections')) {
+            foreach ($request->featured_collections as $cardData) {
+                if (!empty($cardData['id'])) {
+                    $card = FeaturedCollection::find($cardData['id']);
+                    if ($card) {
+                        $card->title = $cardData['title'] ?? '';
+                        $card->subtitle = $cardData['subtitle'] ?? '';
+                        if (isset($cardData['image']) && $cardData['image']) {
+                            if ($card->image && file_exists(public_path($card->image))) {
+                                unlink(public_path($card->image));
+                            }
+                            $card->image = $this->storeImagePublic($cardData['image'], 'collections');
+                        }
+                        $card->save();
+                    }
+                }
+            }
+        }
+
+        /* ================= CLIENTS ================= */
         if ($request->has('clients')) {
+            // existing
+            foreach ($request->clients['existing']['name'] ?? [] as $id => $name) {
+                $client = Client::find($id);
+                if ($client) {
+                    $client->name = $name;
+                    $client->designation = $request->clients['existing']['designation'][$id] ?? '';
+                    $client->quote = $request->clients['existing']['quote'][$id] ?? '';
+                    if (isset($request->clients['existing']['image'][$id]) && $request->clients['existing']['image'][$id]) {
+                        $client->image = $this->storeImagePublic($request->clients['existing']['image'][$id], 'clients');
+                    }
+                    $client->save();
+                }
+            }
+            // new
             foreach ($request->clients['new']['name'] ?? [] as $index => $name) {
                 if (!empty($name)) {
                     $client = new Client();
                     $client->name = $name;
                     $client->designation = $request->clients['new']['designation'][$index] ?? '';
                     $client->quote = $request->clients['new']['quote'][$index] ?? '';
-
                     if (isset($request->clients['new']['image'][$index]) && $request->clients['new']['image'][$index]) {
                         $client->image = $this->storeImagePublic($request->clients['new']['image'][$index], 'clients');
                     }
-
                     $client->save();
                 }
             }
         }
 
-        return back()->with('success', 'Homepage settings updated successfully!');
-    }
 
-    // ---- FEATURE CARD CRUD ----
-    public function cardStore(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'svg' => 'nullable|file|mimes:svg',
-        ]);
-
-        $path = $request->hasFile('svg') ? $this->storeImagePublic($request->file('svg'), 'cards') : null;
-
-        FeatureCard::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'svg_path' => $path,
-        ]);
-
-        return back()->with('success', 'Feature Card added!');
-    }
-
-    public function cardUpdate(Request $request, FeatureCard $card)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'svg' => 'nullable|file|mimes:svg',
-        ]);
-
-        if ($request->hasFile('svg')) {
-            $card->svg_path = $this->storeImagePublic($request->file('svg'), 'cards');
+        /* ================= CONTACT INFOS ================= */
+        if ($request->has('contact_infos')) {
+            foreach ($request->contact_infos as $data) {
+                if (!empty($data['id'])) {
+                    $contact = \App\Models\ContactInfo::find($data['id']);
+                    if ($contact) {
+                        $contact->update([
+                            'title' => $data['title'] ?? '',
+                            'type'  => $data['type'] ?? 'address',
+                            'details' => $data['details'] ?? '',
+                        ]);
+                    }
+                } else {
+                    \App\Models\ContactInfo::create([
+                        'title' => $data['title'] ?? '',
+                        'type'  => $data['type'] ?? 'address',
+                        'details' => $data['details'] ?? '',
+                        'order' => \App\Models\ContactInfo::max('order') + 1,
+                    ]);
+                }
+            }
         }
 
-        $card->update([
-            'title' => $request->title,
-            'description' => $request->description,
-        ]);
 
-        return back()->with('success', 'Feature Card updated!');
-    }
-
-    public function cardDelete(FeatureCard $card)
-    {
-        $card->delete();
-        return back()->with('success', 'Feature Card deleted!');
-    }
-
-    // ---- CLIENT CRUD ----
-    public function clientStore(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'designation' => 'nullable|string|max:255',
-            'quote' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
-
-        $path = $request->hasFile('image') ? $this->storeImagePublic($request->file('image'), 'clients') : null;
-
-        Client::create([
-            'name' => $request->name,
-            'designation' => $request->designation,
-            'quote' => $request->quote,
-            'image' => $path,
-        ]);
-
-        return back()->with('success', 'Client added!');
-    }
-
-    public function clientUpdate(Request $request, Client $client)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'designation' => 'nullable|string|max:255',
-            'quote' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $client->image = $this->storeImagePublic($request->file('image'), 'clients');
-        }
-
-        $client->update([
-            'name' => $request->name,
-            'designation' => $request->designation,
-            'quote' => $request->quote,
-        ]);
-
-        return back()->with('success', 'Client updated!');
-    }
-
-    public function clientDelete(Client $client)
-    {
-        $client->delete();
-        return back()->with('success', 'Client deleted!');
+        return back()->with('success', 'Settings Updated Successfully!');
     }
 }

@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Models\Country;
 use Illuminate\Http\Request;
-
+use App\Models\ContactInfo;
 class ContactController extends Controller
 {
      // Show contact form
     public function index()
     {
         $countries = Country::orderBy('name')->get(); // Fetch all countries
-        return view('contact', compact('countries'));
+         $contact_infos = ContactInfo::orderBy('order')->get();
+        return view('contact', compact('countries','contact_infos'));
     }
 
     // Store form data into DB
