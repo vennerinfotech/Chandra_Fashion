@@ -20,7 +20,22 @@
      <!-- Image field -->
     <div class="mb-3">
         <label for="image" class="form-label">Category Image</label>
-        <input type="file" name="image" id="image" class="form-control">
+        <input type="file" name="image" id="image" class="form-control" onchange="previewImage(event)">
+
+        {{-- Existing Image (for Edit page only) --}}
+        @if(isset($category) && $category->image)
+            <div class="mt-2">
+                <img src="{{ asset('images/categories/' . $category->image) }}"
+                    alt="Current Image"
+                    id="existingImage"
+                    width="80" height="80" class="rounded border">
+            </div>
+        @endif
+
+        {{-- Image Preview (for new uploads) --}}
+        <div class="mt-2" id="previewContainer" style="display:none;">
+            <img id="imagePreview" src="#" alt="Image Preview"  width="80" height="80" class="rounded border">
+        </div>
     </div>
 
     {{-- Status --}}
@@ -40,3 +55,25 @@
         </button>
     </div>
 </div>
+<script>
+function previewImage(event) {
+    const input = event.target;
+    const previewContainer = document.getElementById('previewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const existingImage = document.getElementById('existingImage');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            previewContainer.style.display = 'block';
+            if (existingImage) {
+                existingImage.style.display = 'none';
+            }
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>

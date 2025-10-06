@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::where('status', 1)->get();
-        return view('admin.products.create', compact('categories'));
+        $subcategories = []; // empty initially
+        return view('admin.products.create', compact('categories', 'subcategories'));
     }
 
 
@@ -134,7 +136,19 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::where('status', 1)->get();
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        // Load subcategories of selected category
+        $subcategories = $product->category_id
+            ? \App\Models\SubCategory::where('category_id', $product->category_id)
+                ->where('status', 1)->get()
+            : [];
+
+        return view('admin.products.edit', compact('product', 'categories', 'subcategories'));
+    }
+
+    public function getSubcategories($categoryId)
+    {
+        $subcategories = Subcategory::where('category_id', $categoryId)->get();
+        return response()->json(['subcategories' => $subcategories]);
     }
 
 

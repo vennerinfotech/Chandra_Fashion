@@ -14,18 +14,26 @@
         <textarea name="description" id="description" rows="3" class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
     </div>
 
-    <div class="mb-3">
-        <label for="category_id" class="form-label">Category</label>
-        <select name="category_id" id="category_id" class="form-control" required>
-            <option value="">-- Select Category --</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}"
-                    {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+<div class="mb-3">
+    <label for="category_id" class="form-label">Category</label>
+    <select name="category_id" id="category_id" class="form-control" required>
+        <option value="">-- Select Category --</option>
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}"
+                {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+<!-- Subcategory Field -->
+<div class="mb-3">
+    <label for="subcategory_id" class="form-label">Subcategory</label>
+    <select name="subcategory_id" id="subcategory_id" class="form-control">
+        <option value="">-- Select Subcategory --</option>
+    </select>
+</div>
 
     {{-- Price --}}
     <div class="mb-3">
@@ -132,4 +140,46 @@
     </div>
 </div>
 @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var categorySelect = document.getElementById('category_id');
+        var subcategorySelect = document.getElementById('subcategory_id');
+        var selectedSubcategoryId = '{{ old('subcategory_id', $product->subcategory_id ?? '') }}';
+
+        // If editing, fetch subcategories for current category
+        if (categorySelect.value) {
+            fetchSubcategories(categorySelect.value, selectedSubcategoryId);
+        }
+
+        categorySelect.addEventListener('change', function() {
+            var categoryId = this.value;
+            if (categoryId) {
+                fetchSubcategories(categoryId, null); // no selection on change
+            } else {
+                subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+            }
+        });
+
+        function fetchSubcategories(categoryId, selectId = null) {
+            fetch('/admin/get-subcategories/' + categoryId)
+                .then(response => response.json())
+                .then(data => {
+                    subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+                    data.subcategories.forEach(function(subcategory) {
+                        var option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.name;
+                        if (selectId && selectId == subcategory.id) {
+                            option.selected = true; // mark the correct subcategory as selected
+                        }
+                        subcategorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching subcategories:', error);
+                });
+        }
+    });
+</script>
+
 @endpush

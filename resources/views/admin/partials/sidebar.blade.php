@@ -120,6 +120,13 @@
             </a>
         </li>
 
+        <!-- SubCategories -->
+        <li class="{{ request()->routeIs('admin.subcategories.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.subcategories.index') }}">
+                <i class="fa-solid fa-layer-group me-2"></i> SubCategories
+            </a>
+        </li>
+
         <!-- Products -->
         <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
             <a href="{{ route('admin.products.index') }}">
