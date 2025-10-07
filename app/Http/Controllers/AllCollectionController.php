@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\SubCategory;
 class AllCollectionController extends Controller
 {
     public function index()
     {
-
-        return view('allcollection');
+         $subcategories = SubCategory::all();
+         return view('allcollection', compact('subcategories'));
     }
 }
