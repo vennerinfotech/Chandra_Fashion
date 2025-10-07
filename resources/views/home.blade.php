@@ -4,24 +4,62 @@
 
 @section('content')
 
+<!-- Hero Slider Section -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-inner">
 
-    {{-- <section class="hero-section">
+    <!-- Slide 1 -->
+    <div class="carousel-item active">
+      <section class="hero-section" style="background: url('/images/hero-banner.png') no-repeat center center/cover;">
         <div class="hero-overlay"></div>
         <div class="container">
-            <div class="hero-content">
-                <h1>Crafting Excellence in <br><span>Fashion Manufacturing</span></h1>
-                <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global
-                    fashion brands.</p>
-                <div class="hero-sectoin-btn">
-                    <a href="#" class="btn btn-yellow">Explore Collection</a>
-                    <a href="#" class="btn btn-outline">Check Price</a>
-                    <a href="#" class="btn btn-light">Get in Touch</a>
-                </div>
+          <div class="hero-content">
+            <h1>Crafting Excellence in <br><span>Fashion Manufacturing</span></h1>
+            <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global fashion brands.</p>
+            <div class="hero-sectoin-btn">
+              <a href="#" class="btn btn-yellow">Explore Collection</a>
+              <a href="#" class="btn btn-outline">Check Price</a>
+              <a href="#" class="btn btn-light">Get in Touch</a>
             </div>
+          </div>
         </div>
-    </section> --}}
+      </section>
+    </div>
 
-    <section class="hero-section"
+    <!-- Slide 2 -->
+    <div class="carousel-item">
+      <section class="hero-section" style="background: url('/images/hero-banner.png') no-repeat center center/cover;">
+        <div class="hero-overlay"></div>
+        <div class="container">
+          <div class="hero-content">
+            <h1>Trusted Partner in <br><span>Global Apparel Production</span></h1>
+            <p>Delivering high-quality clothing solutions with innovation, precision, and unmatched craftsmanship.</p>
+            <div class="hero-sectoin-btn">
+              <a href="#" class="btn btn-yellow">Our Services</a>
+              <a href="#" class="btn btn-outline">View Portfolio</a>
+              <a href="#" class="btn btn-light">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Carousel Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+    {{-- <section class="hero-section"
         @if (!empty($hero->background_image)) style="background-image:url('{{ asset($hero->background_image) }}');" @endif>
 
         <div class="hero-overlay"></div>
@@ -41,7 +79,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="featured-section section-padding">
         <div class="container-fluid">
@@ -54,8 +92,8 @@
                 </p>
             </div>
             <div class="row">
-                @foreach ($featuredCollections as $card)
-                    <div class="col-lg-4">
+                <div class="custom-owl-carousel owl-carousel featured-carousel">
+                    @foreach ($featuredCollections as $card)
                         <div class="featured-collection-grid">
                             <div class="featured-img">
                                 @if ($card->image)
@@ -67,8 +105,9 @@
                                 <p>{{ $card->subtitle }}</p>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
+
             </div>
         </div>
     </section>
@@ -84,78 +123,55 @@
                 </p>
             </div>
             <div class="row">
-                <div class="col-md-6 col-lg-4">
+                <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
                     <div class="new-arrival-box card">
                         <div class="new-arrival-box-img">
-                             <img src="/images/product1.webp" alt="" class="img-fluid">
+                            <img src="/images/product2.jpg" alt="" class="img-fluid">
                         </div>
                         <div class="arrival-list">
-                            <p class="">TRENDING</p>
+                            <p>TRENDING</p>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Casual Cloths</h5>
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            </p>
                             <div class="material-list">
                                 <small class="badge-material">Cotton</small>
                                 <small class="badge-moq">MOQ: 10</small>
                             </div>
-                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
-                                Price</a>
+                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
+
                     <div class="new-arrival-box card">
                         <div class="new-arrival-box-img">
-                             <img src="/images/product1.webp" alt="" class="img-fluid">
+                            <img src="/images/product3.webp" alt="" class="img-fluid">
                         </div>
                         <div class="arrival-list">
-                            <p class="">20% OFF</p>
+                            <p>FEATURED</p>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title fw-bold">Casual Cloths</h5>
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <h5 class="card-title fw-bold">Designer T-Shirts</h5>
+                            <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
                             <div class="material-list">
                                 <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 10</small>
+                                <small class="badge-moq">MOQ: 20</small>
                             </div>
-                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
-                                Price</a>
+                            <a href="#" class="btn">Check Price</a>
                         </div>
                     </div>
+
+                    <!-- Add more product cards here -->
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="new-arrival-box card">
-                        <div class="new-arrival-box-img">
-                             <img src="/images/product1.webp" alt="" class="img-fluid">
-                        </div>
-                        <div class="arrival-list">
-                            <p class="">TRENDING</p>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Casual Cloths</h5>
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                            <div class="material-list">
-                                <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 10</small>
-                            </div>
-                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check
-                                Price</a>
-                        </div>
-                    </div>
-                </div>
+
+
             </div>
         </div>
     </section>
 
 
     <section class="collections-section section-padding">
-        <div class="container-fluid">
-            {{-- <div class="row">
-                <h2 class="section-title">Our Collections</h2>
-                <p class="section-sub-title">Specialized manufacturing across diverse fashion categories with uncompromising
-                    quality standards</p>
-            </div> --}}
+        <div class="container">
             <div class="row">
                 <h2 class="section-title">{{ $collections->title ?? 'Our Collections' }}</h2>
                 <p class="section-sub-title">
@@ -163,10 +179,9 @@
                 </p>
             </div>
 
-            <div class="collection-grid">
+            <div class="custom-owl-carousel owl-carousel collection-carousel">
                 @foreach ($categories as $category)
                     <div class="collection-item">
-                        {{-- Image: show default if no image --}}
                         <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
                             alt="{{ $category->name }}">
 
@@ -177,6 +192,7 @@
                     </div>
                 @endforeach
             </div>
+
 
 
 
@@ -327,10 +343,6 @@
             </div>
         </div>
     </section> --}}
-
-
-
-
 
 
     {{-- <section class="heritage-section section-padding">
@@ -526,13 +538,94 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $(".client-carousel").owlCarousel({
+            $(".featured-carousel").owlCarousel({
                 loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                navText: [
+                    '<i class="fa-solid fa-chevron-left"></i>',
+                    '<i class="fa-solid fa-chevron-right"></i>'
+                ],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    576: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    }
+                }
+            });
+
+            $(".new-arrival-carousel").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 1500,
+                autoplayHoverPause: true,
+                navText: [
+                    '<i class="fa-solid fa-chevron-left"></i>',
+                    '<i class="fa-solid fa-chevron-right"></i>'
+                ],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    576: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    },
+                    1150: {
+                        items: 4
+                    }
+                }
+            });
+
+            $(".collection-carousel").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 1500,
+                autoplayHoverPause: true,
+                navText: [
+                    '<i class="fa-solid fa-chevron-left"></i>',
+                    '<i class="fa-solid fa-chevron-right"></i>'
+                ],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    576: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    },
+                     1150: {
+                        items: 4
+                    }
+                }
+            });
+
+            $(".client-carousel").owlCarousel({
+                loop: false,
                 margin: 20,
                 nav: false,
                 dots: true,
-                autoplay: false,
-                autoplayTimeout: 2000,
+                autoplay: true,
+                autoplayTimeout: 5100,
                 responsive: {
                     0: {
                         items: 1

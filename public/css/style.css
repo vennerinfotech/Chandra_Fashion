@@ -157,6 +157,29 @@
     color: #2b3d51;
 }
 
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Initial hidden state */
+.hero-content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+/* Active slide’s content fades in */
+.carousel-item.active .hero-content {
+  animation: fadeUp 1s ease forwards;
+}
+
 @media (max-width: 768px) {
     .hero-content h1 {
         font-size: 2.2rem;
@@ -217,7 +240,7 @@
 }
 
 .collection-item img {
-    width: 250px;
+    width: 250px !important;
     height: 250px;
     object-fit: cover;
     display: block;
@@ -247,6 +270,14 @@
 .product-card img {
     object-fit: cover;
     height: 200px;
+}
+
+.collection-carousel .owl-nav .owl-prev{
+    left: -15px !important;
+}
+
+.collection-carousel .owl-nav .owl-next{
+    right: -15px !important;
 }
 
 /*Card Section Css*/
@@ -298,6 +329,7 @@
 }
 .featured-collection-grid {
     position: relative;
+cursor: pointer;
 }
 .featured-collection-grid .featured-img {
     position: relative;
@@ -320,6 +352,8 @@
 .featured-collection-grid .featured-img img {
     border-radius: 15px;
     width: 100%;
+    height: 500px;
+    object-fit: cover;
     transform: scale(1);
     transition: all 0.5s ease-in-out;
 }
@@ -351,6 +385,43 @@
     transform: scale(1.1);
     transition: all 0.5s ease-in-out;
 }
+.featured-section .featured-carousel{
+    position: relative;
+}
+
+.custom-owl-carousel .owl-nav{
+    display: block !important;
+}
+
+.custom-owl-carousel .owl-nav .owl-prev,
+.custom-owl-carousel .owl-nav .owl-next{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #000 !important;
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-owl-carousel .owl-nav .owl-prev{
+    left: -5px;
+
+}
+
+.custom-owl-carousel .owl-nav .owl-next{
+    right: -5px;
+}
+
+.custom-owl-carousel .owl-nav .owl-prev svg path,
+.custom-owl-carousel .owl-nav .owl-next svg path{
+    fill: #fff;
+}
 
 /*Heritage Css*/
 
@@ -380,6 +451,7 @@
 
 .heritage-img img {
     height: 385px;
+    width: 100%;
     object-fit: cover;
     border-radius: 16px;
 }
@@ -1276,7 +1348,7 @@ footer .chatbot-btn svg path {
 }
 
 .new-arrival-box:hover {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.19), 0 6px 6px rgb(0 0 0 / 1%);
+    border: 1px solid #000;
     transition: all 0.5s ease-in-out;
 }
 
@@ -1287,6 +1359,8 @@ footer .chatbot-btn svg path {
 
 .new-arrival-box img {
     width: 100%;
+    height: 250px;
+    object-fit: cover;
     border-radius: 8px;
     transition: all 0.5s ease-in-out;
 }
@@ -1354,8 +1428,9 @@ footer .chatbot-btn svg path {
 }
 
 .new-arrival-box .btn:hover {
-    background: #fff;
+    background: #f0c040;
     color: #000;
+      border: 1px solid #f0c040;
 }
 
 /* Pagination Styling */
