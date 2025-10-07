@@ -351,7 +351,6 @@
                     </div>
                 </div>
             </div>
-
             {{-- ================= CONTACT INFO ================= --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
@@ -364,11 +363,26 @@
                         <div class="contact-row border p-3 mb-2">
                             <input type="hidden" name="contact_infos[{{ $index }}][id]" value="{{ $contact->id }}">
                             <div class="row align-items-center">
+                                {{-- Title --}}
                                 <div class="col-md-3 mb-2">
                                     <label>Title</label>
                                     <input type="text" name="contact_infos[{{ $index }}][title]" value="{{ $contact->title }}"
                                         class="form-control" required>
                                 </div>
+
+                                {{-- Type Dropdown --}}
+                                <div class="col-md-2 mb-2">
+                                    <label>Type</label>
+                                    <select name="contact_infos[{{ $index }}][type]" class="form-control">
+                                        <option value="address" {{ $contact->type == 'address' ? 'selected' : '' }}>Address
+                                        </option>
+                                        <option value="phone" {{ $contact->type == 'phone' ? 'selected' : '' }}>Phone</option>
+                                        <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>Email</option>
+                                        <option value="hours" {{ $contact->type == 'hours' ? 'selected' : '' }}>hours</option>
+                                    </select>
+                                </div>
+
+                                {{-- Details --}}
                                 <div class="col-md-5 mb-2">
                                     <label>Details</label>
                                     <textarea name="contact_infos[{{ $index }}][details]" class="form-control"
@@ -444,27 +458,27 @@
             // Create a new row div with SVG + inputs (HTML string)
             var newRow = document.createElement('div');
             newRow.innerHTML = `
-                                            <div class="row new-card-row">
-                                                <div class="col-lg-4">
-                                                    <div class="card">
-                                                        <div class="card-body text-center d-flex flex-column align-items-center gap-3">
-                                                            <div class="svg-wrapper">
+                                                <div class="row new-card-row">
+                                                    <div class="col-lg-4">
+                                                        <div class="card">
+                                                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                                                                <div class="svg-wrapper">
 
+                                                                </div>
+                                                                <div class="mb-2 w-100">
+                                                                    <label>Title</label>
+                                                                    <input type="text" name="cards[new][title][]" class="form-control" required>
+                                                                </div>
+                                                                <div class="mb-2 w-100">
+                                                                    <label>Description</label>
+                                                                    <input type="text" name="cards[new][description][]" class="form-control">
+                                                                </div>
+                                                                <button type="button" class="btn btn-danger remove-row">Remove</button>
                                                             </div>
-                                                            <div class="mb-2 w-100">
-                                                                <label>Title</label>
-                                                                <input type="text" name="cards[new][title][]" class="form-control" required>
-                                                            </div>
-                                                            <div class="mb-2 w-100">
-                                                                <label>Description</label>
-                                                                <input type="text" name="cards[new][description][]" class="form-control">
-                                                            </div>
-                                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            `;
+                                                `;
 
             // Append to container
             container.appendChild(newRow);
@@ -481,28 +495,28 @@
             const newRow = document.createElement('div');
             newRow.classList.add('client-row', 'border', 'p-3', 'mb-2');
             newRow.innerHTML = `
-                                                <div class="row align-items-center">
-                                                    <div class="col-md-2 mb-2">
-                                                        <label>Image</label>
-                                                        <input type="file" name="clients[new][image][]" class="form-control-file">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-md-2 mb-2">
+                                                            <label>Image</label>
+                                                            <input type="file" name="clients[new][image][]" class="form-control-file">
+                                                        </div>
+                                                        <div class="col-md-3 mb-2">
+                                                            <label>Name</label>
+                                                            <input type="text" name="clients[new][name][]" placeholder="Name" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-3 mb-2">
+                                                            <label>Designation</label>
+                                                            <input type="text" name="clients[new][designation][]" placeholder="Designation" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-3 mb-2">
+                                                            <label>Quote</label>
+                                                            <input type="text" name="clients[new][quote][]" placeholder="Quote" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-1 mb-2 d-flex align-items-end">
+                                                            <button type="button" class="btn btn-sm btn-danger cancelClientBtn">Cancel</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-3 mb-2">
-                                                        <label>Name</label>
-                                                        <input type="text" name="clients[new][name][]" placeholder="Name" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-3 mb-2">
-                                                        <label>Designation</label>
-                                                        <input type="text" name="clients[new][designation][]" placeholder="Designation" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-3 mb-2">
-                                                        <label>Quote</label>
-                                                        <input type="text" name="clients[new][quote][]" placeholder="Quote" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-1 mb-2 d-flex align-items-end">
-                                                        <button type="button" class="btn btn-sm btn-danger cancelClientBtn">Cancel</button>
-                                                    </div>
-                                                </div>
-                                            `;
+                                                `;
             container.appendChild(newRow);
 
             // Attach Cancel event
@@ -514,34 +528,34 @@
         function addQuickLink() {
             let container = document.getElementById('quick-links-container');
             let html = `
-                                            <div class="row mb-2 quick-link-row">
-                                                <div class="col-md-5 mb-2">
-                                                    <input type="text" name="footer_quick[new][text][]" class="form-control" placeholder="Link Text" required>
-                                                </div>
-                                                <div class="col-md-5 mb-2">
-                                                    <input type="text" name="footer_quick[new][url][]" class="form-control" placeholder="Link URL" required>
-                                                </div>
-                                                <div class="col-md-2 mb-2 d-flex align-items-end">
-                                                    <button class="btn btn-danger btn-sm w-100 remove-quick-link">Remove</button>
-                                                </div>
-                                            </div>`;
+                                                <div class="row mb-2 quick-link-row">
+                                                    <div class="col-md-5 mb-2">
+                                                        <input type="text" name="footer_quick[new][text][]" class="form-control" placeholder="Link Text" required>
+                                                    </div>
+                                                    <div class="col-md-5 mb-2">
+                                                        <input type="text" name="footer_quick[new][url][]" class="form-control" placeholder="Link URL" required>
+                                                    </div>
+                                                    <div class="col-md-2 mb-2 d-flex align-items-end">
+                                                        <button class="btn btn-danger btn-sm w-100 remove-quick-link">Remove</button>
+                                                    </div>
+                                                </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
 
         function addService() {
             let container = document.getElementById('services-container');
             let html = `
-                                            <div class="row mb-2 service-row">
-                                                <div class="col-md-5 mb-2">
-                                                    <input type="text" name="footer_service[new][text][]" class="form-control" placeholder="Service Text" required>
-                                                </div>
-                                                <div class="col-md-5 mb-2">
-                                                    <input type="text" name="footer_service[new][url][]" class="form-control" placeholder="Service URL" required>
-                                                </div>
-                                                <div class="col-md-2 mb-2 d-flex align-items-end">
-                                                    <button class="btn btn-danger btn-sm w-100 remove-service">Remove</button>
-                                                </div>
-                                            </div>`;
+                                                <div class="row mb-2 service-row">
+                                                    <div class="col-md-5 mb-2">
+                                                        <input type="text" name="footer_service[new][text][]" class="form-control" placeholder="Service Text" required>
+                                                    </div>
+                                                    <div class="col-md-5 mb-2">
+                                                        <input type="text" name="footer_service[new][url][]" class="form-control" placeholder="Service URL" required>
+                                                    </div>
+                                                    <div class="col-md-2 mb-2 d-flex align-items-end">
+                                                        <button class="btn btn-danger btn-sm w-100 remove-service">Remove</button>
+                                                    </div>
+                                                </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
 
@@ -563,24 +577,24 @@
         document.getElementById('add-card-btn').addEventListener('click', function () {
             const wrapper = document.getElementById('cards-wrapper');
             const cardHtml = `
-                <div class="card mb-3 p-3 border featured-collection-card">
-                    <div class="mb-2">
-                        <label>Title</label>
-                        <input type="text" name="featured_collections[${featuredCardIndex}][title]" class="form-control" required>
+                    <div class="card mb-3 p-3 border featured-collection-card">
+                        <div class="mb-2">
+                            <label>Title</label>
+                            <input type="text" name="featured_collections[${featuredCardIndex}][title]" class="form-control" required>
+                        </div>
+                        <div class="mb-2">
+                            <label>Subtitle</label>
+                            <input type="text" name="featured_collections[${featuredCardIndex}][subtitle]" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label>Card Image</label>
+                            <input type="file" name="featured_collections[${featuredCardIndex}][image]" class="form-control">
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-danger remove-featured-card">Remove</button>
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <label>Subtitle</label>
-                        <input type="text" name="featured_collections[${featuredCardIndex}][subtitle]" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label>Card Image</label>
-                        <input type="file" name="featured_collections[${featuredCardIndex}][image]" class="form-control">
-                    </div>
-                    <div class="text-end">
-                        <button type="button" class="btn btn-sm btn-danger remove-featured-card">Remove</button>
-                    </div>
-                </div>
-            `;
+                `;
             wrapper.insertAdjacentHTML('beforeend', cardHtml);
             featuredCardIndex++;
         });
@@ -594,7 +608,7 @@
 
 
         document.getElementById('add-hero-btn').addEventListener('click', function () {
-            let container = document.getElementById('hero-sections-container');
+            let container = document.getElementById('hero-sections-body');
             let template = container.querySelector('.hero-section').cloneNode(true);
 
             // Clear values for new section
@@ -610,7 +624,7 @@
         });
 
         // Remove hero section
-        document.getElementById('hero-sections-container').addEventListener('click', function (e) {
+        document.getElementById('hero-sections-body').addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-hero-btn')) {
                 e.target.closest('.hero-section').remove();
             }
