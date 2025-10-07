@@ -15,7 +15,7 @@
         <div class="container">
           <div class="hero-content">
             <h1>Crafting Excellence in <br><span>Fashion Manufacturing</span></h1>
-            <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global fashion brands.</p>
+            {{-- <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global fashion brands.</p> --}}
             <div class="hero-sectoin-btn">
               <a href="#" class="btn btn-yellow">Explore Collection</a>
               <a href="#" class="btn btn-outline">Check Price</a>
@@ -33,7 +33,7 @@
         <div class="container">
           <div class="hero-content">
             <h1>Trusted Partner in <br><span>Global Apparel Production</span></h1>
-            <p>Delivering high-quality clothing solutions with innovation, precision, and unmatched craftsmanship.</p>
+            {{-- <p>Delivering high-quality clothing solutions with innovation, precision, and unmatched craftsmanship.</p> --}}
             <div class="hero-sectoin-btn">
               <a href="#" class="btn btn-yellow">Our Services</a>
               <a href="#" class="btn btn-outline">View Portfolio</a>
