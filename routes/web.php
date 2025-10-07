@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AllCollectionController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -29,3 +30,5 @@ Route::get('/cities/{state}', [ChatController::class, 'getCities'])->name('citie
 Route::post('/inquiries/store', [InquiryController::class, 'store'])->name('inquiries.store');
 
 Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('send.chat');
+
+Route::get('/allcollection', [AllCollectionController::class, 'index'])->name('allcollection');

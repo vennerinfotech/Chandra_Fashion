@@ -3,7 +3,17 @@
 @section('title', $product->name . ' - Product Details')
 
 @section('content')
-    <div class="product-detail-wrapper top-section-padding">
+
+<section class="breadcrumb-wrapper top-section-padding">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Product Detail</li>
+  </ol>
+  <h2 class="breadcrumb-title">Product Detail</h2>
+</nav>
+</section>
+    <div class="product-detail-wrapper section-padding">
         <div class="container">
             <div class="row g-4">
                 {{-- Left Side: Product Image & Thumbnails --}}

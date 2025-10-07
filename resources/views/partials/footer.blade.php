@@ -9,6 +9,7 @@
           <a href="#" class="bi bi-facebook"><i class="fa-brands fa-facebook"></i></a>
           <a href="#" class="bi bi-instagram"><i class="fa-brands fa-instagram"></i></a>
           <a href="#" class="bi bi-linkedin"><i class="fa-brands fa-square-linkedin"></i></a>
+          <a href="#" class="bi bi-linkedin"><i class="fa-brands fa-youtube"></i></a>
         </div>
       </div>
 
@@ -18,8 +19,8 @@
         <ul>
             <li><a href="{{ route('home') }}">About Us</a></li>
             <li><a href="{{ route('contact') }}">Contact Us</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">All Collections</a></li>
+            <li><a href="{{ route('products.index') }}">Products</a></li>
+            <li><a href="{{ route('products.index') }}">Check Price</a></li>
         </ul>
       </div>
 

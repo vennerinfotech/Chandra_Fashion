@@ -3,7 +3,18 @@
 @section('title', 'Chandra Fashion - Manufacturer of Lycra Fabric & Polyester Lycra Fabrics')
 
 @section('content')
-<div class="product-filter-wrapper top-section-padding">
+
+<section class="breadcrumb-wrapper top-section-padding">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Shop</li>
+  </ol>
+  <h2 class="breadcrumb-title">Shop</h2>
+</nav>
+</section>
+
+<div class="product-filter-wrapper section-padding">
     <div class="container">
         <div class="row">
             <!-- Filter Sidebar -->

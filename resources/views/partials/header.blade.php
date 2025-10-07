@@ -17,7 +17,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">All Collection</a></li>
+        <li class="nav-item"><a href="{{ route('allcollection') }}" class="nav-link">All Collection</a></li>
         <li class="nav-item"><a href="{{ route('products.index') }}" class="nav-link">Products</a></li>
         <li class="nav-item"><a href="{{ route('contact') }}" class="nav-link">Contact Us</a></li>
       </ul>

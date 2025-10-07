@@ -4,14 +4,18 @@
 
 @section('content')
 
-    <section class="contact-page-wrapper top-section-padding">
+<section class="breadcrumb-wrapper top-section-padding">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+  </ol>
+  <h2 class="breadcrumb-title">Contact Us</h2>
+</nav>
+</section>
+
+    <section class="contact-page-wrapper section-padding">
         <div class="container contact-page-form">
-            <div class="row">
-                <img src="{{ asset('images/contact-top.png') }}" alt="Contact Icon" class="img-fluid contact-top-img">
-                <h2 class="section-title">Contact Us</h2>
-                <p class="section-sub-title">Get in touch with our team. We're here to help with all your fashion and textile
-                    needs.</p>
-            </div>
             <div class="row">
                 {{-- Left: Form --}}
                 <div class="col-md-6">
@@ -53,7 +57,7 @@
                                 <label class="form-label">Country</label>
                                 <select name="country" class="form-select">
                                     <option value="">Select your country</option>
-                                    @foreach($countries as $country)
+                                    @foreach ($countries as $country)
                                         <option value="{{ $country->name }}">{{ $country->name }}</option>
                                     @endforeach
                                 </select>
@@ -73,23 +77,27 @@
                 <div class="col-md-6">
                     <div class="card mb">
                         <h4 class="card-title">Get in touch</h4>
-                            <div class="contact-page-info">
-                                @foreach($contact_infos as $contact)
+                        <div class="contact-page-info">
+                            @foreach ($contact_infos as $contact)
                                 <div class="contact-info-inner">
                                     <div class="icon">
                                         @switch($contact->type)
                                             @case('address')
                                                 <i class="fa-solid fa-location-dot"></i>
-                                                @break
+                                            @break
+
                                             @case('email')
                                                 <i class="fa-solid fa-envelope"></i>
-                                                @break
+                                            @break
+
                                             @case('phone')
                                                 <i class="fa-solid fa-phone"></i>
-                                                @break
+                                            @break
+
                                             @case('hours')
                                                 <i class="fa-solid fa-clock"></i>
-                                                @break
+                                            @break
+
                                             @default
                                                 <i class="fa-solid fa-info-circle"></i>
                                         @endswitch
@@ -99,8 +107,8 @@
                                         <p>{!! nl2br(e($contact->details)) !!}</p>
                                     </div>
                                 </div>
-                                @endforeach
-                            </div>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="card">
@@ -124,12 +132,21 @@
                                     <path
                                         d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
                                 </svg></a>
-                            <a href="#" class="contact-follow bg-twitter"><svg xmlns="http://www.w3.org/2000/svg"
-                                    width="16" height="16" fill="currentColor" class="bi bi-twitter"
-                                    viewBox="0 0 16 16">
+                            <a href="#" class="contact-follow bg-twitter" aria-label="Follow on X">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" width="16"
+                                    height="16" fill="currentColor">
                                     <path
-                                        d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15" />
-                                </svg></a>
+                                        d="M714.163 519.284L1160.89 0H1057.06L667.137 450.887L356.5 0H0L468.533 681.821L0 1226.37H103.833L516.341 747.687L856.5 1226.37H1200L714.137 519.284H714.163ZM570.625 684.544L522.667 617.688L141.983 79.6H306.433L618.508 531.037L666.467 597.893L1058.09 1150.4H893.642L570.625 684.544Z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="contact-follow bg-youtube" aria-label="Follow on YouTube">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.051 1.999h-.102C3.659 1.999 1.334 2.515.8 4.745c-.275 1.172-.275 3.594-.275 3.594s0 2.422.275 3.594c.534 2.23 2.859 2.746 7.149 2.746h.102c4.29 0 6.615-.516 7.149-2.746.275-1.172.275-3.594.275-3.594s0-2.422-.275-3.594c-.534-2.23-2.859-2.746-7.149-2.746zM6.403 10.598V5.402l4.146 2.598-4.146 2.598z" />
+                                </svg>
+                            </a>
+
                         </div>
 
                     </div>

@@ -167,7 +167,8 @@
 
             <div class="custom-owl-carousel owl-carousel collection-carousel">
                 @foreach ($categories as $category)
-                    <div class="collection-item">
+                <div class="collection-item">
+                <a href="{{ route('allcollection') }}">
                         <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
                             alt="{{ $category->name }}">
 
@@ -175,13 +176,11 @@
                             <h3>{{ $category->name }}</h3>
                             <p>{{ $category->description ?? '' }}</p>
                         </div>
+                    </a>
                     </div>
+
                 @endforeach
             </div>
-
-
-
-
         </div>
     </section>
 
