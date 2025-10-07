@@ -4,82 +4,44 @@
 
 @section('content')
 
-<!-- Hero Slider Section -->
-<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-  <div class="carousel-inner">
+    <!-- Hero Slider Section -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
 
-    <!-- Slide 1 -->
-    <div class="carousel-item active">
-      <section class="hero-section" style="background: url('/images/hero-banner.png') no-repeat center center/cover;">
-        <div class="hero-overlay"></div>
-        <div class="container">
-          <div class="hero-content">
-            <h1>Crafting Excellence in <br><span>Fashion Manufacturing</span></h1>
-            {{-- <p>Premium B2B clothing manufacturer with 35+ years of expertise in creating exceptional garments for global fashion brands.</p> --}}
-            <div class="hero-sectoin-btn">
-              <a href="#" class="btn btn-yellow">Explore Collection</a>
-              <a href="#" class="btn btn-outline">Check Price</a>
-              <a href="#" class="btn btn-light">Get in Touch</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="carousel-item">
-      <section class="hero-section" style="background: url('/images/hero-banner.png') no-repeat center center/cover;">
-        <div class="hero-overlay"></div>
-        <div class="container">
-          <div class="hero-content">
-            <h1>Trusted Partner in <br><span>Global Apparel Production</span></h1>
-            {{-- <p>Delivering high-quality clothing solutions with innovation, precision, and unmatched craftsmanship.</p> --}}
-            <div class="hero-sectoin-btn">
-              <a href="#" class="btn btn-yellow">Our Services</a>
-              <a href="#" class="btn btn-outline">View Portfolio</a>
-              <a href="#" class="btn btn-light">Contact Us</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-  </div>
-
-  <!-- Carousel Controls -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-
-  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
-
-    {{-- <section class="hero-section"
-        @if (!empty($hero->background_image)) style="background-image:url('{{ asset($hero->background_image) }}');" @endif>
-
-        <div class="hero-overlay"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1>{{ $hero->title ?? 'Crafting Excellence in' }} <br>
-                    <span>{{ $hero->subtitle ?? 'Fashion Manufacturing' }}</span>
-                </h1>
-                <p>{{ $hero->subtitle ?? 'Premium B2B clothing manufacturer with 35+ years of expertise.' }}</p>
-                <div class="hero-sectoin-btn">
-                    <a href="{{ $hero->btn1_link ?? '#' }}"
-                        class="btn btn-yellow">{{ $hero->btn1_text ?? 'Explore Collection' }}</a>
-                    <a href="{{ $hero->btn2_link ?? '#' }}"
-                        class="btn btn-outline">{{ $hero->btn2_text ?? 'Check Price' }}</a>
-                    <a href="{{ $hero->btn3_link ?? '#' }}"
-                        class="btn btn-light">{{ $hero->btn3_text ?? 'Get in Touch' }}</a>
+            @foreach($heroSections as $index => $hero)
+                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                    <section class="hero-section"
+                        style="background: url('{{ asset($hero->background_image) }}') no-repeat center center/cover;">
+                        <div class="hero-overlay"></div>
+                        <div class="container">
+                            <div class="hero-content">
+                                <h1>{{ $hero->title }}</h1>
+                                <p>{{ $hero->subtitle }}</p>
+                                <div class="hero-sectoin-btn">
+                                    <a href="{{ $hero->btn1_link }}" class="btn btn-yellow">{{ $hero->btn1_text }}</a>
+                                    <a href="{{ $hero->btn2_link }}" class="btn btn-outline">{{ $hero->btn2_text }}</a>
+                                    <a href="{{ $hero->btn3_link }}" class="btn btn-light">{{ $hero->btn3_text }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </div>
+            @endforeach
+
         </div>
-    </section> --}}
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
 
     <section class="featured-section section-padding">
         <div class="container-fluid">
@@ -115,59 +77,83 @@
     <section class="new-arriaval section-padding">
         <div class="container">
             <div class="row">
-                <h2 class="section-title">
-                    New Arrivals
-                </h2>
-                <p class="section-sub-title">
-                    Discover our latest designs and seasonal highlights
-                </p>
+                <h2 class="section-title">New Arrivals</h2>
+                <p class="section-sub-title">Discover our latest designs and seasonal highlights</p>
             </div>
+
             <div class="row">
                 <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
-                    <div class="new-arrival-box card">
-                        <div class="new-arrival-box-img">
-                            <img src="/images/product2.jpg" alt="" class="img-fluid">
-                        </div>
-                        <div class="arrival-list">
-                            <p>TRENDING</p>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Casual Cloths</h5>
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            </p>
-                            <div class="material-list">
-                                <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 10</small>
-                            </div>
-                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
-                        </div>
-                    </div>
 
-                    <div class="new-arrival-box card">
-                        <div class="new-arrival-box-img">
-                            <img src="/images/product3.webp" alt="" class="img-fluid">
-                        </div>
-                        <div class="arrival-list">
-                            <p>FEATURED</p>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Designer T-Shirts</h5>
-                            <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
-                            <div class="material-list">
-                                <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 20</small>
-                            </div>
-                            <a href="#" class="btn">Check Price</a>
-                        </div>
-                    </div>
+                    @foreach($newArrivals as $product)
+                        @php
+                            $mainImage = null;
 
-                    <!-- Add more product cards here -->
+                            // Check if the product has variants with images
+                            if ($product->variants->count()) {
+                                $firstVariant = $product->variants->first();
+                                $images = is_array($firstVariant->images)
+                                    ? $firstVariant->images
+                                    : json_decode($firstVariant->images, true) ?? [];
+                                $mainImage = $images[0] ?? null;
+                            }
+
+                            // Fallback to main product image if no variant images exist
+                            if (!$mainImage) {
+                                $mainImage = $product->image; // or $product->image_url
+                            }
+
+                            // Prepare final image path
+                            $imagePath = $mainImage && file_exists(public_path('images/variants/' . basename($mainImage)))
+                                ? asset('images/variants/' . basename($mainImage))
+                                : asset('images/default-product.jpg');
+
+                            // Determine MOQ
+                            $moq = $product->variants->count()
+                                ? $product->variants->min('moq')
+                                : $product->moq;
+                        @endphp
+
+                        <div class="new-arrival-box card">
+                            <div class="new-arrival-box-img">
+                                <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
+                            </div>
+
+                            <div class="arrival-list">
+                                @if($product->is_featured)
+                                    <p>FEATURED</p>
+                                @elseif($product->is_trending)
+                                    <p>TRENDING</p>
+                                @endif
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                                <p class="card-text">{{ Str::limit($product->description, 80) }}</p>
+
+                                <div class="material-list">
+                                    @if($product->materials)
+                                        <small class="badge-material">{{ $product->materials }}</small>
+                                    @endif
+                                    @if($moq)
+                                        <small class="badge-moq">MOQ: {{ $moq }}</small>
+                                    @endif
+                                    @if($product->export_ready)
+                                        <small class="badge-export">Export Ready</small>
+                                    @endif
+                                </div>
+
+                                <a href="{{ route('products.show', $product) }}" class="btn">Check Price</a>
+                            </div>
+                        </div>
+
+                    @endforeach
+
                 </div>
-
-
             </div>
         </div>
     </section>
+
+
 
 
     <section class="collections-section section-padding">
@@ -283,37 +269,37 @@
                 @endphp
 
                 @for ($i = 0; $i < 3; $i++)
-                    @php
-                        $card = $cards[$i] ?? null;
-                    @endphp
-                    <div class="col-lg-4 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                        @php
+                            $card = $cards[$i] ?? null;
+                        @endphp
+                        <div class="col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
-                                <div class="svg-wrapper">
-                                    @if ($card && $card->svg_path)
-                                        <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
-                                    @else
-                                        <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
-                                    @endif
+                                    <div class="svg-wrapper">
+                                        @if ($card && $card->svg_path)
+                                            <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
+                                        @else
+                                            <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                        @endif
+                                    </div>
+
+                                    <h5 class="card-title m-0">
+                                        {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                    </h5>
+
+                                    <p class="card-text">
+                                        {{ $card->description ??
+                    [
+                        'Flexible minimum order quantities starting from 100 pieces per style',
+                        'Serving 25+ countries across Europe, North America, and Asia',
+                        'ISO certified facility with rigorous quality control processes.',
+                    ][$i] }}
+                                    </p>
+
                                 </div>
-
-                                <h5 class="card-title m-0">
-                                    {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
-                                </h5>
-
-                                <p class="card-text">
-                                    {{ $card->description ??
-                                        [
-                                            'Flexible minimum order quantities starting from 100 pieces per style',
-                                            'Serving 25+ countries across Europe, North America, and Asia',
-                                            'ISO certified facility with rigorous quality control processes.',
-                                        ][$i] }}
-                                </p>
-
                             </div>
                         </div>
-                    </div>
                 @endfor
 
             </div>
@@ -328,17 +314,17 @@
             </div>
             <div class="row">
                 @foreach ($featuredCollections as $collection)
-                    <div class="col-lg-4">
-                        <div class="featured-collection-grid">
-                            <div class="featured-img">
-                                <img src="{{ asset($collection->image) }}" alt="{{ $collection->title }}">
-                            </div>
-                            <div class="featured-content">
-                                <h2>{{ $collection->title }}</h2>
-                                <p>{{ $collection->subtitle }}</p>
-                            </div>
+                <div class="col-lg-4">
+                    <div class="featured-collection-grid">
+                        <div class="featured-img">
+                            <img src="{{ asset($collection->image) }}" alt="{{ $collection->title }}">
+                        </div>
+                        <div class="featured-content">
+                            <h2>{{ $collection->title }}</h2>
+                            <p>{{ $collection->subtitle }}</p>
                         </div>
                     </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -537,7 +523,7 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".featured-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -613,7 +599,7 @@
                     992: {
                         items: 3
                     },
-                     1150: {
+                    1150: {
                         items: 4
                     }
                 }
