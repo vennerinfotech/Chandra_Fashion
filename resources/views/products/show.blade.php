@@ -191,7 +191,7 @@
                                     <input type="number" name="quantity" class="form-control" required>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">Submit to Check Price</button>
+                                <button type="submit" class="btn w-100">Submit to Check Price</button>
                             </form>
                         </div>
                     </div>
@@ -288,11 +288,89 @@
                     </div>
                 </div>
             </div>
+            <div class="top-related-product">
+                <div class="row">
+                    <h2 class="section-title">Related Products</h2>
+                    <div class="row">
+                     <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
+                    <div class="new-arrival-box card">
+                        <div class="new-arrival-box-img">
+                            <img src="/images/product2.jpg" alt="" class="img-fluid">
+                        </div>
+                        <div class="arrival-list">
+                            <p>TRENDING</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Casual Cloths</h5>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            </p>
+                            <div class="material-list">
+                                <small class="badge-material">Cotton</small>
+                                <small class="badge-moq">MOQ: 10</small>
+                            </div>
+                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
+                        </div>
+                    </div>
+
+                    <div class="new-arrival-box card">
+                        <div class="new-arrival-box-img">
+                            <img src="/images/product3.webp" alt="" class="img-fluid">
+                        </div>
+                        <div class="arrival-list">
+                            <p>FEATURED</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Designer T-Shirts</h5>
+                            <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
+                            <div class="material-list">
+                                <small class="badge-material">Cotton</small>
+                                <small class="badge-moq">MOQ: 20</small>
+                            </div>
+                            <a href="#" class="btn">Check Price</a>
+                        </div>
+                    </div>
+
+                    <!-- Add more product cards here -->
+                </div>
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+<script>
+    $(document).ready(function() {
+     $(".new-arrival-carousel").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 1500,
+                autoplayHoverPause: true,
+                navText: [
+                    '<i class="fa-solid fa-chevron-left"></i>',
+                    '<i class="fa-solid fa-chevron-right"></i>'
+                ],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    576: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    },
+                    1150: {
+                        items: 4
+                    }
+                }
+            });
+        });
+    </script>
     <script>
  document.addEventListener("DOMContentLoaded", function () {
     var inquiryModal = document.getElementById('inquiryModal');
@@ -383,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let relPath = '/images/variants/' + img.split('/').pop();
             const imgTag = document.createElement('img');
             imgTag.src = relPath;
-            imgTag.className = 'img-thumbnail gallery-thumb zoomable';
+            // imgTag.className = 'img-thumbnail gallery-thumb zoomable';
             imgTag.dataset.full = relPath;
             gallery.appendChild(imgTag);
 
@@ -570,7 +648,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     images.forEach(img => {
                         const imgTag = document.createElement('img');
                         imgTag.src = '/images/variants/' + img.split('/').pop();
-                        imgTag.className = 'img-thumbnail gallery-thumb zoomable';
+                        // imgTag.className = 'img-thumbnail gallery-thumb zoomable';
                         imgTag.style = 'width:90px; height:90px; object-fit:cover; cursor:pointer;';
                         imgTag.dataset.full = '/images/variants/' + img.split('/').pop();
                         gallery.appendChild(imgTag);

@@ -5,7 +5,7 @@
 .header-wrapper {
     background-color: #fff;
     padding: 12px 0;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #eaeaea;
     z-index: 1000;
     transition: all 0.3s ease-in-out;
 }
@@ -739,12 +739,16 @@ footer .chatbot-btn svg path {
 }
 
 .contact-page-form .card .form-control,
-.contact-page-form .card .form-select {
+.contact-page-form .card .form-select,
+#inquiryForm .form-control,
+#inquiryForm .form-select {
     padding: 12px 15px;
 }
 
 .contact-page-form .card .form-control:focus,
-.contact-page-form .card .form-select:focus {
+.contact-page-form .card .form-select:focus,
+#inquiryForm .form-control:focus,
+#inquiryForm .form-select:focus {
     border-color: #000000;
     box-shadow: none;
 }
@@ -1048,13 +1052,14 @@ footer .chatbot-btn svg path {
     position: relative;
 }
 .product-detail-left .img-thumbnail-main img {
-    width: 135px;
-    height: 135px;
+     width: 90px;
+    height: 90px;
     object-fit: cover;
     cursor: pointer;
     border: 1px solid #e5e7eb;
     padding: 0px;
-    border-radius: 8px;
+    border-radius: 12px;
+        padding: 5px;
 }
 
 .product-detail-left .img-thumbnail-main {
@@ -1070,7 +1075,7 @@ footer .chatbot-btn svg path {
 
 .product-detail-left .left-img img {
     object-fit: cover;
-    height: auto;
+    height: 550px;
     width: 100%;
     border-radius: 8px;
 }
@@ -1222,7 +1227,8 @@ footer .chatbot-btn svg path {
     margin-bottom: 0;
 }
 
-.product-detail-right .btn-price {
+.product-detail-right .btn-price,
+#inquiryModal .modal-body .btn {
     font-size: 18px;
     color: #fff;
     background: #111827;
@@ -1291,10 +1297,6 @@ footer .chatbot-btn svg path {
     border-radius: 16px;
 }
 
-.additional-info .section-title {
-    font-size: 30px;
-}
-
 .additional-info .section-sub-title {
     font-size: 16px;
 }
@@ -1337,6 +1339,11 @@ footer .chatbot-btn svg path {
 
 .btn:focus {
     box-shadow: none;
+}
+
+.top-related-product{
+    text-align: center;
+    padding: 90px 20px 0;
 }
 
 /*New Arrival*/

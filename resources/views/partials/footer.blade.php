@@ -16,10 +16,10 @@
       <div class="col-md-6 col-lg-3 quick-links">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="#">Collections</a></li>
-          <li><a href="{{ route('home') }}">About Us</a></li>
-          <li><a href="{{ route('contact') }}">Contact Us</a></li>
-          <li><a href="#">Quality</a></li>
+            <li><a href="{{ route('home') }}">About Us</a></li>
+            <li><a href="{{ route('contact') }}">Contact Us</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">All Collections</a></li>
         </ul>
       </div>
 
@@ -48,7 +48,7 @@
     <hr class="border-light" />
 
     <div class="text-center bottom-text">
-      &copy; 2024 Chandra Fashion. All rights reserved.
+      &copy; 2025 Chandra Fashion. All Rights Reserved.
     </div>
   </div>
 
