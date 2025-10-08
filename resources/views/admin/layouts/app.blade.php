@@ -44,8 +44,9 @@
     {{-- Custom Admin JS --}}
     <script src="{{ asset('admin/js/admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-            const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar', // can be 'line', 'pie', 'doughnut', etc.
             data: {
@@ -79,6 +80,7 @@
             }
         });
 </script>
+@stack('scripts')
 </body>
 
 </html>

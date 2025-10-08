@@ -13,9 +13,13 @@ class InquiryController extends Controller
      */
     public function index()
     {
-        $inquiries = Inquiry::with('product')->latest()->paginate(10);
+        $inquiries = Inquiry::with(['product', 'country', 'state', 'city'])
+            ->latest()
+            ->paginate(10);
+
         return view('admin.inquiries.index', compact('inquiries'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -49,9 +53,10 @@ class InquiryController extends Controller
     //     return view('admin.inquiries.show', compact('inquiry'));
     // }
 
-        public function show(string $id)
+    public function show(string $id)
     {
-        $inquiry = Inquiry::with('product')->findOrFail($id);
+        $inquiry = Inquiry::with(['product', 'country', 'state', 'city'])
+            ->findOrFail($id);
 
         // Mark as read
         if (!$inquiry->is_read) {
@@ -59,9 +64,9 @@ class InquiryController extends Controller
             $inquiry->save();
         }
 
-        // $inquiry->selected_images is already an array if casted properly
         return view('admin.inquiries.show', compact('inquiry'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

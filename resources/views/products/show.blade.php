@@ -3,17 +3,7 @@
 @section('title', $product->name . ' - Product Details')
 
 @section('content')
-
-<section class="breadcrumb-wrapper top-section-padding">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Product Detail</li>
-  </ol>
-  <h2 class="breadcrumb-title">Product Detail</h2>
-</nav>
-</section>
-    <div class="product-detail-wrapper section-padding">
+    <div class="product-detail-wrapper top-section-padding">
         <div class="container">
             <div class="row g-4">
                 {{-- Left Side: Product Image & Thumbnails --}}
@@ -129,30 +119,13 @@
                             </div>
                         </div>
 
-                        {{-- <div class="d-flex gap-4 mb-3">
-                            <div class="card shadow-sm p-3 text-center">
-                                <h4 class="fw-bold">{{ $product->moq ?? '100' }}</h4>
-                                <small class="text-muted">Minimum Order Qty</small>
-                            </div>
-                            <div class="card shadow-sm p-3 text-center">
-                                <h4 class="fw-bold">{{ $product->delivery_time ?? '15–20' }}</h4>
-                                <small class="text-muted">Days Delivery</small>
-                            </div>
-                        </div> --}}
-
-                        {{-- CTA Button --}}
-                        {{-- <a href="#" class="btn btn-dark w-100 py-3 fw-bold" data-bs-toggle="modal"
-                            data-bs-target="#inquiryModal">
-                            <i class="bi bi-cart-check"></i> Check Price & Get Quote
-                        </a> --}}
                         <a href="#" class="btn btn-price" data-bs-toggle="modal" data-bs-target="#inquiryModal"
                             data-product="{{ $product->id }}">
-                            <i class="bi bi-cart-check"></i> Check Price & Get Quote
+                            <i class="bi bi-cart-check"></i> Get Quote
                         </a>
                     </div>
                 </div>
             </div>
-
 
             <!-- Modal -->
             <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
@@ -188,11 +161,25 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Country</label>
-                                    <select name="country" class="form-select" required>
+                                    <select name="country_id" id="country" class="form-select" required>
                                         <option value="">Select your country</option>
                                         @foreach($countries as $country)
-                                            <option value="{{ $country->name }}">{{ $country->name }}</option>
+                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">State</label>
+                                    <select name="state_id" id="state" class="form-select" required disabled>
+                                        <option value="">Select your state</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">City</label>
+                                    <select name="city_id" id="city" class="form-select" required disabled>
+                                        <option value="">Select your city</option>
                                     </select>
                                 </div>
 
@@ -210,7 +197,6 @@
 
 
 
-
             {{-- Tabs: Specifications, Certifications, Care Instructions --}}
             <div class="product-description">
                 <ul class="nav nav-tabs" id="productTab" role="tablist">
@@ -218,9 +204,9 @@
                         <a class="nav-link active" id="specs-tab" data-bs-toggle="tab" href="#specs"
                             role="tab">Specifications</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert" role="tab">Certifications</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care
                             Instructions</a>
@@ -302,47 +288,48 @@
                 <div class="row">
                     <h2 class="section-title">Related Products</h2>
                     <div class="row">
-                     <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
-                    <div class="new-arrival-box card">
-                        <div class="new-arrival-box-img">
-                            <img src="/images/product2.jpg" alt="" class="img-fluid">
-                        </div>
-                        <div class="arrival-list">
-                            <p>TRENDING</p>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Casual Cloths</h5>
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            </p>
-                            <div class="material-list">
-                                <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 10</small>
+                        <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
+                            <div class="new-arrival-box card">
+                                <div class="new-arrival-box-img">
+                                    <img src="/images/product2.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div class="arrival-list">
+                                    <p>TRENDING</p>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">Casual Cloths</h5>
+                                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
+                                        industry.
+                                    </p>
+                                    <div class="material-list">
+                                        <small class="badge-material">Cotton</small>
+                                        <small class="badge-moq">MOQ: 10</small>
+                                    </div>
+                                    <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
+                                </div>
                             </div>
-                            <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
+
+                            <div class="new-arrival-box card">
+                                <div class="new-arrival-box-img">
+                                    <img src="/images/product3.webp" alt="" class="img-fluid">
+                                </div>
+                                <div class="arrival-list">
+                                    <p>FEATURED</p>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">Designer T-Shirts</h5>
+                                    <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
+                                    <div class="material-list">
+                                        <small class="badge-material">Cotton</small>
+                                        <small class="badge-moq">MOQ: 20</small>
+                                    </div>
+                                    <a href="#" class="btn">Check Price</a>
+                                </div>
+                            </div>
+
+                            <!-- Add more product cards here -->
                         </div>
                     </div>
-
-                    <div class="new-arrival-box card">
-                        <div class="new-arrival-box-img">
-                            <img src="/images/product3.webp" alt="" class="img-fluid">
-                        </div>
-                        <div class="arrival-list">
-                            <p>FEATURED</p>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Designer T-Shirts</h5>
-                            <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
-                            <div class="material-list">
-                                <small class="badge-material">Cotton</small>
-                                <small class="badge-moq">MOQ: 20</small>
-                            </div>
-                            <a href="#" class="btn">Check Price</a>
-                        </div>
-                    </div>
-
-                    <!-- Add more product cards here -->
-                </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -350,9 +337,9 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-     $(".new-arrival-carousel").owlCarousel({
+    <script>
+        $(document).ready(function () {
+            $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
                 nav: true,
@@ -382,183 +369,183 @@
         });
     </script>
     <script>
- document.addEventListener("DOMContentLoaded", function () {
-    var inquiryModal = document.getElementById('inquiryModal');
-    inquiryModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var productId = button.getAttribute('data-product');
-        var inputProduct = inquiryModal.querySelector('#product_id');
-        inputProduct.value = productId;
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const colorButtons = document.querySelectorAll('.color-circle');
-    const mainImage = document.getElementById('mainProductImage');
-    const gallery = document.getElementById('colorGallery');
-    const sizeContainer = document.getElementById('sizeContainer');
-
-    const selectedSizeInput = document.getElementById('selected_size');
-    const selectedImagesInput = document.getElementById('selected_images');
-    const variantDetailsInput = document.getElementById('variant_details');
-
-    // Current selection
-    let currentSelection = {
-        size: null,
-        image: null, // only main image
-        variant: {}
-    };
-
-    function updateHiddenInputs() {
-        if (!currentSelection.size || !currentSelection.image || !currentSelection.variant) return;
-
-        // Ensure variant object always has correct values
-        currentSelection.variant.size = [currentSelection.size];
-        currentSelection.variant.images = [currentSelection.image];
-
-        selectedSizeInput.value = currentSelection.size;
-        selectedImagesInput.value = JSON.stringify([currentSelection.image]);
-        variantDetailsInput.value = JSON.stringify(currentSelection.variant);
-
-        console.log("Saving:", {
-            size: selectedSizeInput.value,
-            images: selectedImagesInput.value,
-            variant: variantDetailsInput.value
-        });
-    }
-
-    // Gallery image click
-    gallery.addEventListener('click', (e) => {
-        if (e.target.tagName === 'IMG') {
-            const newImage = e.target.dataset.full;
-            mainImage.src = newImage;
-            currentSelection.image = newImage;
-            updateHiddenInputs();
-        }
-    });
-
-    // Size button click
-    sizeContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-            e.target.classList.add('selected');
-
-            currentSelection.size = e.target.textContent.trim();
-            updateHiddenInputs();
-        }
-    });
-
-
-    function selectColor(colorBtn) {
-        const color = colorBtn.dataset.color;
-        const images = JSON.parse(colorBtn.dataset.images);
-        const sizes = JSON.parse(colorBtn.dataset.sizes || "[]");
-        const productCode = colorBtn.dataset.code;
-        const moq = parseInt(colorBtn.dataset.moq || 1);
-
-        // Highlight selected color
-        colorButtons.forEach(c => c.classList.remove('selected'));
-        colorBtn.classList.add('selected');
-
-        // ✅ Set main image (relative path only)
-        let firstImg = '/images/variants/' + images[0].split('/').pop();
-        mainImage.src = firstImg;
-        currentSelection.image = firstImg;
-
-        // Update gallery
-        gallery.innerHTML = '';
-        images.forEach(img => {
-            let relPath = '/images/variants/' + img.split('/').pop();
-            const imgTag = document.createElement('img');
-            imgTag.src = relPath;
-            // imgTag.className = 'img-thumbnail gallery-thumb zoomable';
-            imgTag.dataset.full = relPath;
-            gallery.appendChild(imgTag);
-
-            imgTag.addEventListener('click', () => {
-                mainImage.src = relPath;
-                currentSelection.image = relPath;
-                if (currentSelection.size) {
-                    currentSelection.variant = {
-                        product_code: productCode,
-                        color: color,
-                        size: [currentSelection.size],
-                        min_order_qty: moq,
-                        images: [relPath]
-                    };
-                }
-                updateHiddenInputs();
+        document.addEventListener("DOMContentLoaded", function () {
+            var inquiryModal = document.getElementById('inquiryModal');
+            inquiryModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var productId = button.getAttribute('data-product');
+                var inputProduct = inquiryModal.querySelector('#product_id');
+                inputProduct.value = productId;
             });
         });
 
-        // Update sizes
-        sizeContainer.innerHTML = '';
-        if (sizes.length === 0) {
-            sizeContainer.innerHTML = '<p class="text-muted">No sizes available</p>';
-            currentSelection.size = null;
-            currentSelection.variant = {};
-            updateHiddenInputs();
-            return;
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const colorButtons = document.querySelectorAll('.color-circle');
+            const mainImage = document.getElementById('mainProductImage');
+            const gallery = document.getElementById('colorGallery');
+            const sizeContainer = document.getElementById('sizeContainer');
 
-        sizes.forEach((sizeString, i) => {
-            sizeString.split(',').forEach((size, j) => {
-                const btn = document.createElement('button');
-                btn.className = 'btn btn-sm btn-outline-primary m-1';
-                btn.textContent = size.trim().toUpperCase();
+            const selectedSizeInput = document.getElementById('selected_size');
+            const selectedImagesInput = document.getElementById('selected_images');
+            const variantDetailsInput = document.getElementById('variant_details');
 
-                // Select first size by default
-                if (i === 0 && j === 0) {
-                    btn.classList.add('selected');
-                    currentSelection.size = size.trim();
-                    currentSelection.variant = {
-                        product_code: productCode,
-                        color: color,
-                        size: [size.trim()],
-                        min_order_qty: moq,
-                        images: [firstImg]
-                    };
+            // Current selection
+            let currentSelection = {
+                size: null,
+                image: null, // only main image
+                variant: {}
+            };
+
+            function updateHiddenInputs() {
+                if (!currentSelection.size || !currentSelection.image || !currentSelection.variant) return;
+
+                // Ensure variant object always has correct values
+                currentSelection.variant.size = [currentSelection.size];
+                currentSelection.variant.images = [currentSelection.image];
+
+                selectedSizeInput.value = currentSelection.size;
+                selectedImagesInput.value = JSON.stringify([currentSelection.image]);
+                variantDetailsInput.value = JSON.stringify(currentSelection.variant);
+
+                console.log("Saving:", {
+                    size: selectedSizeInput.value,
+                    images: selectedImagesInput.value,
+                    variant: variantDetailsInput.value
+                });
+            }
+
+            // Gallery image click
+            gallery.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    const newImage = e.target.dataset.full;
+                    mainImage.src = newImage;
+                    currentSelection.image = newImage;
                     updateHiddenInputs();
                 }
+            });
 
-                btn.addEventListener('click', () => {
+            // Size button click
+            sizeContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
                     sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
+                    e.target.classList.add('selected');
 
-                    currentSelection.size = size.trim();
-                    currentSelection.variant = {
-                        product_code: productCode,
-                        color: color,
-                        size: [size.trim()],
-                        min_order_qty: moq,
-                        images: [currentSelection.image]
-                    };
+                    currentSelection.size = e.target.textContent.trim();
                     updateHiddenInputs();
+                }
+            });
+
+
+            function selectColor(colorBtn) {
+                const color = colorBtn.dataset.color;
+                const images = JSON.parse(colorBtn.dataset.images);
+                const sizes = JSON.parse(colorBtn.dataset.sizes || "[]");
+                const productCode = colorBtn.dataset.code;
+                const moq = parseInt(colorBtn.dataset.moq || 1);
+
+                // Highlight selected color
+                colorButtons.forEach(c => c.classList.remove('selected'));
+                colorBtn.classList.add('selected');
+
+                // ✅ Set main image (relative path only)
+                let firstImg = '/images/variants/' + images[0].split('/').pop();
+                mainImage.src = firstImg;
+                currentSelection.image = firstImg;
+
+                // Update gallery
+                gallery.innerHTML = '';
+                images.forEach(img => {
+                    let relPath = '/images/variants/' + img.split('/').pop();
+                    const imgTag = document.createElement('img');
+                    imgTag.src = relPath;
+                    // imgTag.className = 'img-thumbnail gallery-thumb zoomable';
+                    imgTag.dataset.full = relPath;
+                    gallery.appendChild(imgTag);
+
+                    imgTag.addEventListener('click', () => {
+                        mainImage.src = relPath;
+                        currentSelection.image = relPath;
+                        if (currentSelection.size) {
+                            currentSelection.variant = {
+                                product_code: productCode,
+                                color: color,
+                                size: [currentSelection.size],
+                                min_order_qty: moq,
+                                images: [relPath]
+                            };
+                        }
+                        updateHiddenInputs();
+                    });
                 });
 
-                sizeContainer.appendChild(btn);
+                // Update sizes
+                sizeContainer.innerHTML = '';
+                if (sizes.length === 0) {
+                    sizeContainer.innerHTML = '<p class="text-muted">No sizes available</p>';
+                    currentSelection.size = null;
+                    currentSelection.variant = {};
+                    updateHiddenInputs();
+                    return;
+                }
+
+                sizes.forEach((sizeString, i) => {
+                    sizeString.split(',').forEach((size, j) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn btn-sm btn-outline-primary m-1';
+                        btn.textContent = size.trim().toUpperCase();
+
+                        // Select first size by default
+                        if (i === 0 && j === 0) {
+                            btn.classList.add('selected');
+                            currentSelection.size = size.trim();
+                            currentSelection.variant = {
+                                product_code: productCode,
+                                color: color,
+                                size: [size.trim()],
+                                min_order_qty: moq,
+                                images: [firstImg]
+                            };
+                            updateHiddenInputs();
+                        }
+
+                        btn.addEventListener('click', () => {
+                            sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                            btn.classList.add('selected');
+
+                            currentSelection.size = size.trim();
+                            currentSelection.variant = {
+                                product_code: productCode,
+                                color: color,
+                                size: [size.trim()],
+                                min_order_qty: moq,
+                                images: [currentSelection.image]
+                            };
+                            updateHiddenInputs();
+                        });
+
+                        sizeContainer.appendChild(btn);
+                    });
+                });
+
+                updateHiddenInputs();
+            }
+
+            // Auto-select first color
+            if (colorButtons.length > 0) {
+                selectColor(colorButtons[0]);
+            }
+
+            const inquiryForm = document.getElementById('inquiryForm');
+            if (inquiryForm) {
+                inquiryForm.addEventListener('submit', function () {
+                    updateHiddenInputs();
+                });
+            }
+
+            colorButtons.forEach(btn => {
+                btn.addEventListener('click', () => selectColor(btn));
             });
         });
-
-        updateHiddenInputs();
-    }
-
-    // Auto-select first color
-    if (colorButtons.length > 0) {
-        selectColor(colorButtons[0]);
-    }
-
-    const inquiryForm = document.getElementById('inquiryForm');
-    if (inquiryForm) {
-        inquiryForm.addEventListener('submit', function () {
-            updateHiddenInputs();
-        });
-    }
-
-    colorButtons.forEach(btn => {
-        btn.addEventListener('click', () => selectColor(btn));
-    });
-});
 
 
 
@@ -583,13 +570,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                <div class="card" style="width:120px;">
-                                    <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                    <div class="card-body p-2 text-center">
-                                        <small>${p.name}</small>
-                                    </div>
-                                </div>
-                            `;
+                                        <div class="card" style="width:120px;">
+                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                            <div class="card-body p-2 text-center">
+                                                <small>${p.name}</small>
+                                            </div>
+                                        </div>
+                                    `;
                             });
                         });
                 });
@@ -771,9 +758,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const countrySelect = document.getElementById('country');
+    const stateSelect = document.getElementById('state');
+    const citySelect = document.getElementById('city');
+
+    // When country is selected, fetch states
+    countrySelect.addEventListener('change', function () {
+        const countryId = this.value; // 🔥 use ID now
+        if (countryId) {
+            stateSelect.disabled = false;
+            stateSelect.innerHTML = '<option value="">Loading states...</option>';
+
+            // Fetch states for selected country
+            fetch(`/states/${countryId}`) // 🔥 pass ID
+                .then(response => response.json())
+                .then(data => {
+                    stateSelect.innerHTML = '<option value="">Select your state</option>';
+                    data.forEach(state => {
+                        const option = document.createElement('option');
+                        option.value = state.id;
+                        option.textContent = state.name;
+                        stateSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    stateSelect.innerHTML = '<option value="">No states available</option>';
+                    console.error(error);
+                });
+        } else {
+            stateSelect.disabled = true;
+            citySelect.disabled = true;
+        }
+    });
+
+    // When state is selected, fetch cities
+    stateSelect.addEventListener('change', function () {
+        const stateId = this.value; // ✅ already ID
+        if (stateId) {
+            citySelect.disabled = false;
+            citySelect.innerHTML = '<option value="">Loading cities...</option>';
+
+            fetch(`/cities/${stateId}`) // ✅ pass ID
+                .then(response => response.json())
+                .then(data => {
+                    citySelect.innerHTML = '<option value="">Select your city</option>';
+                    data.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.id;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    citySelect.innerHTML = '<option value="">No cities available</option>';
+                    console.error(error);
+                });
+        } else {
+            citySelect.disabled = true;
+        }
+    });
+});
+
+
+
     </script>
 @endpush
-
-
-
-

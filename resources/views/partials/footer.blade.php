@@ -6,10 +6,10 @@
         <h3>Chandra Fashion</h3>
         <p>Premium B2B clothing manufacturer serving global fashion brands since 1985.</p>
         <div class="social-links mt-3">
-          <a href="#" class="bi bi-facebook"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" class="bi bi-instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="bi bi-linkedin"><i class="fa-brands fa-square-linkedin"></i></a>
-          <a href="#" class="bi bi-linkedin"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://www.facebook.com/ChandraFabrics/" class="bi bi-facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="https://www.instagram.com/chandrafashionofficial/" class="bi bi-instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://in.linkedin.com/company/chandrafashion" class="bi bi-linkedin"><i class="fa-brands fa-square-linkedin"></i></a>
+          <a href="https://www.youtube.com/@chandrafashion" class="bi bi-linkedin"><i class="fa-brands fa-youtube"></i></a>
         </div>
       </div>
 
@@ -17,10 +17,10 @@
       <div class="col-md-6 col-lg-3 quick-links">
         <h4>Quick Links</h4>
         <ul>
-            <li><a href="{{ route('home') }}">About Us</a></li>
+            <li><a href="{{ route('about') }}">About Us</a></li>
             <li><a href="{{ route('contact') }}">Contact Us</a></li>
             <li><a href="{{ route('products.index') }}">Products</a></li>
-            <li><a href="{{ route('products.index') }}">Check Price</a></li>
+            <li><a href="{{ route('allcollection') }}">Check Price</a></li>
         </ul>
       </div>
 

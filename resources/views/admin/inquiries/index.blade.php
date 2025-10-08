@@ -48,7 +48,7 @@
                             <td>{{ $inquiry->name }}</td>
                             <td>{{ $inquiry->email }}</td>
                             <td>{{ $inquiry->phone }}</td>
-                            <td>{{ $inquiry->country }}</td>
+                            <td>{{ $inquiry->country->name ?? 'N/A' }}</td>
                             <td>{{ $inquiry->quantity }}</td>
                             <td>
                                 <!-- View Button -->

@@ -22,6 +22,7 @@
                 <th>Name</th>
                 <th>Image</th>
                 <th>Category</th>
+                <th>Subcategory</th>
                 <th>Price</th>
                 <th>Export Ready</th>
                 <th>Actions</th>
@@ -55,6 +56,7 @@
                     @endif
                 </td>
                 <td>{{ $product->category->name ?? '-' }}</td>
+                <td>{{ $product->subcategory->name ?? '-' }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>
                 <td>

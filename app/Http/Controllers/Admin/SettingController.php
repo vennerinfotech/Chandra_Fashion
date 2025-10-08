@@ -42,7 +42,8 @@ class SettingController extends Controller
         $heroSections  = HeroSection::orderBy('id')->get(); // Fetch all hero sections
         $cards         = FeatureCard::orderBy('id', 'desc')->get(); // Feature Cards
         $heritage      = Heritage::firstOrNew([]);
-        $clients       = Client::orderBy('id', 'desc')->take(3)->get();
+        // $clients       = Client::orderBy('id', 'desc')->take(3)->get();
+        $clients = Client::orderBy('id', 'desc')->get();
         $subscription  = SubscriptionSection::firstOrNew([]);
         $footer        = Setting::firstOrNew([]);
         $quick_links   = QuickLink::all();
@@ -134,6 +135,13 @@ class SettingController extends Controller
         }
 
         /* ================= FEATURED COLLECTIONS ================= */
+        // Delete removed cards first
+        if ($request->filled('featured_deleted_ids')) {
+            FeaturedCollection::whereIn('id', $request->featured_deleted_ids)->delete();
+        }
+
+
+        // Update or create cards
         if ($request->has('featured_collections')) {
             foreach ($request->featured_collections as $index => $cardData) {
                 if (empty($cardData['title'])) continue;
@@ -143,6 +151,7 @@ class SettingController extends Controller
                 $card->subtitle = $cardData['subtitle'] ?? '';
 
                 if ($request->hasFile("featured_collections.{$index}.image")) {
+                    // Delete old image if exists
                     if ($card->image && file_exists(public_path($card->image))) {
                         unlink(public_path($card->image));
                     }
@@ -153,9 +162,25 @@ class SettingController extends Controller
             }
         }
 
+
         /* ================= CLIENTS ================= */
         if ($request->has('clients')) {
-            // Existing clients
+
+            // 1️⃣ Delete removed clients
+            if (!empty($request->clients['deleted'])) {
+                foreach ($request->clients['deleted'] as $id) {
+                    $client = Client::find($id);
+                    if ($client) {
+                        // Delete image if exists
+                        if ($client->image && file_exists(public_path($client->image))) {
+                            unlink(public_path($client->image));
+                        }
+                        $client->delete();
+                    }
+                }
+            }
+
+            // 2️⃣ Update existing clients
             foreach ($request->clients['existing']['name'] ?? [] as $id => $name) {
                 $client = Client::find($id);
                 if ($client) {
@@ -174,7 +199,7 @@ class SettingController extends Controller
                 }
             }
 
-            // New clients
+            // 3️⃣ Add new clients
             foreach ($request->clients['new']['name'] ?? [] as $index => $name) {
                 if (!empty($name)) {
                     $client = new Client();
@@ -190,6 +215,7 @@ class SettingController extends Controller
                 }
             }
         }
+
 
         /* ================= COLLECTIONS SECTION ================= */
         if ($request->has('collections_title')) {
@@ -250,8 +276,4 @@ class SettingController extends Controller
 
         return back()->with('success', 'Settings Updated Successfully!');
     }
-
-
-
-
 }

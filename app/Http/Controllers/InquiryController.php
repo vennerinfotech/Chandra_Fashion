@@ -21,43 +21,41 @@ class InquiryController extends Controller
     }
 public function store(Request $request)
 {
-    // Validate request
-    $request->validate([
-        'name'            => 'required|string|max:255',
-        'email'           => 'required|email',
-        'company'         => 'nullable|string|max:255',
-        'phone'           => 'nullable|string|max:50',
-        'country_id'      => 'required|exists:countries,id',  // Ensure it's a valid country ID
-        'state_id'        => 'required|exists:states,id',      // Ensure it's a valid state ID
-        'city_id'         => 'required|exists:cities,id',      // Ensure it's a valid city ID
-        'quantity'        => 'required|integer',
-        'product_id'      => 'nullable|exists:products,id',
-        'selected_size'   => 'nullable|string',  // JSON string
-        'selected_images' => 'nullable|string',  // JSON string
-        'variant_details' => 'nullable|string',  // JSON string
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'company' => 'nullable|string|max:255',
+        'phone' => 'nullable|string|max:50',
+        'country_id' => 'required|exists:countries,id',
+        'state_id' => 'required|exists:states,id',
+        'city_id' => 'required|exists:cities,id',
+        'quantity' => 'required|integer',
+        'product_id' => 'nullable|exists:products,id',
+        'selected_size' => 'nullable|string',
+        'selected_images' => 'nullable|string',
+        'variant_details' => 'nullable|string',
     ]);
 
-    // Store inquiry in DB
     $inquiry = Inquiry::create([
-        'name'            => $request->name,
-        'company'         => $request->company,
-        'email'           => $request->email,
-        'phone'           => $request->phone,
-        'country_id'      => $request->country_id,      // Store country_id instead of country name
-        'state_id'        => $request->state_id,        // Store state_id instead of state name
-        'city_id'         => $request->city_id,         // Store city_id instead of city name
-        'quantity'        => $request->quantity,
-        'product_id'      => $request->product_id,
-        'selected_size'   => $request->selected_size ? json_decode($request->selected_size, true) : [],
-        'selected_images' => $request->selected_images ? json_decode($request->selected_images, true) : [],
-        'variant_details' => $request->variant_details ? json_decode($request->variant_details, true) : [],
+        'name' => $validated['name'],
+        'company' => $validated['company'] ?? null,
+        'email' => $validated['email'],
+        'phone' => $validated['phone'] ?? null,
+        'country_id' => $validated['country_id'],
+        'state_id' => $validated['state_id'],
+        'city_id' => $validated['city_id'],
+        'quantity' => $validated['quantity'],
+        'product_id' => $validated['product_id'] ?? null,
+        'selected_size' => $validated['selected_size'] ? json_decode($validated['selected_size'], true) : [],
+        'selected_images' => $validated['selected_images'] ? json_decode($validated['selected_images'], true) : [],
+        'variant_details' => $validated['variant_details'] ? json_decode($validated['variant_details'], true) : [],
     ]);
 
-    // Dispatch email job to send both admin & user emails
     SendInquiryEmails::dispatch($inquiry);
 
     return redirect()->back()->with('success', 'Your inquiry has been submitted successfully!');
 }
+
 
 
 

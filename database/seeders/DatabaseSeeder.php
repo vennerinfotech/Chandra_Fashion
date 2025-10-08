@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             CountriesTableSeeder::class,  // Register Countries Seeder
             StatesSeeder::class,          // Register States Seeder
             CitiesTableSeeder::class,     // Register Cities Seeder
+            LocationSeeder::class,
         ]);
     }
 }

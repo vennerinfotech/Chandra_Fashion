@@ -20,8 +20,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class, ['as' => 'admin']);
     Route::resource('subcategories', \App\Http\Controllers\Admin\SubCategoryController::class, ['as' => 'admin']);
 
-   Route::get('/get-subcategories/{categoryId}', [\App\Http\Controllers\Admin\ProductController::class, 'getSubcategories']);
-
+    Route::get('/get-subcategories/{categoryId}', [\App\Http\Controllers\Admin\ProductController::class, 'getSubcategories']);
 
 
     Route::get('/settings', [SettingController::class, 'manage'])->name('admin.settings.manage');

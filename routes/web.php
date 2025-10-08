@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AllCollectionController;
+use App\Http\Controllers\AboutController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -25,10 +26,11 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/states/{country}', [ChatController::class, 'getStates'])->name('states.get');
-Route::get('/cities/{state}', [ChatController::class, 'getCities'])->name('cities.get');
+Route::get('/states/{countryId}', [ChatController::class, 'getStates'])->name('states.get');
+Route::get('/cities/{stateId}', [ChatController::class, 'getCities'])->name('cities.get');
 Route::post('/inquiries/store', [InquiryController::class, 'store'])->name('inquiries.store');
 
 Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('send.chat');
 
 Route::get('/allcollection', [AllCollectionController::class, 'index'])->name('allcollection');
+Route::get('/about', [AboutController::class, 'index'])->name('about');

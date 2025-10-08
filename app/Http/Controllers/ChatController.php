@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
 use Illuminate\Http\Request;
@@ -32,36 +33,15 @@ class ChatController extends Controller
 
 
         // Fetch states based on selected country
-    public function getStates($countryName)
-    {
-        $country = Country::where('name', $countryName)->first();
+public function getStates($countryId)
+{
+    return response()->json(State::where('country_id', $countryId)->get());
+}
 
-        if ($country) {
-            $states = $country->states; // Assuming 'states' relationship exists
-            return response()->json($states);
-        }
+public function getCities($stateId)
+{
+    return response()->json(City::where('state_id', $stateId)->get());
+}
 
-        return response()->json(['message' => 'No states found for the selected country'], 404);
-    }
-
-    // Fetch cities based on selected state
-    public function getCities($stateId)
-    {
-        // Ensure the state exists
-        $state = State::find($stateId);
-
-        if (!$state) {
-            return response()->json(['message' => 'State not found'], 404);
-        }
-
-        // Retrieve the cities associated with this state
-        $cities = $state->cities;
-
-        if ($cities->isEmpty()) {
-            return response()->json(['message' => 'No cities found for the selected state'], 404);
-        }
-
-        return response()->json($cities);
-    }
 
 }

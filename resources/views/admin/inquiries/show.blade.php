@@ -51,7 +51,7 @@
                     </tr>
                     <tr>
                         <th>Country</th>
-                        <td>{{ $inquiry->country }}</td>
+                        <td>{{ $inquiry->country->name ?? 'N/A' }}</td>
                     </tr>
                     <tr>
                         <th>Quantity</th>
