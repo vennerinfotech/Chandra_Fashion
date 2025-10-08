@@ -533,6 +533,54 @@
     color: #fff;
 }
 
+/*Feature Section Css*/
+.home-feature-section {
+    background: #fff;
+    padding: 90px 20px 0;
+}
+.home-feature-section .feature-box {
+    border-radius: 16px;
+    padding: 30px 20px;
+    color: #000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    background: #f8f9fa;
+}
+
+.home-feature-section .feature-box:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.home-feature-section .icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: #fff;
+    background: #f0c040;
+}
+
+.home-feature-section .icon-box svg {
+    font-size: 24px;
+}
+
+.home-feature-section .feature-title {
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
+
+.home-feature-section .feature-subtitle {
+    color: #666;
+    font-size: 0.95rem;
+}
+
 /*Client Css*/
 .client-card {
     background: #fff;
@@ -1610,4 +1658,209 @@ footer .chatbot-btn svg path {
 .color-circle.selected {
     border: 3px solid #000;
     box-shadow: 0 0 0 2px #fff; /* White ring outside black border */
+}
+
+/*About us page*/
+.about-section {
+    text-align: left;
+    background: #fff;
+}
+.about-section .about-img {
+    position: relative;
+}
+
+.about-section .about-img img {
+    border-radius: 40px 0;
+}
+
+.about-section .experience-badge {
+    position: absolute;
+    top: 50%;
+    right: -60px;
+    transform: translateY(-50%);
+    background-color: #d4af37;
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+    border-radius: 50%;
+    font-weight: bold;
+    width: 130px;
+    height: 130px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 5px solid #fff;
+}
+
+.about-section .testimonial-box {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    background: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 30px 0;
+    max-width: 80%;
+    border: 5px solid #fff;
+}
+
+.about-section .testimonial-box small {
+    color: #d4af37;
+}
+
+.about-section .feature-icon {
+    color: #d4af37;
+    font-size: 1.5rem;
+    margin-right: 15px;
+}
+
+.about-section .about-content {
+    padding: 0 0 0 50px;
+}
+
+.about-section .about-content .title,
+.why-about-content .title {
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #2b3d51;
+}
+
+.about-section .about-content .sub-title {
+    color: #d4af37;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.about-section .about-content p,
+.why-about-content p {
+    color: #2b3d51;
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
+}
+
+.why-about-content .listing ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.why-about-content .listing ul li {
+    padding: 10px 0;
+}
+
+.why-about-content .listing ul li svg {
+    padding-right: 5px;
+}
+
+.states-section{
+    background: #fff;
+}
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box {
+    flex: 1 1 250px;
+    text-align: center;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    transition: all 0.5s;
+}
+
+.stat-box:hover .stat-icon{
+    background: #000;
+    transition: all 0.5s;
+}
+
+.stat-box:last-child {
+    border-right: none;
+}
+
+.stat-icon {
+height: 80px;
+    width: 80px;
+    font-size: 30px;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #d4af37;
+    margin: 0 auto;
+}
+
+.stat-number,
+.stat-box span {
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #2b3d51;
+}
+
+.stat-label {
+    font-size: 16px;
+    color: #2b3d51;
+}
+
+
+
+@media (max-width: 768px) {
+    .stat-box {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+    .stat-box:last-child {
+        border-bottom: none;
+    }
+}
+
+.team-leader-section .team-leader-card{
+    padding: 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid transparent;
+     transition: all 0.5s;
+}
+
+.team-leader-section .team-leader-card:hover{
+    border: 1px solid #000;
+    transition: all 0.5s;
+}
+
+.team-leader-section .team-leader-card img{
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.team-leader-section .team-leader-card h2{
+     font-size: 22px;
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #2b3d51;
+}
+
+.team-leader-section .team-leader-card p{
+        color: #2b3d51;
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
 }
