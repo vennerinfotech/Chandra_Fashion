@@ -24,7 +24,7 @@ class HomeController extends Controller
         $heroSections = HeroSection::all();
         $categories = Category::where('status', 1)->take(5)->get();
         $collections = CollectionSection::first();
-        $featuredCollections = FeaturedCollection::orderBy('created_at', 'desc')->take(3)->get();
+        $featuredCollections = FeaturedCollection::orderBy('created_at', 'desc')->get();
         $featureCards = FeatureCard::orderBy('created_at', 'desc')->get();
         $heritage = Heritage::first();
         $clients = Client::orderBy('created_at', 'desc')->get();

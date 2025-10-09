@@ -18,15 +18,23 @@
                                         : json_decode($firstVariant->images, true)[0])
                                     : $product->image_url;
                             @endphp
+                            {{-- <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
+                                id="mainProductImage" class="img-fluid"> --}}
                             <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
-                                id="mainProductImage" class="img-fluid">
+                                id="mainProductImage" class="img-fluid selectable-image"
+                                data-image="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}">
+
                         </div>
 
                         <div id="colorGallery" class="img-thumbnail-main">
                             @foreach ($colorImages[$colors[0]] as $img)
-                                <img src="{{ asset('images/variants/' . basename($img)) }}"
+                                {{-- <img src="{{ asset('images/variants/' . basename($img)) }}"
                                     class="img-thumbnail gallery-thumb"
-                                    data-full="{{ asset('images/variants/' . basename($img)) }}">
+                                    data-full="{{ asset('images/variants/' . basename($img)) }}"> --}}
+                                <img src="{{ asset('images/variants/' . basename($img)) }}"
+                                    class="img-thumbnail selectable-image"
+                                    data-image="{{ asset('images/variants/' . basename($img)) }}">
+
                             @endforeach
                         </div>
                         <div class="badge-top d-flex align-items-center gap-2 mb-2">
@@ -40,6 +48,7 @@
                 <div class="col-md-6">
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
+                          <h6 class="product-price"> ₹1,999</h6>
                         <p class="product-desc">{{ $product->description }}</p>
 
                         <div class="sku-category">
@@ -47,7 +56,7 @@
                                     id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span></p>
 
                             <p class="">
-                                Category: {{ $product->category->name ?? 'N/A' }}
+                              Category: <span>{{ $product->category->name ?? 'N/A' }}</span>
                             </p>
                         </div>
 
@@ -67,9 +76,20 @@
                         </div>
 
                         {{-- Available Colors --}}
-                        <div class="color-variation">
+                       <div class="color-variation">
                             <h6>Available Colors</h6>
-                            <div class="color" id="colorContainer">
+                            <div class="color-selected">
+                                <span class="" style="background:#000000;"></span>
+                                <span class="" style="background:#ff0000;"></span>
+                                <span class="" style="background:#269600;"></span>
+                                <span class="" style="background:#d67201;"></span>
+                                <span class="" style="background:#0c0080;"></span>
+                                <span class="" style="background:#ffffff;"></span>
+                                <span class="" style="background:#620080;"></span>
+                                <span class="" style="background:#b4bb00;"></span>
+                                <span class="" style="background:#0083bb;"></span>
+                            </div>
+                            {{-- <div class="color" id="colorContainer">
                                 @foreach ($colors as $index => $color)
                                     <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
                                         data-color="{{ $color }}" data-images='@json($colorImages[$color])'
@@ -79,7 +99,7 @@
                                         style="background-color: {{ $color }};">
                                     </button>
                                 @endforeach
-                            </div>
+                            </div> --}}
 
                         </div>
 
@@ -89,20 +109,20 @@
                             <h6 class="">Available Sizes</h6>
                             <div class="size" id="sizeContainer">
                                 @php
-                                    $firstColor = $colors[0] ?? null;
-                                    $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
+                                $firstColor = $colors[0] ?? null;
+                                $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
                                 @endphp
 
                                 @if (!empty($initialSizes))
-                                    @foreach ($initialSizes as $sizeString)
-                                        @foreach (explode(',', $sizeString) as $size)
-                                            <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
-                                                {{ strtoupper(trim($size)) }}
-                                            </button>
-                                        @endforeach
-                                    @endforeach
+                                @foreach ($initialSizes as $sizeString)
+                                @foreach (explode(',', $sizeString) as $size)
+                                <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
+                                    {{ strtoupper(trim($size)) }}
+                                </button>
+                                @endforeach
+                                @endforeach
                                 @else
-                                    <p class="text-muted">No sizes available</p>
+                                <p class="text-muted">No sizes available</p>
                                 @endif
                             </div>
                         </div> --}}
@@ -122,7 +142,7 @@
 
                         <a href="#" class="btn btn-price" data-bs-toggle="modal" data-bs-target="#inquiryModal"
                             data-product="{{ $product->id }}">
-                            <i class="bi bi-cart-check"></i> Get Quote
+                             <i class="bi bi-cart-check"></i> Get a Quote
                         </a>
                     </div>
                 </div>
@@ -204,15 +224,6 @@
                                     </div>
                                 </div>
 
-
-
-
-
-
-
-
-
-
                                 <button type="submit" class="btn w-100">Submit to Check Price</button>
                             </form>
                         </div>
@@ -227,7 +238,7 @@
                 <ul class="nav nav-tabs" id="productTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="specs-tab" data-bs-toggle="tab" href="#specs"
-                            role="tab">Specifications</a>
+                             role="tab">Description</a>
                     </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert" role="tab">Certifications</a>
@@ -363,7 +374,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -394,9 +405,9 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function(event) {
+            inquiryModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
                 var productId = button.getAttribute('data-product');
                 var inputProduct = inquiryModal.querySelector('#product_id');
@@ -404,7 +415,7 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const colorButtons = document.querySelectorAll('.color-circle');
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
@@ -442,7 +453,7 @@
             // Gallery image click
             gallery.addEventListener('click', (e) => {
                 if (e.target.tagName === 'IMG') {
-                    const newImage = e.target.dataset.full;
+                    const newImage = e.target.dataset.image;
                     mainImage.src = newImage;
                     currentSelection.image = newImage;
                     updateHiddenInputs();
@@ -563,7 +574,7 @@
 
             const inquiryForm = document.getElementById('inquiryForm');
             if (inquiryForm) {
-                inquiryForm.addEventListener('submit', function() {
+                inquiryForm.addEventListener('submit', function () {
                     updateHiddenInputs();
                 });
             }
@@ -576,13 +587,13 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function() {
+                btn.addEventListener("click", function () {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -596,13 +607,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                        <div class="card" style="width:120px;">
-                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                            <div class="card-body p-2 text-center">
-                                                <small>${p.name}</small>
-                                            </div>
-                                        </div>
-                                    `;
+                                                        <div class="card" style="width:120px;">
+                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                            <div class="card-body p-2 text-center">
+                                                                <small>${p.name}</small>
+                                                            </div>
+                                                        </div>
+                                                    `;
                             });
                         });
                 });
@@ -610,12 +621,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function() {
+                thumb.addEventListener('click', function () {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -624,7 +635,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function(e) {
+            container.addEventListener("mousemove", function (e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -636,14 +647,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function() {
+            container.addEventListener("mouseleave", function () {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -654,7 +665,7 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function() {
+                circle.addEventListener('click', function () {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
@@ -727,7 +738,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function() {
+            circle.addEventListener('click', function () {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -743,7 +754,7 @@
         });
 
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             // Store selections
             let selectedSizes = [];
@@ -753,7 +764,7 @@
             // Example: user clicks on a variant color box
             const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function() {
+                box.addEventListener('click', function () {
                     const color = this.dataset.color;
                     const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
                     const images = JSON.parse(this.dataset.images); // array of image URLs
@@ -796,13 +807,13 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const countrySelect = document.getElementById('country');
             const stateSelect = document.getElementById('state');
             const citySelect = document.getElementById('city');
 
             // When country is selected, fetch states
-            countrySelect.addEventListener('change', function() {
+            countrySelect.addEventListener('change', function () {
                 const countryId = this.value; // 🔥 use ID now
                 if (countryId) {
                     stateSelect.disabled = false;
@@ -831,7 +842,7 @@
             });
 
             // When state is selected, fetch cities
-            stateSelect.addEventListener('change', function() {
+            stateSelect.addEventListener('change', function () {
                 const stateId = this.value; // ✅ already ID
                 if (stateId) {
                     citySelect.disabled = false;
@@ -857,5 +868,32 @@
                 }
             });
         });
+
+
+        // apture Selected Images in JavaScript
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectedImages = [];
+
+            // When user clicks any product image
+            document.querySelectorAll('.selectable-image').forEach(img => {
+                img.addEventListener('click', function () {
+                    let imgPath = this.getAttribute('data-image');
+
+                    if (!selectedImages.includes(imgPath)) {
+                        selectedImages.push(imgPath);
+                    }
+
+                    // Save into hidden input
+                    document.getElementById('selected_images').value = JSON.stringify(selectedImages);
+                    console.log("Selected Images:", selectedImages);
+                });
+            });
+
+            // Before form submit
+            document.getElementById('inquiryForm').addEventListener('submit', function () {
+                document.getElementById('selected_images').value = JSON.stringify(selectedImages);
+            });
+        });
+
     </script>
 @endpush

@@ -22,7 +22,8 @@ class About extends Model
         'team',
         'status',
         'why_choose_us_1',
-        'why_choose_us_2'
+        'why_choose_us_2',
+        'why_choose_us_image'
     ];
 
     protected $casts = [

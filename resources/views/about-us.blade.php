@@ -66,11 +66,14 @@
                 </div>
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="position-relative about-img">
-                        @php $firstTeamImage = $about->team[0]['image'] ?? null; @endphp
-                        <img src="{{ asset($firstTeamImage ?? 'images/product2.jpg') }}" alt="Model"
+                        @php
+                            $whyChooseImg = $about->why_choose_us_image ?? null;
+                        @endphp
+                        <img src="{{ asset($whyChooseImg ?? 'images/product2.jpg') }}" alt="Why Choose Us"
                             class="img-fluid w-100">
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

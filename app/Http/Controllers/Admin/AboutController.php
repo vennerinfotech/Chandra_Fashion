@@ -59,6 +59,13 @@ class AboutController extends Controller
             }
             $about->hero_image = $this->storeImagePublic($request->file('hero_image'), 'about');
         }
+        // Why Choose Us Image Upload
+        if ($request->hasFile('why_choose_us_image')) {
+            if ($about->why_choose_us_image && file_exists(public_path($about->why_choose_us_image))) {
+                @unlink(public_path($about->why_choose_us_image));
+            }
+            $about->why_choose_us_image = $this->storeImagePublic($request->file('why_choose_us_image'), 'about/why');
+        }
 
         // Why list (array of bullets)
         $why_list = array_values(array_filter($request->input('why_list', []), fn($v) => trim($v) !== ''));

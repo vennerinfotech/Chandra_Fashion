@@ -10,7 +10,7 @@ use App\Mail\InquiryUserMail;
 use App\Mail\InquiryAdminMail;
 use App\Jobs\SendInquiryEmails;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Log;
 class InquiryController extends Controller
 {
 
@@ -21,6 +21,7 @@ class InquiryController extends Controller
     }
 public function store(Request $request)
 {
+    Log::info('Inquiry Submit Request:', $request->all());
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email',

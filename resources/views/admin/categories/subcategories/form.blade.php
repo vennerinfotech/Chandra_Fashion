@@ -7,8 +7,7 @@
         <select name="category_id" id="category_id" class="form-select" required>
             <option value="">Select Category</option>
             @foreach($categories as $category)
-                <option value="{{ $category->id }}"
-                    {{ old('category_id', $subcategory->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                <option value="{{ $category->id }}" {{ old('category_id', $subcategory->category_id ?? '') == $category->id ? 'selected' : '' }}>
                     {{ $category->name }}
                 </option>
             @endforeach
@@ -18,23 +17,31 @@
     {{-- SubCategory Name --}}
     <div class="mb-3">
         <label for="name" class="form-label">SubCategory Name</label>
-        <input type="text" name="name" id="name"
-               class="form-control"
-               value="{{ old('name', $subcategory->name ?? '') }}" required>
+        <input type="text" name="name" id="name" class="form-control"
+            value="{{ old('name', $subcategory->name ?? '') }}" required>
     </div>
 
     {{-- Description --}}
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
         <textarea name="description" id="description" rows="3"
-                  class="form-control">{{ old('description', $subcategory->description ?? '') }}</textarea>
+            class="form-control">{{ old('description', $subcategory->description ?? '') }}</textarea>
     </div>
 
     {{-- Image --}}
     <div class="mb-3">
         <label for="image" class="form-label">Image</label>
         <input type="file" name="image" id="image" class="form-control">
+
+        {{-- Show old image if exists --}}
+        @if(isset($subcategory) && $subcategory->image)
+            <div class="mt-2">
+                <img src="{{ asset('images/subcategories/' . $subcategory->image) }}" alt="SubCategory Image" width="100"
+                    class="rounded shadow-sm">
+            </div>
+        @endif
     </div>
+
 
     {{-- Status --}}
     <div class="mb-3">

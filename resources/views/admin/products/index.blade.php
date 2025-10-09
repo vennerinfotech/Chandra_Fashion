@@ -2,83 +2,88 @@
 
 
 @section('content')
-<div class="table-wrapper">
-    <div class="admin-title">
-        <h1>Products</h1>
-        <a href="{{ route('admin.products.create') }}" class="btn"><i class="fa-solid fa-plus"></i>Add Product</a>
-    </div>
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="table-wrapper">
+        <div class="admin-title">
+            <h1>Products</h1>
+            <a href="{{ route('admin.products.create') }}" class="btn"><i class="fa-solid fa-plus"></i>Add Product</a>
+        </div>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
 
- <div class="card shadow-sm">
-        <div class="card-body">
-            <div class="table-responsive">
-    <table class="table table-bordered custom-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Category</th>
-                <th>Subcategory</th>
-                <th>Price</th>
-                <th>Export Ready</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        @forelse($products as $product)
-            <tr>
-                <td>{{ $product->id }}</td>
-                <td>{{ $product->name }}</td>
-                <td>
-                    @php
-                        // Start with main product image
-                        $firstImage = $product->image ?? null;
-                        // If no main image, take first variant image
-                        if (!$firstImage) {
-                            foreach ($product->variants as $variant) {
-                                $images = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
-                                if (!empty($images)) {
-                                    $firstImage = $images[0];
-                                    break; // stop after first found
-                                }
-                            }
-                        }
-                    @endphp
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Category</th>
+                                <th>Subcategory</th>
+                                <th>Price</th>
+                                <th>Export Ready</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($products as $product)
+                                <tr>
+                                    <td>{{ $product->id }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>
+                                        @php
+                                            // Start with main product image
+                                            $firstImage = $product->image ?? null;
+                                            // If no main image, take first variant image
+                                            if (!$firstImage) {
+                                                foreach ($product->variants as $variant) {
+                                                    $images = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
+                                                    if (!empty($images)) {
+                                                        $firstImage = $images[0];
+                                                        break; // stop after first found
+                                                    }
+                                                }
+                                            }
+                                        @endphp
 
-                    @if($firstImage)
-                        <img src="{{ asset($firstImage) }}" alt="{{ $product->name }}" width="50" height="50" class="rounded">
-                    @else
-                        <span>-</span>
-                    @endif
-                </td>
-                <td>{{ $product->category->name ?? '-' }}</td>
-                <td>{{ $product->subcategory->name ?? '-' }}</td>
-                <td>{{ $product->price }}</td>
-                <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ route('admin.products.edit', $product->id) }}" title="Edit" class="btn-action btn-sm"><i class="fa-solid fa-pencil"></i></a>
-                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button onclick="return confirm('Are you sure?')" title="Delete" class="btn-action btn-sm"><i class="fa-solid fa-trash"></i></button>
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="6" class="text-center">No products found.</td>
-            </tr>
-        @endforelse
-        </tbody>
-    </table>
+                                        @if($firstImage)
+                                            {{-- Include Lightbox --}}
+                                            @include('admin.lightbox', ['images' => [asset($firstImage)]])
+                                        @else
+                                            <span>-</span>
+                                        @endif
+                                    </td>
+
+                                    <td>{{ $product->category->name ?? '-' }}</td>
+                                    <td>{{ $product->subcategory->name ?? '-' }}</td>
+                                    <td>{{ $product->price }}</td>
+                                    <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.products.edit', $product->id) }}" title="Edit"
+                                            class="btn-action btn-sm"><i class="fa-solid fa-pencil"></i></a>
+                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                            style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button onclick="return confirm('Are you sure?')" title="Delete"
+                                                class="btn-action btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">No products found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
- </div>
 
-    {{ $products->links() }}
-</div>
+        {{ $products->links() }}
+    </div>
 @endsection

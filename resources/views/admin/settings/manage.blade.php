@@ -604,31 +604,27 @@
         });
 
         // Remove existing or newly added Featured Collection card
-        document.getElementById('cards-wrapper').addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-featured-card')) {
-                e.target.closest('.featured-collection-card').remove();
-            }
-        });
-
-        document.getElementById('cards-wrapper').addEventListener('click', function (e) {
+        document.getElementById('cards-wrapper').addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-featured-card')) {
                 const card = e.target.closest('.featured-collection-card');
+                const cardIdInput = card.querySelector('input[name*="[id]"]');
 
-                // If card has an ID (existing in DB)
-                const hiddenInput = card.querySelector('input[name*="[id]"]');
-                if (hiddenInput && hiddenInput.value) {
-                    // Create a new hidden input for each deleted ID
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'featured_deleted_ids[]';
-                    input.value = hiddenInput.value;
-                    document.querySelector('form').appendChild(input);
+                // Only add to deleted IDs if card has an existing ID
+                if (cardIdInput && cardIdInput.value) {
+                    const deletedInput = document.createElement('input');
+                    deletedInput.type = 'hidden';
+                    deletedInput.name = 'featured_deleted_ids[]';
+                    deletedInput.value = cardIdInput.value;
+
+                    // Append to the wrapper (or form)
+                    document.getElementById('cards-wrapper').appendChild(deletedInput);
                 }
 
-                // Remove from UI
+                // Remove the card from DOM
                 card.remove();
             }
         });
+
 
 
 
@@ -655,6 +651,7 @@
                 e.target.closest('.hero-section').remove();
             }
         });
+
 
 
     </script>
