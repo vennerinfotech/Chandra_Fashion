@@ -48,7 +48,7 @@
                 <div class="col-md-6">
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
-                          <h6 class="product-price"> ₹1,999</h6>
+                        <h6 class="product-price"> ₹1,999</h6>
                         <p class="product-desc">{{ $product->description }}</p>
 
                         <div class="sku-category">
@@ -56,7 +56,7 @@
                                     id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span></p>
 
                             <p class="">
-                              Category: <span>{{ $product->category->name ?? 'N/A' }}</span>
+                                Category: <span>{{ $product->category->name ?? 'N/A' }}</span>
                             </p>
                         </div>
 
@@ -76,7 +76,7 @@
                         </div>
 
                         {{-- Available Colors --}}
-                       <div class="color-variation">
+                        <div class="color-variation">
                             <h6>Available Colors</h6>
                             <div class="color-selected">
                                 <span class="" style="background:#000000;"></span>
@@ -91,13 +91,13 @@
                             </div>
                             {{-- <div class="color" id="colorContainer">
                                 @foreach ($colors as $index => $color)
-                                    <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
-                                        data-color="{{ $color }}" data-images='@json($colorImages[$color])'
-                                        data-sizes='@json($sizesByColor[$color] ?? [])'
-                                        data-code='{{ $skuByColor[$color] ?? $product->variants->first()->product_code }}'
-                                        data-moq='{{ $moqByColor[$color] ?? $product->moq }}' title="{{ $color }}"
-                                        style="background-color: {{ $color }};">
-                                    </button>
+                                <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
+                                    data-color="{{ $color }}" data-images='@json($colorImages[$color])'
+                                    data-sizes='@json($sizesByColor[$color] ?? [])'
+                                    data-code='{{ $skuByColor[$color] ?? $product->variants->first()->product_code }}'
+                                    data-moq='{{ $moqByColor[$color] ?? $product->moq }}' title="{{ $color }}"
+                                    style="background-color: {{ $color }};">
+                                </button>
                                 @endforeach
                             </div> --}}
 
@@ -142,7 +142,7 @@
 
                         <a href="#" class="btn btn-price" data-bs-toggle="modal" data-bs-target="#inquiryModal"
                             data-product="{{ $product->id }}">
-                             <i class="bi bi-cart-check"></i> Get a Quote
+                            <i class="bi bi-cart-check"></i> Get a Quote
                         </a>
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                 <ul class="nav nav-tabs" id="productTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="specs-tab" data-bs-toggle="tab" href="#specs"
-                             role="tab">Description</a>
+                            role="tab">Description</a>
                     </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert" role="tab">Certifications</a>
@@ -325,49 +325,36 @@
                     <h2 class="section-title">Related Products</h2>
                     <div class="row">
                         <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
-                            <div class="new-arrival-box card">
-                                <div class="new-arrival-box-img">
-                                    <img src="/images/product2.jpg" alt="" class="img-fluid">
-                                </div>
-                                <div class="arrival-list">
-                                    <p>TRENDING</p>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold">Casual Cloths</h5>
-                                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                        industry.
-                                    </p>
-                                    <div class="material-list">
-                                        <small class="badge-material">Cotton</small>
-                                        <small class="badge-moq">MOQ: 10</small>
-                                    </div>
-                                    <a href="http://127.0.0.1:8000/products/14" class="btn">Check Price</a>
-                                </div>
-                            </div>
 
-                            <div class="new-arrival-box card">
-                                <div class="new-arrival-box-img">
-                                    <img src="/images/product3.webp" alt="" class="img-fluid">
-                                </div>
-                                <div class="arrival-list">
-                                    <p>FEATURED</p>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold">Designer T-Shirts</h5>
-                                    <p class="card-text">A modern look with soft and breathable cotton fabric.</p>
-                                    <div class="material-list">
-                                        <small class="badge-material">Cotton</small>
-                                        <small class="badge-moq">MOQ: 20</small>
+                            @foreach($relatedProducts as $rProduct)
+                                <div class="new-arrival-box card">
+                                    <div class="new-arrival-box-img">
+                                        @php
+                                            $firstImage = $rProduct->variants->first()?->images;
+                                            $firstImage = is_array($firstImage) ? $firstImage[0] ?? '/images/product2.jpg' : json_decode($firstImage, true)[0] ?? '/images/product2.jpg';
+                                        @endphp
+                                        <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid">
                                     </div>
-                                    <a href="#" class="btn">Check Price</a>
+                                    <div class="arrival-list">
+                                        <p>{{ $rProduct->is_featured ? 'FEATURED' : 'TRENDING' }}</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
+                                        <p class="card-text">{{ Str::limit($rProduct->description, 50) }}</p>
+                                        <div class="material-list">
+                                            <small class="badge-material">{{ $rProduct->materials }}</small>
+                                            <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
+                                        </div>
+                                        <a href="{{ route('products.show', $rProduct->id) }}" class="btn">Check Price</a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
 
-                            <!-- Add more product cards here -->
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 @endsection
@@ -607,13 +594,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                        <div class="card" style="width:120px;">
-                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                            <div class="card-body p-2 text-center">
-                                                                <small>${p.name}</small>
+                                                            <div class="card" style="width:120px;">
+                                                                <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                <div class="card-body p-2 text-center">
+                                                                    <small>${p.name}</small>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    `;
+                                                        `;
                             });
                         });
                 });
