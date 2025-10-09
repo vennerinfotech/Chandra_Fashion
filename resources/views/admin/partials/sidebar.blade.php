@@ -9,7 +9,7 @@
         background-color: #ffffff;
         transition: left 0.3s ease;
         z-index: 1000;
-           box-shadow: 0 8px 24px rgba(168, 180, 208, 0.1);
+        box-shadow: 0 8px 24px rgba(168, 180, 208, 0.1);
     }
 
     .sidebar-wrapper.open {
@@ -33,6 +33,7 @@
         color: #2b3d51;
         padding: 15px 20px;
     }
+
     .sidebar-wrapper ul li a svg {
         padding-right: 10px;
     }
@@ -53,12 +54,14 @@
         background-color: #2b3d51;
     }
 
-    .sidebar-wrapper ul li.active a{
+    .sidebar-wrapper ul li.active a {
         color: #fff;
     }
-     .sidebar-wrapper ul li.active svg{
+
+    .sidebar-wrapper ul li.active svg {
         fill: #fff;
     }
+
     .sidebar-logo {
         padding: 3px;
     }
@@ -102,8 +105,9 @@
 </style>
 
 <div class="sidebar-wrapper">
-   <div class="sidebar-logo text-center py-3">
-        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid" style="max-height: 60px;">
+    <div class="sidebar-logo text-center py-3">
+        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid"
+            style="max-height: 60px;">
         <h5>
             {{-- {{ auth()->user()->name }} --}}
             {{-- {{ auth()->user()->role }} --}}
@@ -147,21 +151,31 @@
 
         <!-- Settings -->
         <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.settings.manage') }}">
+            {{-- <a href="{{ route('admin.settings.manage') }}">
                 <i class="fa-solid fa-gear me-2"></i> Settings
+            </a> --}}
+        <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.settings.manage') }}">
+                <i class="fa-solid fa-sliders me-2"></i> General Settings
+            </a>
+        </li>
+        </li>
+
+        <!-- About as -->
+        <li class="{{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.about.manage') }}">
+                <i class="fa-solid fa-circle-info me-2"></i> About Us
             </a>
         </li>
 
 
         <!-- Chat Bot -->
-        <li>
+        {{-- <li>
             <a href="#">
                 <i class="fa-solid fa-headset me-2"></i> Chat Bot
             </a>
-        </li>
+        </li> --}}
     </ul>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-

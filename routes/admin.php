@@ -26,6 +26,10 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/settings', [SettingController::class, 'manage'])->name('admin.settings.manage');
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
 
+    // Admin About manage routes
+    Route::get('/about', [\App\Http\Controllers\Admin\AboutController::class, 'manage'])->name('admin.about.manage');
+    Route::post('/about', [\App\Http\Controllers\Admin\AboutController::class, 'update'])->name('admin.about.update');
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
