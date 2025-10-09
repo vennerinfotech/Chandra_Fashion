@@ -19,7 +19,7 @@
         <ul>
             <li><a href="{{ route('about') }}">About Us</a></li>
             <li><a href="{{ route('contact') }}">Contact Us</a></li>
-            <li><a href="{{ route('products.index') }}">Products</a></li>
+            <li><a href="{{ route('products.index') }}">Shop</a></li>
             <li><a href="{{ route('allcollection') }}">Check Price</a></li>
         </ul>
       </div>

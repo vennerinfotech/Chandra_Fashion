@@ -24,7 +24,8 @@
 
                         <div id="colorGallery" class="img-thumbnail-main">
                             @foreach ($colorImages[$colors[0]] as $img)
-                                <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-thumbnail gallery-thumb"
+                                <img src="{{ asset('images/variants/' . basename($img)) }}"
+                                    class="img-thumbnail gallery-thumb"
                                     data-full="{{ asset('images/variants/' . basename($img)) }}">
                             @endforeach
                         </div>
@@ -69,7 +70,7 @@
                         <div class="color-variation">
                             <h6>Available Colors</h6>
                             <div class="color" id="colorContainer">
-                                @foreach($colors as $index => $color)
+                                @foreach ($colors as $index => $color)
                                     <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
                                         data-color="{{ $color }}" data-images='@json($colorImages[$color])'
                                         data-sizes='@json($sizesByColor[$color] ?? [])'
@@ -84,7 +85,7 @@
 
 
                         {{-- Available Sizes --}}
-                        <div class="size-variaton">
+                        {{-- <div class="size-variaton">
                             <h6 class="">Available Sizes</h6>
                             <div class="size" id="sizeContainer">
                                 @php
@@ -92,9 +93,9 @@
                                     $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
                                 @endphp
 
-                                @if(!empty($initialSizes))
-                                    @foreach($initialSizes as $sizeString)
-                                        @foreach(explode(',', $sizeString) as $size)
+                                @if (!empty($initialSizes))
+                                    @foreach ($initialSizes as $sizeString)
+                                        @foreach (explode(',', $sizeString) as $size)
                                             <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
                                                 {{ strtoupper(trim($size)) }}
                                             </button>
@@ -104,7 +105,7 @@
                                     <p class="text-muted">No sizes available</p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- MOQ & Delivery --}}
 
@@ -129,10 +130,10 @@
 
             <!-- Modal -->
             <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content p-3">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title fw-bold">Check Price Inquiry</h5>
+                            <h5 class="modal-title fw-bold">Product Inquiry</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -143,50 +144,74 @@
                                 <input type="hidden" name="selected_images" id="selected_images">
                                 <input type="hidden" name="variant_details" id="variant_details">
 
-                                <div class="mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" name="name" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Company</label>
-                                    <input type="text" name="company" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Phone</label>
-                                    <input type="text" name="phone" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Country</label>
-                                    <select name="country_id" id="country" class="form-select" required>
-                                        <option value="">Select your country</option>
-                                        @foreach($countries as $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" name="name" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Company</label>
+                                            <input type="text" name="company" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" name="phone" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Country</label>
+                                            <select name="country_id" id="country" class="form-select" required>
+                                                <option value="">Select your country</option>
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">State</label>
+                                            <select name="state_id" id="state" class="form-select" required disabled>
+                                                <option value="">Select your state</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">City</label>
+                                            <select name="city_id" id="city" class="form-select" required disabled>
+                                                <option value="">Select your city</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Quantity Interested</label>
+                                            <input type="number" name="quantity" class="form-control" required>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">State</label>
-                                    <select name="state_id" id="state" class="form-select" required disabled>
-                                        <option value="">Select your state</option>
-                                    </select>
-                                </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">City</label>
-                                    <select name="city_id" id="city" class="form-select" required disabled>
-                                        <option value="">Select your city</option>
-                                    </select>
-                                </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Quantity Interested</label>
-                                    <input type="number" name="quantity" class="form-control" required>
-                                </div>
+
+
+
+
+
+
 
                                 <button type="submit" class="btn w-100">Submit to Check Price</button>
                             </form>
@@ -338,7 +363,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -369,9 +394,9 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function (event) {
+            inquiryModal.addEventListener('show.bs.modal', function(event) {
                 var button = event.relatedTarget;
                 var productId = button.getAttribute('data-product');
                 var inputProduct = inquiryModal.querySelector('#product_id');
@@ -379,7 +404,7 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll('.color-circle');
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
@@ -509,7 +534,8 @@
                         }
 
                         btn.addEventListener('click', () => {
-                            sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                            sizeContainer.querySelectorAll('button').forEach(b => b
+                                .classList.remove('selected'));
                             btn.classList.add('selected');
 
                             currentSelection.size = size.trim();
@@ -537,7 +563,7 @@
 
             const inquiryForm = document.getElementById('inquiryForm');
             if (inquiryForm) {
-                inquiryForm.addEventListener('submit', function () {
+                inquiryForm.addEventListener('submit', function() {
                     updateHiddenInputs();
                 });
             }
@@ -550,13 +576,13 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function () {
+                btn.addEventListener("click", function() {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -584,12 +610,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function () {
+                thumb.addEventListener('click', function() {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -598,7 +624,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function (e) {
+            container.addEventListener("mousemove", function(e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -610,14 +636,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function () {
+            container.addEventListener("mouseleave", function() {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -628,12 +654,13 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function () {
+                circle.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
                     // Remove selected from all colors
-                    document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
+                    document.querySelectorAll('.color-circle').forEach(c => c.classList.remove(
+                        'selected'));
                     // Add selected to clicked color
                     this.classList.add('selected');
 
@@ -646,7 +673,8 @@
                         const imgTag = document.createElement('img');
                         imgTag.src = '/images/variants/' + img.split('/').pop();
                         // imgTag.className = 'img-thumbnail gallery-thumb zoomable';
-                        imgTag.style = 'width:90px; height:90px; object-fit:cover; cursor:pointer;';
+                        imgTag.style =
+                            'width:90px; height:90px; object-fit:cover; cursor:pointer;';
                         imgTag.dataset.full = '/images/variants/' + img.split('/').pop();
                         gallery.appendChild(imgTag);
 
@@ -669,7 +697,9 @@
                             // Click to select size
                             btn.addEventListener('click', () => {
                                 // Remove selected from all sizes
-                                sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove('selected'));
+                                sizeContainer.querySelectorAll('.btn')
+                                    .forEach(b => b.classList.remove(
+                                        'selected'));
                                 btn.classList.add('selected');
                             });
 
@@ -685,7 +715,8 @@
             // Optional: handle size selection on initial page load
             sizeContainer.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove('selected'));
+                    sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove(
+                        'selected'));
                     btn.classList.add('selected');
                 });
             });
@@ -696,7 +727,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function () {
+            circle.addEventListener('click', function() {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -705,13 +736,14 @@
                 const moqElement = document.getElementById('moqValue');
                 const deliveryElement = document.getElementById('deliveryValue');
 
-                moqElement.textContent = moqByColor[color] ?? '{{ $product->moq ?? "100" }}';
-                deliveryElement.textContent = deliveryByColor[color] ?? '{{ $product->delivery_time ?? "15-20" }}';
+                moqElement.textContent = moqByColor[color] ?? '{{ $product->moq ?? '100' }}';
+                deliveryElement.textContent = deliveryByColor[color] ??
+                    '{{ $product->delivery_time ?? '15-20' }}';
             });
         });
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
 
             // Store selections
             let selectedSizes = [];
@@ -721,7 +753,7 @@
             // Example: user clicks on a variant color box
             const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function () {
+                box.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
                     const images = JSON.parse(this.dataset.images); // array of image URLs
@@ -729,7 +761,8 @@
                     const minOrderQty = this.dataset.moq;
 
                     // Example: select a size from size options
-                    const size = prompt(`Available sizes: ${sizeOptions.join(', ')}\nEnter your size:`);
+                    const size = prompt(
+                        `Available sizes: ${sizeOptions.join(', ')}\nEnter your size:`);
 
                     if (!size || !sizeOptions.includes(size)) {
                         alert('Invalid size selected!');
@@ -749,8 +782,10 @@
 
                     // Update hidden inputs
                     document.getElementById('selected_size').value = JSON.stringify(selectedSizes);
-                    document.getElementById('selected_images').value = JSON.stringify(selectedImages);
-                    document.getElementById('variant_details').value = JSON.stringify(variantDetails);
+                    document.getElementById('selected_images').value = JSON.stringify(
+                        selectedImages);
+                    document.getElementById('variant_details').value = JSON.stringify(
+                        variantDetails);
 
                     alert(`Selected ${color} - ${size}`);
                 });
@@ -761,69 +796,66 @@
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    const countrySelect = document.getElementById('country');
-    const stateSelect = document.getElementById('state');
-    const citySelect = document.getElementById('city');
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
 
-    // When country is selected, fetch states
-    countrySelect.addEventListener('change', function () {
-        const countryId = this.value; // 🔥 use ID now
-        if (countryId) {
-            stateSelect.disabled = false;
-            stateSelect.innerHTML = '<option value="">Loading states...</option>';
+            // When country is selected, fetch states
+            countrySelect.addEventListener('change', function() {
+                const countryId = this.value; // 🔥 use ID now
+                if (countryId) {
+                    stateSelect.disabled = false;
+                    stateSelect.innerHTML = '<option value="">Loading states...</option>';
 
-            // Fetch states for selected country
-            fetch(`/states/${countryId}`) // 🔥 pass ID
-                .then(response => response.json())
-                .then(data => {
-                    stateSelect.innerHTML = '<option value="">Select your state</option>';
-                    data.forEach(state => {
-                        const option = document.createElement('option');
-                        option.value = state.id;
-                        option.textContent = state.name;
-                        stateSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    stateSelect.innerHTML = '<option value="">No states available</option>';
-                    console.error(error);
-                });
-        } else {
-            stateSelect.disabled = true;
-            citySelect.disabled = true;
-        }
-    });
+                    // Fetch states for selected country
+                    fetch(`/states/${countryId}`) // 🔥 pass ID
+                        .then(response => response.json())
+                        .then(data => {
+                            stateSelect.innerHTML = '<option value="">Select your state</option>';
+                            data.forEach(state => {
+                                const option = document.createElement('option');
+                                option.value = state.id;
+                                option.textContent = state.name;
+                                stateSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            stateSelect.innerHTML = '<option value="">No states available</option>';
+                            console.error(error);
+                        });
+                } else {
+                    stateSelect.disabled = true;
+                    citySelect.disabled = true;
+                }
+            });
 
-    // When state is selected, fetch cities
-    stateSelect.addEventListener('change', function () {
-        const stateId = this.value; // ✅ already ID
-        if (stateId) {
-            citySelect.disabled = false;
-            citySelect.innerHTML = '<option value="">Loading cities...</option>';
+            // When state is selected, fetch cities
+            stateSelect.addEventListener('change', function() {
+                const stateId = this.value; // ✅ already ID
+                if (stateId) {
+                    citySelect.disabled = false;
+                    citySelect.innerHTML = '<option value="">Loading cities...</option>';
 
-            fetch(`/cities/${stateId}`) // ✅ pass ID
-                .then(response => response.json())
-                .then(data => {
-                    citySelect.innerHTML = '<option value="">Select your city</option>';
-                    data.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city.id;
-                        option.textContent = city.name;
-                        citySelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    citySelect.innerHTML = '<option value="">No cities available</option>';
-                    console.error(error);
-                });
-        } else {
-            citySelect.disabled = true;
-        }
-    });
-});
-
-
-
+                    fetch(`/cities/${stateId}`) // ✅ pass ID
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">Select your city</option>';
+                            data.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.id;
+                                option.textContent = city.name;
+                                citySelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            citySelect.innerHTML = '<option value="">No cities available</option>';
+                            console.error(error);
+                        });
+                } else {
+                    citySelect.disabled = true;
+                }
+            });
+        });
     </script>
 @endpush
