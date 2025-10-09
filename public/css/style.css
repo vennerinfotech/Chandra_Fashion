@@ -1146,6 +1146,9 @@ footer .chatbot-btn svg path {
 
 .product-filter-right .card .card-body {
     padding: 25px;
+        display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 .product-filter-right .card .card-title {
@@ -1561,7 +1564,9 @@ footer .chatbot-btn svg path {
 }
 
 .new-arrival-box .card-body {
-    padding: 15px 0 0px;
+        display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 .new-arrival-box .card-body h5 {

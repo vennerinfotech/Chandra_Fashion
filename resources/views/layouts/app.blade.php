@@ -229,6 +229,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+<script>
+$(document).ready(function() {
+    function equalizeHeights() {
+        var maxHeight = 0;
+        var $boxes = $('.new-arrival-box, .product-filter-right .card');
+        $boxes.css('height', 'auto'); // reset first
+
+        $boxes.each(function() {
+            var thisHeight = $(this).outerHeight();
+            if (thisHeight > maxHeight) maxHeight = thisHeight;
+        });
+
+        $boxes.css('height', maxHeight + 'px');
+    }
+
+    // Run after images load
+    $(window).on('load resize', equalizeHeights);
+});
+</script>
+
+
+
     <script>
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -306,11 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if(e.key === "Enter") sendMessage();
         });
     });
-
-
     </script>
-
-
     @stack('scripts')
 </body>
 

@@ -411,7 +411,7 @@
                 nav: true,
                 dots: false,
                 autoplay: true,
-                autoplayTimeout: 1500,
+                autoplayTimeout: 150000,
                 autoplayHoverPause: true,
                 navText: [
                     '<i class="fa-solid fa-chevron-left"></i>',

@@ -1,7 +1,7 @@
 <div class="top-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-md-4 col-lg-6">
                 <div class="d-flex align-items-center py-1">
                    <a href="#">
                      <i class="fa-solid fa-location-dot"></i>
@@ -9,7 +9,7 @@
                    </a>
                 </div>
             </div>
-            <div class="col-lg-6 top-bar">
+            <div class="col-md-8 col-lg-6 top-bar">
                 <div class="d-flex justify-content-end align-items-center py-1">
                     <div class="me-3">
                         <a href="tel:+910000000000">
