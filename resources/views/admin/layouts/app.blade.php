@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Panel')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/cf-logo-1.png') }}">
 
     {{-- Bootstrap CSS --}}
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">

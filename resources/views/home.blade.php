@@ -42,7 +42,7 @@
         </button>
     </div>
 
-     <section class="home-feature-section">
+    <section class="home-feature-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-3">
@@ -158,8 +158,8 @@
                             // Prepare final image path
                             $imagePath =
                                 $mainImage && file_exists(public_path('images/variants/' . basename($mainImage)))
-                                    ? asset('images/variants/' . basename($mainImage))
-                                    : asset('images/default-product.jpg');
+                                ? asset('images/variants/' . basename($mainImage))
+                                : asset('images/default-product.jpg');
 
                             // Determine MOQ
                             $moq = $product->variants->count() ? $product->variants->min('moq') : $product->moq;
@@ -216,10 +216,9 @@
             <div class="custom-owl-carousel owl-carousel collection-carousel">
                 @foreach ($categories as $category)
                     <div class="collection-item">
-                        <a href="{{ route('allcollection') }}">
+                        <a href="{{ route('allcollection', ['category' => $category->id]) }}">
                             <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
                                 alt="{{ $category->name }}">
-
                             <div class="collection-info">
                                 <h3>{{ $category->name }}</h3>
                                 <p>{{ $category->description ?? '' }}</p>
@@ -228,6 +227,7 @@
                     </div>
                 @endforeach
             </div>
+
         </div>
     </section>
 
@@ -246,37 +246,37 @@
                 @endphp
 
                 @for ($i = 0; $i < 3; $i++)
-                    @php
-                        $card = $cards[$i] ?? null;
-                    @endphp
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                        @php
+                            $card = $cards[$i] ?? null;
+                        @endphp
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
-                                <div class="svg-wrapper">
-                                    @if ($card && $card->svg_path)
-                                        <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
-                                    @else
-                                        <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
-                                    @endif
+                                    <div class="svg-wrapper">
+                                        @if ($card && $card->svg_path)
+                                            <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
+                                        @else
+                                            <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                        @endif
+                                    </div>
+
+                                    <h5 class="card-title m-0">
+                                        {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                    </h5>
+
+                                    <p class="card-text">
+                                        {{ $card->description ??
+                    [
+                        'Flexible minimum order quantities starting from 100 pieces per style',
+                        'Serving 25+ countries across Europe, North America, and Asia',
+                        'ISO certified facility with rigorous quality control processes.',
+                    ][$i] }}
+                                    </p>
+
                                 </div>
-
-                                <h5 class="card-title m-0">
-                                    {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
-                                </h5>
-
-                                <p class="card-text">
-                                    {{ $card->description ??
-                                        [
-                                            'Flexible minimum order quantities starting from 100 pieces per style',
-                                            'Serving 25+ countries across Europe, North America, and Asia',
-                                            'ISO certified facility with rigorous quality control processes.',
-                                        ][$i] }}
-                                </p>
-
                             </div>
                         </div>
-                    </div>
                 @endfor
 
             </div>
@@ -381,7 +381,7 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".featured-carousel").owlCarousel({
                 loop: true,
                 margin: 20,

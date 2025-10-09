@@ -102,8 +102,12 @@
 </style>
 
 <div class="sidebar-wrapper">
-    <div class="sidebar-logo text-center py-3">
-        <h2>Chandra Admin</h2>
+   <div class="sidebar-logo text-center py-3">
+        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid" style="max-height: 60px;">
+        <h5>
+            {{-- {{ auth()->user()->name }} --}}
+            {{-- {{ auth()->user()->role }} --}}
+        </h5>
     </div>
     <ul>
         <!-- Dashboard -->

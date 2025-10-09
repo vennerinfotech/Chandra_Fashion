@@ -11,47 +11,124 @@ use App\Models\ProductVariant;
 class ProductController extends Controller
 {
 
+    // public function index(Request $request)
+    // {
+    //     $query = Product::query()->with('variants', 'category')
+    //         ->whereHas('category', function($q) {
+    //             $q->where('status', 1);
+    //         });
+
+
+    //     // --- Dynamic Filters ---
+
+    //     $categories = Category::where('status', 1)->pluck('name', 'id'); // key = id, value = name
+    //     $fabrics = Product::select('materials')
+    //                 ->distinct()
+    //                 ->whereNotNull('materials')
+    //                 ->pluck('materials');
+    //     $moqRanges = ['50-100', '100-500', '500+'];
+
+    //     // --- Apply Filters ---
+
+    //     if ($request->filled('category')) {
+    //         $query->whereIn('category_id', $request->category); // use category_id instead of category
+    //     }
+
+    //     if ($request->filled('fabric')) {
+    //         $query->whereIn('materials', $request->fabric);
+    //     }
+
+    //     if ($request->filled('moq_range')) {
+    //         $query->where(function($q) use ($request) {
+    //             // Check variants
+    //             $q->whereHas('variants', function($q2) use ($request) {
+    //                 $q2->where(function($q3) use ($request) {
+    //                     foreach ($request->moq_range as $range) {
+    //                         if ($range === '50-100') $q3->orWhereBetween('moq', [50, 100]);
+    //                         elseif ($range === '100-500') $q3->orWhereBetween('moq', [100, 500]);
+    //                         elseif ($range === '500+') $q3->orWhere('moq', '>=', 500);
+    //                     }
+    //                 });
+    //             })
+    //             // Or check product itself if no variants
+    //             ->orWhere(function($q2) use ($request) {
+    //                 foreach ($request->moq_range as $range) {
+    //                     if ($range === '50-100') $q2->orWhereBetween('moq', [50, 100]);
+    //                     elseif ($range === '100-500') $q2->orWhereBetween('moq', [100, 500]);
+    //                     elseif ($range === '500+') $q2->orWhere('moq', '>=', 500);
+    //                 }
+    //             });
+    //         });
+    //     }
+
+
+
+    //     if ($request->has('export_ready_only')) {
+    //         $query->where('export_ready', true);
+    //     }
+
+    //     $totalProducts = $query->count();
+
+    //     $sort = $request->get('sort', 'latest');
+    //     if ($sort == 'price_asc') {
+    //         $query->orderBy('price', 'asc');
+    //     } elseif ($sort == 'price_desc') {
+    //         $query->orderBy('price', 'desc');
+    //     } else {
+    //         $query->orderBy('created_at', 'desc');
+    //     }
+
+    //     $products = $query->paginate(6)->withQueryString();
+
+    //     return view('products.index', compact(
+    //         'products',
+    //         'totalProducts',
+    //         'categories',
+    //         'fabrics',
+    //         'moqRanges'
+    //     ));
+    // }
+
+
+
     public function index(Request $request)
     {
-        $query = Product::query()->with('variants', 'category')
-            ->whereHas('category', function($q) {
+        $query = Product::query()->with('variants', 'category', 'subcategory')
+            ->whereHas('category', function ($q) {
                 $q->where('status', 1);
             });
 
-
         // --- Dynamic Filters ---
 
-        $categories = Category::where('status', 1)->pluck('name', 'id'); // key = id, value = name
-        $fabrics = Product::select('materials')
-                    ->distinct()
-                    ->whereNotNull('materials')
-                    ->pluck('materials');
+        $categories = Category::where('status', 1)->pluck('name', 'id');
+        $fabrics = Product::select('materials')->distinct()->whereNotNull('materials')->pluck('materials');
         $moqRanges = ['50-100', '100-500', '500+'];
 
         // --- Apply Filters ---
 
         if ($request->filled('category')) {
-            $query->whereIn('category_id', $request->category); // use category_id instead of category
+            $query->whereIn('category_id', (array) $request->category);
+        }
+
+        if ($request->filled('subcategory')) {
+            $query->where('subcategory_id', $request->subcategory);
         }
 
         if ($request->filled('fabric')) {
-            $query->whereIn('materials', $request->fabric);
+            $query->whereIn('materials', (array) $request->fabric);
         }
 
         if ($request->filled('moq_range')) {
-            $query->where(function($q) use ($request) {
-                // Check variants
-                $q->whereHas('variants', function($q2) use ($request) {
-                    $q2->where(function($q3) use ($request) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('variants', function ($q2) use ($request) {
+                    $q2->where(function ($q3) use ($request) {
                         foreach ($request->moq_range as $range) {
                             if ($range === '50-100') $q3->orWhereBetween('moq', [50, 100]);
                             elseif ($range === '100-500') $q3->orWhereBetween('moq', [100, 500]);
                             elseif ($range === '500+') $q3->orWhere('moq', '>=', 500);
                         }
                     });
-                })
-                // Or check product itself if no variants
-                ->orWhere(function($q2) use ($request) {
+                })->orWhere(function ($q2) use ($request) {
                     foreach ($request->moq_range as $range) {
                         if ($range === '50-100') $q2->orWhereBetween('moq', [50, 100]);
                         elseif ($range === '100-500') $q2->orWhereBetween('moq', [100, 500]);
@@ -61,23 +138,17 @@ class ProductController extends Controller
             });
         }
 
-
-
         if ($request->has('export_ready_only')) {
             $query->where('export_ready', true);
         }
 
-        $totalProducts = $query->count();
-
+        // --- Sorting ---
         $sort = $request->get('sort', 'latest');
-        if ($sort == 'price_asc') {
-            $query->orderBy('price', 'asc');
-        } elseif ($sort == 'price_desc') {
-            $query->orderBy('price', 'desc');
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
+        if ($sort == 'price_asc') $query->orderBy('price', 'asc');
+        elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
+        else $query->orderBy('created_at', 'desc');
 
+        $totalProducts = $query->count();
         $products = $query->paginate(6)->withQueryString();
 
         return view('products.index', compact(
@@ -88,8 +159,6 @@ class ProductController extends Controller
             'moqRanges'
         ));
     }
-
-
     public function show($id)
     {
         $product = Product::with(['category', 'variants'])->findOrFail($id);
@@ -132,9 +201,4 @@ class ProductController extends Controller
             'deliveryByColor'
         ));
     }
-
-
-
-
-
 }
