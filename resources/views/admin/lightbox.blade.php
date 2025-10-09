@@ -6,7 +6,7 @@
     @if(count($images) > 0)
         <!-- First image as preview -->
         <a data-fancybox="{{ $galleryId }}" href="{{ asset($images[0]) }}">
-            <img src="{{ asset($images[0]) }}" wwidth="50" height="50" class="rounded" alt="" />
+            <img src="{{ asset($images[0]) }}" width="50" height="50" class="rounded" alt="" />
         </a>
 
         <!-- Hidden images for lightbox -->
