@@ -304,7 +304,6 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="featured-collection-grid">
                         <div class="heritage-img">
                             @if ($heritage->image)
                                 <img src="{{ asset($heritage->image) }}" alt="{{ $heritage->title }}">
@@ -312,7 +311,6 @@
                                 <img src="{{ asset('images/Heritage.png') }}" alt="Heritage Image">
                             @endif
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -421,7 +419,7 @@
                 ],
                 responsive: {
                     0: {
-                        items: 1
+                        items: 2
                     },
                     576: {
                         items: 2

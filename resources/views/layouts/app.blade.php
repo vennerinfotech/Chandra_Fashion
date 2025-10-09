@@ -216,7 +216,19 @@
 
     @include('partials.footer')
 
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> --}}
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const header = document.querySelector(".header-wrapper");
+
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 50) {
+            header.classList.add("scrolled");
+        } else {
+            header.classList.remove("scrolled");
+        }
+    });
+});
+</script>
     <script>
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -225,6 +237,12 @@
         const chatInput = document.getElementById("chat-input");
         const chatMessages = document.getElementById("chat-messages");
         const sendBtn = document.getElementById("send-btn");
+        const closeBox = document.getElementById("close-box");
+
+        closeBox.addEventListener("click", function() {
+    chatWindow.style.display = "none";
+
+        });
 
         // Toggle chat window
         chatBtn.addEventListener("click", function() {

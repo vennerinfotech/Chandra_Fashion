@@ -26,12 +26,12 @@
 
       <!-- Column 3: Services -->
       <div class="col-md-6 col-lg-3 services">
-        <h4>Services</h4>
+        <h4>Collection</h4>
         <ul>
-          <li><a href="#">Custom Manufacturing</a></li>
-          <li><a href="#">Design Consultation</a></li>
-          <li><a href="#">Quality Control</a></li>
-          <li><a href="#">Global Shipping</a></li>
+          <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+          <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
+          <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
+          <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
         </ul>
       </div>
 
@@ -66,7 +66,7 @@
   <!-- Chat Window (hidden by default) -->
 <div id="chat-window" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; height:400px; background:white; border:1px solid #ccc; border-radius:10px; box-shadow:0px 4px 10px rgba(0,0,0,0.2); overflow:hidden; flex-direction:column;">
     <div style="background:#273847; color:white; padding:10px; font-weight:bold;">
-        AI Assistant
+        AI Assistant <span id="close-box" style="float: right;"><i class="fa-solid fa-times"></i></span>
     </div>
     <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto; font-size:14px;"></div>
     <div style="display:flex; border-top:1px solid #ccc;">
