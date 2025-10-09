@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
 $(document).ready(function() {
     function equalizeHeights() {
         var maxHeight = 0;
-        var $boxes = $('.new-arrival-box, .product-filter-right .card');
+        var $boxes = $('.new-arrival-box, .product-filter-right .card, .collection-item');
         $boxes.css('height', 'auto'); // reset first
 
         $boxes.each(function() {
