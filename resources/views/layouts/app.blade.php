@@ -21,6 +21,7 @@
 
     {{-- Custom Admin CSS --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
 
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -228,13 +229,38 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const collapse = document.querySelector('#navbarNav');
+    const closeBtn = document.querySelector('#closeMenu');
+    const toggler = document.querySelector('.navbar-toggler');
+
+    // Prevent scrolling when open
+    collapse.addEventListener('show.bs.collapse', () => {
+        document.body.classList.add('nav-open');
+    });
+    collapse.addEventListener('hidden.bs.collapse', () => {
+        document.body.classList.remove('nav-open');
+    });
+
+    // Close button click
+    closeBtn.addEventListener('click', function () {
+        const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+        bsCollapse.hide();
+    });
+});
+</script>
+
+
 
 <script>
 $(document).ready(function() {
     function equalizeHeights() {
         var maxHeight = 0;
-        var $boxes = $('.new-arrival-box, .product-filter-right .card, .collection-item');
+        var $boxes = $('.new-arrival-box, .product-filter-right .card, .collection-page-wrapper .collection-item');
         $boxes.css('height', 'auto'); // reset first
 
         $boxes.each(function() {

@@ -2,16 +2,39 @@
       font-family: "Open Sans", sans-serif;
 } */
 
-.top-header{
+.top-header {
     background: #000;
     padding: 8px;
 }
 
-.top-header a{
+.top-header a {
     color: #ffffff;
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
+}
+
+.header-social ul {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header-social ul li svg path {
+    fill: #fff;
+}
+
+.header-social ul li a {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    border: 1px solid #ddd;
+    background: #000;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1000%;
 }
 
 .header-wrapper {
@@ -19,7 +42,7 @@
     padding: 12px 0;
     border-bottom: 1px solid #eaeaea;
     transition: all 0.3s ease-in-out;
-      position: sticky;
+    position: sticky;
     top: 0;
     z-index: 1030;
 }
@@ -96,7 +119,6 @@
 }
 
 .breadcrumb-wrapper nav {
-    z-index: 9999;
     position: relative;
 }
 
@@ -250,15 +272,6 @@
     max-width: 700px;
 }
 
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-    .hero-content p {
-        font-size: 1rem;
-    }
-}
-
 .top-section-padding {
     padding: 90px 20px 90px;
 }
@@ -296,18 +309,24 @@
     gap: 20px;
 }
 
+.collections-section .collection-item {
+    height: 380px;
+}
+
+.collection-carousel .owl-stage {
+    padding: 10px 0;
+}
+
 .collection-item {
     border-radius: 12px;
     overflow: hidden;
     padding: 20px;
     border: 1px solid #ddd;
     transition: all 0.5s ease-in-out;
-    margin-bottom: 15px;
 }
 
 .collection-item:hover {
-    /* transform: translateY(-5px); */
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
     transition: all 0.5s ease-in-out;
 }
 
@@ -341,6 +360,10 @@
     color: #2b3d51;
     margin: 0;
     line-height: 22px;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .product-card img {
@@ -369,14 +392,15 @@
     transition: all 0.5s ease-in-out;
 }
 
-.card-section .svg-wrapper img{
-     height:50px;
+.card-section .svg-wrapper img {
+    height: 50px;
     width: 50px;
     object-fit: cover;
 }
 
 .card-section .card {
     border: none;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
 }
 
 .card-section .card .card-title {
@@ -815,7 +839,7 @@ footer .bottom-text {
     margin-top: 30px;
 }
 
-#chat-window{
+#chat-window {
     z-index: 9;
 }
 
@@ -1146,7 +1170,7 @@ footer .chatbot-btn svg path {
 
 .product-filter-right .card .card-body {
     padding: 25px;
-        display: flex;
+    display: flex;
     justify-content: space-between;
     flex-direction: column;
 }
@@ -1194,7 +1218,7 @@ footer .chatbot-btn svg path {
 }
 
 /*Product detail*/
-.product-detail-wrapper{
+.product-detail-wrapper {
     background: #fff;
 }
 .product-detail-left {
@@ -1261,8 +1285,8 @@ footer .chatbot-btn svg path {
     line-height: 36px;
 }
 
-.product-detail-right .product-price{
-      color: #111827;
+.product-detail-right .product-price {
+    color: #111827;
     font-size: 24px;
     line-height: 32px;
     font-weight: 700;
@@ -1288,7 +1312,7 @@ footer .chatbot-btn svg path {
     font-weight: 500;
 }
 
-.product-detail-right .sku-category p span{
+.product-detail-right .sku-category p span {
     color: #4b5563;
     font-weight: 400;
 }
@@ -1401,8 +1425,8 @@ footer .chatbot-btn svg path {
     background-color: transparent;
 }
 
-#inquiryModal .modal-header{
-        background: #f8f9fa;
+#inquiryModal .modal-header {
+    background: #f8f9fa;
 }
 
 .product-detail-right .btn-price:hover {
@@ -1410,18 +1434,17 @@ footer .chatbot-btn svg path {
     color: #2b3d51;
 }
 
-.color-variation .color-selected{
+.color-variation .color-selected {
     display: flex;
     gap: 10px;
-
 }
 
-.color-variation .color-selected span{
+.color-variation .color-selected span {
     height: 25px;
     width: 25px;
     border-radius: 30px;
-        display: block;
-        border: 1px solid #000;
+    display: block;
+    border: 1px solid #000;
 }
 
 .product-description {
@@ -1564,7 +1587,7 @@ footer .chatbot-btn svg path {
 }
 
 .new-arrival-box .card-body {
-        display: flex;
+    display: flex;
     justify-content: space-between;
     flex-direction: column;
 }
@@ -1583,7 +1606,7 @@ footer .chatbot-btn svg path {
 }
 
 .new-arrival-box .card-body h5,
-.new-arrival-box .card-body p{
+.new-arrival-box .card-body p {
     -webkit-line-clamp: 2;
     overflow: hidden;
     display: -webkit-box;
@@ -1793,7 +1816,6 @@ footer .chatbot-btn svg path {
     padding: 0 0 0 50px;
 }
 
-
 .about-section .about-content .title,
 .why-about-content .title {
     font-size: 30px;
@@ -1825,13 +1847,14 @@ footer .chatbot-btn svg path {
 
 .why-about-content .listing ul li {
     padding: 10px 0;
+    color: #2b3d51;
 }
 
 .why-about-content .listing ul li svg {
     padding-right: 5px;
 }
 
-.states-section{
+.states-section {
     background: #fff;
 }
 
@@ -1854,7 +1877,7 @@ footer .chatbot-btn svg path {
     transition: all 0.5s;
 }
 
-.stat-box:hover .stat-icon{
+.stat-box:hover .stat-icon {
     background: #000;
     transition: all 0.5s;
 }
@@ -1864,7 +1887,7 @@ footer .chatbot-btn svg path {
 }
 
 .stat-icon {
-height: 80px;
+    height: 80px;
     width: 80px;
     font-size: 30px;
     margin-bottom: 15px;
@@ -1892,44 +1915,32 @@ height: 80px;
     color: #2b3d51;
 }
 
-
-
-@media (max-width: 768px) {
-    .stat-box {
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-    }
-    .stat-box:last-child {
-        border-bottom: none;
-    }
-}
-
-.team-leader-section .team-leader-card{
-     transition: all 0.5s;
-}
-
-.team-leader-section .team-leader-card:hover{
-   transform: translateY(-10px);
+.team-leader-section .team-leader-card {
     transition: all 0.5s;
 }
 
-.team-leader-section .team-leader-card img{
+.team-leader-section .team-leader-card:hover {
+    transform: translateY(-10px);
+    transition: all 0.5s;
+}
+
+.team-leader-section .team-leader-card img {
     height: 250px;
     width: 250px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-.team-leader-section .team-leader-card h2{
-     font-size: 18px;
+.team-leader-section .team-leader-card h2 {
+    font-size: 18px;
     font-weight: 700;
     margin-top: 15px;
     margin-bottom: 5px;
     color: #2b3d51;
 }
 
-.team-leader-section .team-leader-card p{
-        color: #2b3d51;
+.team-leader-section .team-leader-card p {
+    color: #2b3d51;
     font-size: 16px;
     line-height: 26px;
     font-weight: 500;

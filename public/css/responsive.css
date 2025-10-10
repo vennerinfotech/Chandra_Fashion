@@ -1,0 +1,273 @@
+@media (max-width: 991px) {
+    .navbar-collapse {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100vh;
+        background-color: #fff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        transition: left 0.3s ease;
+        z-index: 999;
+    }
+
+    .navbar-collapse.show {
+        left: 0;
+    }
+
+    /* Close button style */
+    .navbar-collapse .btn-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 14px;
+    }
+
+    .navbar-nav li {
+        padding: 0;
+    }
+
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+
+    .navbar-brand {
+        margin-right: 0px;
+    }
+
+    .navbar-nav li a {
+        max-width: max-content;
+    }
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+    .navbar-toggler .navbar-toggler-icon {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 40px;
+        width: 40px;
+    }
+
+    .navbar-toggler svg {
+        height: auto;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-collapse {
+        justify-content: end;
+    }
+    .navbar-expand-lg .navbar-nav {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .subscription-section form {
+        display: block;
+    }
+    .subscription-content button {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .top-header {
+        display: none;
+    }
+    .header-social ul {
+        margin-top: 20px;
+    }
+    .header-wrapper .navbar-brand span,
+    .hero-sectoin-btn {
+        display: none;
+    }
+    .hero-section {
+        padding: 70px 20px;
+        height: 250px;
+    }
+    .hero-content h1,
+    .heritage-content h2,
+    .subscription-content h2,
+    .about-section .about-content .title,
+    .why-about-content .title,
+    .contact-page-form .card .card-title {
+        font-size: 26px;
+        line-height: 34px;
+    }
+    .hero-content p {
+        font-size: 16px;
+    }
+    .hero-section .hero-content p {
+        margin: 10px 0px;
+    }
+    .hero-section .hero-content {
+        padding: 0 10px;
+    }
+    .hero-sectoin-btn {
+        margin-top: 0 !important;
+    }
+    .section-title {
+        font-size: 26px;
+    }
+    .section-sub-title {
+        font-size: 16px;
+        margin: 0 auto 30px;
+        max-width: 100%;
+    }
+    .featured-collection-grid .featured-img img {
+        height: 300px;
+    }
+
+    .collections-section .collection-item,
+    .heritage-img img {
+        height: auto;
+    }
+
+    .collection-item img {
+        width: 200px !important;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .new-arrival-box .card-body {
+        padding: 1rem 0 0;
+    }
+
+    .card-section .card .card-title {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 16px !important;
+    }
+    .about-section .experience-badge {
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        width: 110px;
+        height: 110px;
+    }
+
+    .about-section .about-content p,
+    .why-about-content p {
+        margin-bottom: 0px;
+    }
+    .about-section .testimonial-box {
+        display: none;
+    }
+    .stat-box {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        flex: 1 120px;
+    }
+    .stat-box:last-child {
+        border-bottom: none;
+    }
+    .stat-icon {
+        height: 60px;
+        width: 60px;
+        font-size: 26px;
+    }
+
+    .collection-page-wrapper .col-md-6:last-child .collection-item {
+        margin-bottom: 0px;
+    }
+}
+
+@media (max-width: 991px) {
+    .carousel-control-next,
+    .carousel-control-prev {
+        width: 10%;
+    }
+    .hero-sectoin-btn .btn {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+    .hero-sectoin-btn {
+        margin-top: 30px;
+    }
+    .home-feature-section {
+        padding: 70px 10px 0;
+    }
+    .home-feature-section .feature-box {
+        margin-bottom: 30px;
+    }
+    .home-feature-section .col-md-6:nth-child(3) .feature-box,
+    .home-feature-section .col-md-6:nth-child(4) .feature-box,
+    .card-section .col-md-6:last-child .card {
+        margin-bottom: 0px;
+    }
+    .section-padding,
+    .subscription-section {
+        padding: 70px 10px;
+    }
+    .card-section .card {
+        margin-bottom: 30px;
+    }
+    .heritage-img {
+        margin-top: 30px;
+    }
+    footer {
+        padding: 70px 20px 30px;
+    }
+    .breadcrumb-wrapper .breadcrumb-title {
+        font-size: 26px;
+    }
+
+    .top-section-padding {
+        padding: 70px 20px;
+    }
+
+    .about-section .about-content {
+        padding: 0px;
+    }
+    .why-about-section {
+        padding: 70px 20px;
+    }
+
+    .why-about-section .about-img img {
+        border-radius: 40px;
+    }
+
+    .why-about-section .about-img {
+        margin-top: 30px;
+    }
+
+    .contact-page-form .card {
+        margin-bottom: 30px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .hero-section {
+        padding: 70px 20px;
+        height: 380px;
+    }
+    .hero-section .hero-content h1 {
+        font-size: 36px;
+        line-height: 44px;
+    }
+    .hero-section .hero-content p {
+        margin: 20px 0 20px 0;
+    }
+    .hero-section .hero-content {
+        padding: 0 40px;
+    }
+    .featured-collection-grid .featured-img img {
+        height: 400px;
+    }
+    .collection-page-wrapper .col-md-6:nth-last-child(1) .collection-item,
+    .collection-page-wrapper .col-md-6:nth-last-child(2) .collection-item {
+        margin-bottom: 0px;
+    }
+}

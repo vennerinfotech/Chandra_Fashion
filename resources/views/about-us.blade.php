@@ -64,7 +64,7 @@
                     </div>
 
                 </div>
-                <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="col-lg-6">
                     <div class="position-relative about-img">
                         @php
                             $whyChooseImg = $about->why_choose_us_image ?? null;
@@ -105,7 +105,7 @@
             </div>
             <div class="row">
                 @foreach ($about->team ?? [] as $member)
-                    <div class="col-md-6 col-lg-3">
+                    <div class="col-sm-6 col-md-6 col-lg-3">
                         <div class="team-leader-card">
                             <img src="{{ asset($member['image'] ?? 'images/team.png') }}" alt="{{ $member['name'] }}"
                                 class="leader-photo">

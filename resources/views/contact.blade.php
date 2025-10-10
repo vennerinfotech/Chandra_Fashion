@@ -18,7 +18,7 @@
         <div class="container contact-page-form">
             <div class="row">
                 {{-- Left: Form --}}
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     <div class="card">
                         <h4 class="card-title">Send us a message</h4>
 
@@ -28,25 +28,25 @@
 
                         <form action="{{ route('contact.store') }}" method="POST">
                             @csrf
-                            <div class="row mb-3">
-                                <div class="col">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Name *</label>
                                     <input type="text" name="name" class="form-control" placeholder="Your full name"
                                         required>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Company</label>
                                     <input type="text" name="company" class="form-control" placeholder="Company name">
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Email *</label>
                                     <input type="email" name="email" class="form-control" placeholder="your@email.com"
                                         required>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Phone</label>
                                     <input type="text" name="phone" class="form-control"
                                         placeholder="+1 (555) 000-0000">
@@ -74,7 +74,7 @@
                 </div>
 
                 {{-- Right: Contact Info --}}
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     <div class="card mb">
                         <h4 class="card-title">Get in touch</h4>
                         <div class="contact-page-info">
@@ -113,7 +113,7 @@
 
                     <div class="card">
                         <h5 class="card-title">Follow Us</h5>
-                        <div class="d-md-flex gap-2">
+                        <div class="d-flex gap-2">
                             <a href="https://www.facebook.com/ChandraFabrics/" class="contact-follow bg-facebook"><svg xmlns="http://www.w3.org/2000/svg"
                                     width="16" height="16" fill="currentColor" class="bi bi-facebook"
                                     viewBox="0 0 16 16">

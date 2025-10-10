@@ -249,7 +249,7 @@
                     @php
                         $card = $cards[$i] ?? null;
                     @endphp
-                    <div class="col-lg-4">
+                    <div class="col-md-6 col-lg-4">
                         <div class="card">
                             <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
@@ -419,7 +419,7 @@
                 ],
                 responsive: {
                     0: {
-                        items: 2
+                        items: 1
                     },
                     576: {
                         items: 2
