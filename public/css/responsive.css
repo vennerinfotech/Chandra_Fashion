@@ -60,6 +60,15 @@
     }
 }
 
+@media (min-width:768px){
+       .product-filter-right-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+}
+
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-collapse {
         justify-content: end;
@@ -123,6 +132,9 @@
         margin: 0 auto 30px;
         max-width: 100%;
     }
+    .home-feature-section .col-md-6:last-child .feature-box {
+        margin-bottom: 0px;
+    }
     .featured-collection-grid .featured-img img {
         height: 300px;
     }
@@ -182,6 +194,49 @@
     .collection-page-wrapper .col-md-6:last-child .collection-item {
         margin-bottom: 0px;
     }
+
+    .product-filter-right .title h4{
+        font-size: 18px;
+    }
+
+    .product-filter-right-top,
+    .product-filter-right-top .title{
+        margin-bottom: 25px;
+    }
+
+    .product-filter-right-top .title{
+            display: flex;
+    justify-content: space-between;
+    }
+
+    .product-detail-left .left-img img{
+        height: 350px;
+    }
+
+    .product-detail-right{
+        padding-left: 0px;
+    }
+
+    .product-detail-right .product-title{
+        font-size: 24px;
+    line-height: 32px;
+    }
+
+    .product-detail-right .product-price{
+        font-size: 20px;
+    }
+
+    .additional-info{
+        padding: 40px 20px 15px;
+    }
+
+    .additional-info .feature-box {
+        margin-bottom: 25px;
+    }
+
+    .additional-info .feature-title{
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 991px) {
@@ -202,15 +257,17 @@
     .home-feature-section .feature-box {
         margin-bottom: 30px;
     }
-    .home-feature-section .col-md-6:nth-child(3) .feature-box,
-    .home-feature-section .col-md-6:nth-child(4) .feature-box,
-    .card-section .col-md-6:last-child .card {
-        margin-bottom: 0px;
-    }
+
     .section-padding,
     .subscription-section {
         padding: 70px 10px;
     }
+
+    .top-related-product{
+
+        padding: 70px 0x 0px;
+    }
+
     .card-section .card {
         margin-bottom: 30px;
     }
@@ -225,14 +282,11 @@
     }
 
     .top-section-padding {
-        padding: 70px 20px;
+        padding: 70px 10px;
     }
 
     .about-section .about-content {
         padding: 0px;
-    }
-    .why-about-section {
-        padding: 70px 20px;
     }
 
     .why-about-section .about-img img {
@@ -245,6 +299,56 @@
 
     .contact-page-form .card {
         margin-bottom: 30px;
+    }
+
+    .btn-filter-toggle {
+       align-items: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 6px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .product-filter-left {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: 100%;
+        background: #fff;
+        overflow-y: auto;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+        z-index: 1050;
+        transition: left 0.3s ease-in-out;
+        padding: 20px;
+    }
+
+    .product-filter-left.active {
+        left: 0;
+    }
+
+    .filter-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1040;
+    }
+
+    .filter-overlay.active {
+        display: block;
+    }
+
+    .product-filter-right{
+        width: 100%;
     }
 }
 
@@ -267,7 +371,10 @@
         height: 400px;
     }
     .collection-page-wrapper .col-md-6:nth-last-child(1) .collection-item,
-    .collection-page-wrapper .col-md-6:nth-last-child(2) .collection-item {
+    .collection-page-wrapper .col-md-6:nth-last-child(2) .collection-item,
+    .home-feature-section .col-md-6:nth-child(3) .feature-box,
+    .home-feature-section .col-md-6:nth-child(4) .feature-box,
+    .card-section .col-md-6:last-child .card {
         margin-bottom: 0px;
     }
 }

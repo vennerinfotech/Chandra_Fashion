@@ -87,7 +87,7 @@
                             <i class="fas fa-headset"></i>
                         </div>
                         <div>
-                            <div class="feature-title">Effective after-sale services</div>
+                            <div class="feature-title">Effective services</div>
                             <div class="feature-subtitle">Reliable support guaranteed</div>
                         </div>
                     </div>
@@ -427,7 +427,7 @@
                     992: {
                         items: 3
                     },
-                    1150: {
+                    1300: {
                         items: 4
                     }
                 }
@@ -455,7 +455,7 @@
                     992: {
                         items: 3
                     },
-                    1150: {
+                    1300: {
                         items: 4
                     }
                 }

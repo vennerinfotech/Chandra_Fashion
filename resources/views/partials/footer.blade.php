@@ -39,8 +39,8 @@
       <div class="col-md-6 col-lg-3 contact-info">
         <h4>Contact Info</h4>
         <ul>
-            <li><a href="#"><i class="fa-solid fa-location-dot"></i>Mumbai, India</a></li>
-            <li><a href="#"><i class="fa-solid fa-phone"></i>+91 98765 43210</a></li>
+            <li><a href="#"><i class="fa-solid fa-location-dot"></i>Surat, Gujarat</a></li>
+            <li><a href="#"><i class="fa-solid fa-phone"></i>+91 08048985637</a></li>
             <li><a href="#"><i class="fa-solid fa-envelope"></i>info@chandrafashion.com</a></li>
         </ul>
       </div>

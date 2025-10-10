@@ -12,8 +12,8 @@
             <div class="col-md-8 col-lg-6 top-bar">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 15px;">
                     <div class="">
-                        <a href="tel:+910000000000">
-                            <i class="fa-solid fa-phone"></i> +91 00000 00000
+                        <a href="tel:+9108048985637">
+                            <i class="fa-solid fa-phone"></i> +91 08048985637
                         </a>
                     </div>
                     <div class="">
@@ -46,17 +46,17 @@
         </a>
 
         <div class="header-social d-none d-md-block d-lg-none">
-                <ul>
-                    <li> <a href="https://www.facebook.com/ChandraFabrics/" class="bi bi-facebook"><i
-                                class="fa-brands fa-facebook"></i></a></li>
-                    <li> <a href="https://www.instagram.com/chandrafashionofficial/" class="bi bi-instagram"><i
-                                class="fa-brands fa-instagram"></i></a></li>
-                    <li> <a href="https://in.linkedin.com/company/chandrafashion" class="bi bi-linkedin"><i
-                                class="fa-brands fa-square-linkedin"></i></a></li>
-                    <li> <a href="https://www.youtube.com/@chandrafashion" class="bi bi-linkedin"><i
-                                class="fa-brands fa-youtube"></i></a></li>
-                </ul>
-            </div>
+            <ul>
+                <li> <a href="https://www.facebook.com/ChandraFabrics/" class="bi bi-facebook"><i
+                            class="fa-brands fa-facebook-f"></i></a></li>
+                <li> <a href="https://www.instagram.com/chandrafashionofficial/" class="bi bi-instagram"><i
+                            class="fa-brands fa-instagram"></i></a></li>
+                <li> <a href="https://in.linkedin.com/company/chandrafashion" class="bi bi-linkedin"><i
+                            class="fa-brands fa-linkedin-in"></i></a></li>
+                <li> <a href="https://www.youtube.com/@chandrafashion" class="bi bi-linkedin"><i
+                            class="fa-brands fa-youtube"></i></a></li>
+            </ul>
+        </div>
 
         <!-- Navbar Links -->
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -73,11 +73,11 @@
             <div class="header-social d-md-none d-lg-block">
                 <ul>
                     <li> <a href="https://www.facebook.com/ChandraFabrics/" class="bi bi-facebook"><i
-                                class="fa-brands fa-facebook"></i></a></li>
+                                class="fa-brands fa-facebook-f"></i></a></li>
                     <li> <a href="https://www.instagram.com/chandrafashionofficial/" class="bi bi-instagram"><i
                                 class="fa-brands fa-instagram"></i></a></li>
                     <li> <a href="https://in.linkedin.com/company/chandrafashion" class="bi bi-linkedin"><i
-                                class="fa-brands fa-square-linkedin"></i></a></li>
+                                class="fa-brands fa-linkedin-in"></i></a></li>
                     <li> <a href="https://www.youtube.com/@chandrafashion" class="bi bi-linkedin"><i
                                 class="fa-brands fa-youtube"></i></a></li>
                 </ul>

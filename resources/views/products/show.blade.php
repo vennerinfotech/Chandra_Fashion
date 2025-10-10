@@ -62,16 +62,16 @@
 
                         {{-- Fabric & Materials --}}
                         <div class="fabric">
-                            <h6 class="">Fabric & Materials</h6>
+                            <h6 class="">Fabric & Materials:</h6>
                             <div class="row mt-2">
-                                <div class="col-6 d-flex flex-column gap-2">
-                                    <span>🌱 {{ $product->fabric ?? 'Organic Cotton' }}</span>
-                                    <span>🌀 Breathable Weave</span>
+                                <div class="col-md-12 d-flex flex-column gap-2">
+                                    <span>{{ $product->fabric ?? 'Organic Cotton' }}</span>
+                                    <span>Breathable Weave</span>
                                 </div>
-                                <div class="col-6 d-flex flex-column gap-2">
+                                {{-- <div class="col-md-6 d-flex flex-column gap-2">
                                     <span>💧 Moisture Wicking</span>
                                     <span>✨ Wrinkle Resistant</span>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 
@@ -323,7 +323,6 @@
             <div class="top-related-product">
                 <div class="row">
                     <h2 class="section-title">Related Products</h2>
-                    <div class="row">
                         <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
 
                             @foreach($relatedProducts as $rProduct)
@@ -351,7 +350,6 @@
                             @endforeach
 
                         </div>
-                    </div>
                 </div>
             </div>
 

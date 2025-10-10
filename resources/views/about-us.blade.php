@@ -46,7 +46,7 @@
     </section>
 
     {{-- Why choose --}}
-    <section class="why-about-section">
+    <section class="why-about-section section-padding">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">

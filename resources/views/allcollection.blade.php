@@ -40,7 +40,7 @@
         <div class="container">
             <div class="row">
                 @foreach($subcategories as $subcategory)
-                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                         <div class="collection-item">
                             <a href="{{ route('products.index', ['subcategory' => $subcategory->id]) }}">
                                 <img src="{{ $subcategory->image ? asset('images/subcategories/' . $subcategory->image) : asset('images/placeholder.png') }}"
