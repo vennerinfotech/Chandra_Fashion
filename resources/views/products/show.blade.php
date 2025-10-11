@@ -34,7 +34,6 @@
                                 <img src="{{ asset('images/variants/' . basename($img)) }}"
                                     class="img-thumbnail selectable-image"
                                     data-image="{{ asset('images/variants/' . basename($img)) }}">
-
                             @endforeach
                         </div>
                         <div class="badge-top d-flex align-items-center gap-2 mb-2">
@@ -323,33 +322,35 @@
             <div class="top-related-product">
                 <div class="row">
                     <h2 class="section-title">Related Products</h2>
-                        <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
+                    <div class="custom-owl-carousel owl-carousel new-arrival-carousel">
 
-                            @foreach($relatedProducts as $rProduct)
-                                <div class="new-arrival-box card">
-                                    <div class="new-arrival-box-img">
-                                        @php
-                                            $firstImage = $rProduct->variants->first()?->images;
-                                            $firstImage = is_array($firstImage) ? $firstImage[0] ?? '/images/product2.jpg' : json_decode($firstImage, true)[0] ?? '/images/product2.jpg';
-                                        @endphp
-                                        <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid">
-                                    </div>
-                                    <div class="arrival-list">
-                                        <p>{{ $rProduct->is_featured ? 'FEATURED' : 'TRENDING' }}</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
-                                        <p class="card-text">{{ Str::limit($rProduct->description, 50) }}</p>
-                                        <div class="material-list">
-                                            <small class="badge-material">{{ $rProduct->materials }}</small>
-                                            <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
-                                        </div>
-                                        <a href="{{ route('products.show', $rProduct->id) }}" class="btn">Check Price</a>
-                                    </div>
+                        @foreach ($relatedProducts as $rProduct)
+                            <div class="new-arrival-box card">
+                                <div class="new-arrival-box-img">
+                                    @php
+                                        $firstImage = $rProduct->variants->first()?->images;
+                                        $firstImage = is_array($firstImage)
+                                            ? $firstImage[0] ?? '/images/product2.jpg'
+                                            : json_decode($firstImage, true)[0] ?? '/images/product2.jpg';
+                                    @endphp
+                                    <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid">
                                 </div>
-                            @endforeach
+                                <div class="arrival-list">
+                                    <p>{{ $rProduct->is_featured ? 'FEATURED' : 'TRENDING' }}</p>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
+                                    <p class="card-text">{{ Str::limit($rProduct->description, 50) }}</p>
+                                    <div class="material-list">
+                                        <small class="badge-material">{{ $rProduct->materials }}</small>
+                                        <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
+                                    </div>
+                                    <a href="{{ route('products.show', $rProduct->id) }}" class="btn">Check Price</a>
+                                </div>
+                            </div>
+                        @endforeach
 
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -359,7 +360,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -390,9 +391,9 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function (event) {
+            inquiryModal.addEventListener('show.bs.modal', function(event) {
                 var button = event.relatedTarget;
                 var productId = button.getAttribute('data-product');
                 var inputProduct = inquiryModal.querySelector('#product_id');
@@ -400,7 +401,7 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll('.color-circle');
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
@@ -468,7 +469,7 @@
                 colorButtons.forEach(c => c.classList.remove('selected'));
                 colorBtn.classList.add('selected');
 
-                // ✅ Set main image (relative path only)
+                //  Set main image (relative path only)
                 let firstImg = '/images/variants/' + images[0].split('/').pop();
                 mainImage.src = firstImg;
                 currentSelection.image = firstImg;
@@ -559,7 +560,7 @@
 
             const inquiryForm = document.getElementById('inquiryForm');
             if (inquiryForm) {
-                inquiryForm.addEventListener('submit', function () {
+                inquiryForm.addEventListener('submit', function() {
                     updateHiddenInputs();
                 });
             }
@@ -572,13 +573,13 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function () {
+                btn.addEventListener("click", function() {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -592,13 +593,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                            <div class="card" style="width:120px;">
-                                                                <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                <div class="card-body p-2 text-center">
-                                                                    <small>${p.name}</small>
-                                                                </div>
-                                                            </div>
-                                                        `;
+                                                                        <div class="card" style="width:120px;">
+                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                            <div class="card-body p-2 text-center">
+                                                                                <small>${p.name}</small>
+                                                                            </div>
+                                                                        </div>
+                                                                    `;
                             });
                         });
                 });
@@ -606,12 +607,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function () {
+                thumb.addEventListener('click', function() {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -620,7 +621,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function (e) {
+            container.addEventListener("mousemove", function(e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -632,14 +633,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function () {
+            container.addEventListener("mouseleave", function() {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -650,7 +651,7 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function () {
+                circle.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
@@ -723,7 +724,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function () {
+            circle.addEventListener('click', function() {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -739,7 +740,7 @@
         });
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
 
             // Store selections
             let selectedSizes = [];
@@ -749,7 +750,7 @@
             // Example: user clicks on a variant color box
             const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function () {
+                box.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
                     const images = JSON.parse(this.dataset.images); // array of image URLs
@@ -792,76 +793,92 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const countrySelect = document.getElementById('country');
             const stateSelect = document.getElementById('state');
             const citySelect = document.getElementById('city');
 
-            // When country is selected, fetch states
-            countrySelect.addEventListener('change', function () {
-                const countryId = this.value; // 🔥 use ID now
-                if (countryId) {
-                    stateSelect.disabled = false;
-                    stateSelect.innerHTML = '<option value="">Loading states...</option>';
+            const DEFAULT_COUNTRY = "India"; // country name to pre-select
 
-                    // Fetch states for selected country
-                    fetch(`/states/${countryId}`) // 🔥 pass ID
-                        .then(response => response.json())
-                        .then(data => {
-                            stateSelect.innerHTML = '<option value="">Select your state</option>';
-                            data.forEach(state => {
-                                const option = document.createElement('option');
-                                option.value = state.id;
-                                option.textContent = state.name;
-                                stateSelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => {
-                            stateSelect.innerHTML = '<option value="">No states available</option>';
-                            console.error(error);
-                        });
-                } else {
-                    stateSelect.disabled = true;
-                    citySelect.disabled = true;
+            //  Set default country to India
+            for (let option of countrySelect.options) {
+                if (option.text === DEFAULT_COUNTRY) {
+                    option.selected = true;
+                    break;
                 }
+            }
+
+            //  Function to load states
+            function loadStates(countryId) {
+                if (!countryId) return;
+                stateSelect.disabled = false;
+                stateSelect.innerHTML = '<option value="">Loading states...</option>';
+
+                fetch(`/states/${countryId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        stateSelect.innerHTML = '<option value="">Select your state</option>';
+                        data.forEach(state => {
+                            const option = document.createElement('option');
+                            option.value = state.id;
+                            option.textContent = state.name;
+                            stateSelect.appendChild(option);
+                        });
+                        citySelect.disabled = true; // city disabled until state selected
+                    })
+                    .catch(err => {
+                        stateSelect.innerHTML = '<option value="">No states available</option>';
+                        console.error(err);
+                    });
+            }
+
+            // Function to load cities
+            function loadCities(stateId) {
+                if (!stateId) return;
+                citySelect.disabled = false;
+                citySelect.innerHTML = '<option value="">Loading cities...</option>';
+
+                fetch(`/cities/${stateId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        citySelect.innerHTML = '<option value="">Select your city</option>';
+                        data.forEach(city => {
+                            const option = document.createElement('option');
+                            option.value = city.id;
+                            option.textContent = city.name;
+                            citySelect.appendChild(option);
+                        });
+                    })
+                    .catch(err => {
+                        citySelect.innerHTML = '<option value="">No cities available</option>';
+                        console.error(err);
+                    });
+            }
+
+            //  Trigger load of India states on page load
+            if (countrySelect.value) {
+                loadStates(countrySelect.value);
+            }
+
+            //  Event listeners
+            countrySelect.addEventListener('change', function() {
+                loadStates(this.value);
             });
 
-            // When state is selected, fetch cities
-            stateSelect.addEventListener('change', function () {
-                const stateId = this.value; // ✅ already ID
-                if (stateId) {
-                    citySelect.disabled = false;
-                    citySelect.innerHTML = '<option value="">Loading cities...</option>';
-
-                    fetch(`/cities/${stateId}`) // ✅ pass ID
-                        .then(response => response.json())
-                        .then(data => {
-                            citySelect.innerHTML = '<option value="">Select your city</option>';
-                            data.forEach(city => {
-                                const option = document.createElement('option');
-                                option.value = city.id;
-                                option.textContent = city.name;
-                                citySelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => {
-                            citySelect.innerHTML = '<option value="">No cities available</option>';
-                            console.error(error);
-                        });
-                } else {
-                    citySelect.disabled = true;
-                }
+            stateSelect.addEventListener('change', function() {
+                loadCities(this.value);
             });
         });
 
 
+
         // apture Selected Images in JavaScript
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let selectedImages = [];
 
             // When user clicks any product image
             document.querySelectorAll('.selectable-image').forEach(img => {
-                img.addEventListener('click', function () {
+                img.addEventListener('click', function() {
                     let imgPath = this.getAttribute('data-image');
 
                     if (!selectedImages.includes(imgPath)) {
@@ -869,16 +886,42 @@
                     }
 
                     // Save into hidden input
-                    document.getElementById('selected_images').value = JSON.stringify(selectedImages);
+                    document.getElementById('selected_images').value = JSON.stringify(
+                        selectedImages);
                     console.log("Selected Images:", selectedImages);
                 });
             });
 
             // Before form submit
-            document.getElementById('inquiryForm').addEventListener('submit', function () {
+            document.getElementById('inquiryForm').addEventListener('submit', function() {
                 document.getElementById('selected_images').value = JSON.stringify(selectedImages);
             });
         });
 
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const inquiryForm = document.getElementById('inquiryForm');
+            const selectedImagesInput = document.getElementById('selected_images');
+            const mainImage = document.getElementById('mainProductImage');
+
+            if (!inquiryForm || !mainImage) return;
+
+            // On form submit, store the current main image into hidden input
+            inquiryForm.addEventListener('submit', function() {
+                const currentMainImage = mainImage.dataset.image || mainImage.src;
+                selectedImagesInput.value = JSON.stringify([currentMainImage]); // store as array
+                console.log('Storing Main Image to DB:', currentMainImage);
+            });
+
+            // Optional: if you want clicking gallery to also update main image visually
+            document.getElementById('colorGallery').addEventListener('click', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    const imgPath = e.target.dataset.image || e.target.src;
+                    mainImage.src = imgPath;
+                    mainImage.dataset.image = imgPath; // keep dataset updated
+                }
+            });
+        });
     </script>
 @endpush

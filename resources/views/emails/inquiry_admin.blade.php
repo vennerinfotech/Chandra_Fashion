@@ -100,48 +100,53 @@
             <h1>✨ Chandra Fashion ✨</h1>
         </div>
 
-        <!-- Customer Details -->
-        <h2>👤 Customer Details</h2>
-        <table>
-            <tr><td>Name:</td><td>{{ $data['inquiry']['name'] }}</td></tr>
-            <tr><td>Company:</td><td>{{ $data['inquiry']['company'] }}</td></tr>
-            <tr><td>Email:</td><td>{{ $data['inquiry']['email'] }}</td></tr>
-            <tr><td>Phone:</td><td>{{ $data['inquiry']['phone'] }}</td></tr>
-            <tr><td>Country:</td><td>{{ $data['inquiry']['country'] }}</td></tr>
-            <tr><td>Quantity Interested:</td><td>{{ $data['inquiry']['quantity'] }}</td></tr>
-        </table>
+  <div style="font-family:Arial,sans-serif; color:#333;">
+    <h2>New Product Inquiry</h2>
 
-        <!-- Variant Details -->
-        @if(!empty($data['inquiry']['variant_details']))
-        <h2>🛍 Product Details</h2>
-        <table>
-            <tr><td>Product ID:</td><td>{{ $data['product']['id'] }}</td></tr>
-            <tr><td>Name:</td><td>{{ $data['product']['name'] }}</td></tr>
-            <tr><td>Description:</td><td>{{ $data['product']['description'] }}</td></tr>
-            <tr><td>Category ID:</td><td>{{ $data['product']['category_id'] }}</td></tr>
-            <tr><td>Materials:</td><td>{{ $data['product']['materials'] }}</td></tr>
-            <tr><td>Delivery Time:</td><td>{{ $data['product']['delivery_days'] }} days</td></tr>
-            <tr><td>MOQ:</td><td>{{ $data['inquiry']['variant_details']['min_order_qty'] ?? 'N/A' }}</td></tr>
-            <tr><td>Quantity Interested:</td><td>{{ $data['inquiry']['quantity'] }}</td></tr>
-            <tr><td>Product Code:</td><td>{{ $data['inquiry']['variant_details']['product_code'] ?? 'N/A' }}</td></tr>
-            <tr><td>Color:</td><td>{{ $data['inquiry']['variant_details']['color'] ?? 'N/A' }}</td></tr>
-            <tr><td>Size:</td>
-                <td>{{ is_array($data['inquiry']['variant_details']['size']) ? implode(',', $data['inquiry']['variant_details']['size']) : $data['inquiry']['variant_details']['size'] }}</td>
+    <h3>Customer Details:</h3>
+    <table>
+        <tr><td>Name:</td><td>{{ $inquiry->name }}</td></tr>
+        <tr><td>Company:</td><td>{{ $inquiry->company ?? '-' }}</td></tr>
+        <tr><td>Email:</td><td>{{ $inquiry->email }}</td></tr>
+        <tr><td>Phone:</td><td>{{ $inquiry->phone ?? '-' }}</td></tr>
+        <tr><td>Country:</td><td>{{ $inquiry->country->name ?? '-' }}</td></tr>
+        <tr><td>State:</td><td>{{ $inquiry->state->name ?? '-' }}</td></tr>
+        <tr><td>City:</td><td>{{ $inquiry->city->name ?? '-' }}</td></tr>
+        <tr><td>Quantity Interested:</td><td>{{ $inquiry->quantity }}</td></tr>
+    </table>
+
+    @if($product)
+    <h3>Product Details:</h3>
+    <table>
+        <tr><td>Name:</td><td>{{ $product->name }}</td></tr>
+        <tr><td>Description:</td><td>{{ $product->description }}</td></tr>
+        <tr><td>Category ID:</td><td>{{ $product->category_id }}</td></tr>
+        <tr><td>Materials:</td><td>{{ $product->materials }}</td></tr>
+        <tr><td>Delivery Time:</td><td>{{ $product->delivery_time ?? '-' }}</td></tr>
+    </table>
+
+    <h4>Variant Details:</h4>
+    @foreach($product->variants as $variant)
+        <table border="1" cellpadding="5" cellspacing="0" style="margin-bottom:15px;">
+            <tr><td>Product Code:</td><td>{{ $variant->product_code }}</td></tr>
+            {{-- <tr><td>Color:</td><td>{{ $variant->color ?? '-' }}</td></tr>
+            <tr><td>Size:</td><td>{{ $variant->size ?? '-' }}</td></tr> --}}
+            <tr><td>MOQ:</td><td>{{ $variant->moq ?? '-' }}</td></tr>
+            <tr>
+                <td>Images:</td>
+                <td>
+                    @if($variant->images)
+                        @php $images = json_decode($variant->images, true); @endphp
+                        @foreach($images as $img)
+                            <img src="{{ asset($img) }}" width="100" style="margin:3px;" />
+                        @endforeach
+                    @endif
+                </td>
             </tr>
-            @if(!empty($data['inquiry']['selected_size']))
-            <tr><td>Selected Size:</td><td>{{ $data['inquiry']['selected_size'] }}</td></tr>
-            @endif
         </table>
-
-        @if(!empty($data['inquiry']['selected_images']))
-        <h3>Selected Images</h3>
-        <div class="variant-images">
-            @foreach($data['inquiry']['selected_images'] as $img)
-                <img src="{{ asset($img) }}" alt="Selected Image">
-            @endforeach
-        </div>
-        @endif
-        @endif
+    @endforeach
+    @endif
+</div>
 
         <!-- Footer -->
         <p class="email-footer">

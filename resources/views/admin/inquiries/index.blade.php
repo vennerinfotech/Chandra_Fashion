@@ -35,13 +35,7 @@
                             <td>
                                 {{-- Selected Images --}}
                                 @if(!empty($inquiry->selected_images))
-                                    {{-- <div class="mt-2 d-flex flex-wrap gap-2">
-                                        @foreach($inquiry->selected_images as $image)
-                                            <img src="{{ asset($image) }}"
-                                                alt="{{ $inquiry->product->name }}"
-                                                width="50" height="50" class="rounded">
-                                        @endforeach
-                                    </div> --}}
+
                                     @include('admin.lightbox', ['images' => $inquiry->selected_images])
                                 @endif
                             </td>

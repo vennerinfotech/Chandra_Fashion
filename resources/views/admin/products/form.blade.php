@@ -4,8 +4,10 @@
     {{-- Name --}}
     <div class="mb-3">
         <label for="name" class="form-label">Product Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $product->name ?? '') }}"
-            required>
+        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $product->name ?? '') }}">
+        @error('name')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 
     {{-- Description --}}
@@ -13,12 +15,15 @@
         <label for="description" class="form-label">Description</label>
         <textarea name="description" id="description" rows="3"
             class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
+        @error('description')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 
     {{-- Category --}}
     <div class="mb-3">
         <label for="category_id" class="form-label">Category</label>
-        <select name="category_id" id="category_id" class="form-control" required>
+        <select name="category_id" id="category_id" class="form-control">
             <option value="">-- Select Category --</option>
             @foreach ($categories as $category)
                 <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
@@ -26,6 +31,9 @@
                 </option>
             @endforeach
         </select>
+        @error('category_id')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 
     <!-- Subcategory Field -->
@@ -34,6 +42,9 @@
         <select name="subcategory_id" id="subcategory_id" class="form-control">
             <option value="">-- Select Subcategory --</option>
         </select>
+        @error('subcategory_id')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 
     {{-- Price --}}
@@ -41,6 +52,9 @@
         <label for="price" class="form-label">Base Price</label>
         <input type="text" name="price" id="price" class="form-control"
             value="{{ old('price', $product->price ?? '') }}">
+        @error('price')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 
 
@@ -50,19 +64,26 @@
             <label for="materials" class="form-label">Materials</label>
             <input type="text" name="materials" id="materials" class="form-control"
                 value="{{ old('materials', $product->materials ?? '') }}">
+            @error('materials')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
         <div class="col-md-6 mb-3">
             <label for="delivery_time" class="form-label">Delivery Time</label>
             <input type="text" name="delivery_time" id="delivery_time" class="form-control"
                 value="{{ old('delivery_time', $product->delivery_time ?? '') }}">
+            @error('delivery_time')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
     </div>
 
     {{-- Export Ready --}}
-    <div class="form-check mb-3">
-        <input type="checkbox" name="export_ready" id="export_ready" class="form-check-input" {{ old('export_ready', $product->export_ready ?? false) ? 'checked' : '' }}>
+    {{-- <div class="form-check mb-3">
+        <input type="checkbox" name="export_ready" id="export_ready" class="form-check-input" {{ old('export_ready',
+            $product->export_ready ?? false) ? 'checked' : '' }}>
         <label for="export_ready" class="form-check-label">Export Ready</label>
-    </div>
+    </div> --}}
 
     {{-- Variants --}}
     <div id="variants-wrapper">
@@ -78,22 +99,19 @@
                     <div class="col-md-3">
                         <label class="form-label">Product Code</label>
                         <input type="text" name="variants[{{ $index }}][product_code]" class="form-control"
-                            value="{{ old("variants.$index.product_code", $variant->product_code ?? '') }}" required>
+                            value="{{ old("variants.$index.product_code", $variant->product_code ?? '') }}">
+                        @error("variants.$index.product_code")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
-                    {{-- <div class="col-md-2">
-                        <label class="form-label">Color</label>
-                        <input type="text" name="variants[{{ $index }}][color]" class="form-control" value="{{ old("
-                            variants.$index.color", $variant->color ?? '') }}">
-                    </div>
+
                     <div class="col-md-2">
-                        <label class="form-label">Size</label>
-                        <input type="text" name="variants[{{ $index }}][size]" class="form-control" value="{{ old("
-                            variants.$index.size", $variant->size ?? '') }}">
-                    </div> --}}
-                    <div class="col-md-2">
-                        <label class="form-label">MOQ</label>
+                        <label class="form-label">MOQ (KG)</label>
                         <input type="number" name="variants[{{ $index }}][moq]" class="form-control"
                             value="{{ old("variants.$index.moq", $variant->moq ?? '') }}">
+                        @error("variants.$index.moq")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Images</label>
@@ -111,6 +129,9 @@
                                     </div>
                                 @endforeach
                             @endif
+                            @error("variants.$index.images")
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                         <input type="hidden" name="variants[{{ $index }}][removed_images]" class="removed-images" value="">
                     </div>
@@ -182,30 +203,30 @@
             document.getElementById('add-variant').addEventListener('click', function () {
                 const index = wrapper.querySelectorAll('.variant-item').length;
                 const html = `
-            <div class="variant-item border rounded p-3 mb-3 position-relative">
-                <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-                    <i class="fa-solid fa-circle-xmark text-danger"></i>
-                </a>
-                <hr>
-                <h5>Product Variants</h5>
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <label class="form-label">Product Code</label>
-                        <input type="text" name="variants[${index}][product_code]" class="form-control" required>
-                    </div>
+                        <div class="variant-item border rounded p-3 mb-3 position-relative">
+                            <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+                                <i class="fa-solid fa-circle-xmark text-danger"></i>
+                            </a>
+                            <hr>
+                            <h5>Product Variants</h5>
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Product Code</label>
+                                    <input type="text" name="variants[${index}][product_code]" class="form-control" >
+                                </div>
 
-                    <div class="col-md-2">
-                        <label class="form-label">MOQ</label>
-                        <input type="number" name="variants[${index}][moq]" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Images</label>
-                        <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-                        <div class="mt-2 preview-wrapper"></div>
-                        <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-                    </div>
-                </div>
-            </div>`;
+                                <div class="col-md-2">
+                                    <label class="form-label">MOQ</label>
+                                    <input type="number" name="variants[${index}][moq]" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Images</label>
+                                    <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
+                                    <div class="mt-2 preview-wrapper"></div>
+                                    <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
+                                </div>
+                            </div>
+                        </div>`;
                 wrapper.insertAdjacentHTML('beforeend', html);
             });
 

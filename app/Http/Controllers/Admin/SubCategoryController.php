@@ -18,17 +18,6 @@ class SubCategoryController extends Controller
         return view('admin.categories.subcategories.index', compact('subcategories'));
     }
 
-    /**
-     * Get subcategories by category id
-     */
-    // public function getByCategory($categoryId)
-    // {
-    //     $subcategories = SubCategory::where('category_id', $categoryId)
-    //         ->where('status', 1)
-    //         ->get();
-
-    //     return response()->json($subcategories);
-    // }
 
     /**
      * Show the form for creating a new resource.
@@ -46,8 +35,10 @@ class SubCategoryController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'name' => 'required|unique:sub_categories,name',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'name' => 'required|unique:sub_categories,name|max:255',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'status' => 'required|in:0,1',
         ]);
 
         $imageName = null;
@@ -91,8 +82,10 @@ class SubCategoryController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'name' => 'required|unique:sub_categories,name,' . $subcategory->id,
+            'name' => 'required|unique:sub_categories,name,' . $subcategory->id . '|max:255',
+            'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'status' => 'required|in:0,1',
         ]);
 
         $imageName = $subcategory->image;

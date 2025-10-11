@@ -28,9 +28,15 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::where('status', 1)->get();
-        $subcategories = []; // empty initially
-        return view('admin.products.create', compact('categories', 'subcategories'));
+        $subcategories = [];
+
+        // Auto-generate next product code
+        $lastCode = ProductVariant::max('product_code');
+        $nextCode = $lastCode ? $lastCode + 1 : 1001; // Starting from 1001
+
+        return view('admin.products.create', compact('categories', 'subcategories', 'nextCode'));
     }
+
 
 
     /**
@@ -41,22 +47,50 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:sub_categories,id',
-            'materials' => 'nullable|string|max:255',
+            'subcategory_id' => 'required|exists:sub_categories,id',
+            'materials' => 'required|string|max:255',
             'export_ready' => 'boolean',
-            'price' => 'required|numeric|min:1',
-            'delivery_time' => ['nullable', 'regex:/^\d+(-\d+)?$/'],
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'price' => 'required|regex:/^[0-9]+$/',
+            'delivery_time' => ['required', 'regex:/^\d+(-\d+)?$/'],
             'variants' => 'required|array|min:1',
             'variants.*.product_code' => 'required|integer|distinct',
-            'variants.*.color' => 'nullable|string|max:100',
-            'variants.*.size' => 'nullable|string|max:50',
-            'variants.*.moq' => 'nullable|integer',
-            'variants.*.images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'variants.*.moq' => 'required|integer',
+            'variants.*.images' => 'required',
+            'variants.*.images.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+        ], [
+            'name.required' => 'Product Name is required.',
+            'description.required' => 'Description is required.',
+            'category_id.required' => 'Please select a category.',
+            'subcategory_id.required' => 'Please select a subcategory.',
+            'price.required' => 'Base Price is required.',
+            'price.regex' => 'Base Price must be a valid number only.',
+            'delivery_time.regex' => 'Delivery Time must be in format 10 or 10-20.',
+            'variants.required' => 'At least one variant is required.',
+            'variants.*.product_code.required' => 'Product Code is required.',
+            'variants.*.product_code.distinct' => 'Product Code must be unique.',
+            'variants.*.product_code.integer' => 'Product Code must be a number.',
+            'variants.*.moq.required' => 'MOQ (kg) is required.',
+            'variants.*.moq.integer' => 'MOQ must be a number.',
+            'variants.*.images.required' => 'Variant images are required.',
+            'variants.*.images.*.image' => 'Each file must be an image.',
         ]);
 
+        // --- Check duplicates within the request first ---
+        $productCodes = array_map(fn($v) => $v['product_code'], $data['variants']);
+        if (count($productCodes) !== count(array_unique($productCodes))) {
+            return back()->withInput()->withErrors(['variants.0.product_code' => 'Product Code must be unique.']);
+        }
+
+        // --- Check duplicates in DB ---
+        foreach ($data['variants'] as $index => $variant) {
+            if (ProductVariant::where('product_code', $variant['product_code'])->exists()) {
+                return back()->withInput()->withErrors([
+                    "variants.$index.product_code" => "Product Code {$variant['product_code']} already exists. It must be unique."
+                ]);
+            }
+        }
         // Check for duplicate colors
         $colors = array_map(fn($v) => strtolower(trim($v['color'] ?? '')), $data['variants']);
         if (count($colors) !== count(array_unique($colors))) {

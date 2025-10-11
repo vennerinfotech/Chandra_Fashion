@@ -4,7 +4,7 @@
     {{-- <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mb-3">Back</a> --}}
     <div class="create-form-wrapper">
 
-        @if ($errors->any())
+        {{-- @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
@@ -12,7 +12,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif --}}
 
         <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
