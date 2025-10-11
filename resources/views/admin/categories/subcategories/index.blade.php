@@ -3,9 +3,9 @@
 @section('content')
 <div class="table-wrapper">
     <div class="admin-title">
-        <h1>SubCategories</h1>
+        <h1>Sub Categories</h1>
         <a href="{{ route('admin.subcategories.create') }}" class="btn">
-            <i class="fa-solid fa-plus"></i>Add SubCategory
+            <i class="fa-solid fa-plus"></i>Add Sub Category
         </a>
     </div>
 
@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>SubCategory Name</th>
+                            <th>Sub Category Name</th>
                             <th>Category</th>
                             <th>Image</th>
                             <th>Status</th>

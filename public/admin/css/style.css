@@ -10,7 +10,7 @@
 
 .menu-bar {
     background: #2b3d51;
-    padding: 10px 20px 10px 260px;
+    padding: 20px 20px 20px 260px;
 }
 
 .header-top {
@@ -132,11 +132,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .admin-title h1 {
-    font-size: 30px;
+    font-size: 26px;
+    font-weight: 600;
     margin-bottom: 0;
     color: #222;
 }
@@ -149,7 +150,7 @@
 .btn {
     background: #2b3d51;
     color: #fff;
-    font-size: 16px;
+    font-size: 15px;
     border-radius: 5px;
     padding: 10px 15px;
     border: 1px solid #2b3d51;
@@ -162,14 +163,16 @@
 
 .custom-table {
     background: #fff;
+        margin-bottom: 0;
 }
 
 .custom-table th,
 .custom-table td {
-    padding: 10px 15px;
+    padding: 7px 15px;
     text-align: left;
     border: 1px solid #e1e4e8;
     vertical-align: baseline;
+    font-size: 15px;
 }
 
 .custom-table th {
@@ -222,7 +225,13 @@
 }
 
 /*Form Css*/
-.create-form-wrapper .card .form-control {
+.create-form-wrapper .card h4{
+        font-size: 26px;
+    font-weight: 600;
+    color: #222;
+}
+.create-form-wrapper .card .form-control,
+.create-form-wrapper .card .form-select {
     padding: 15px;
 }
 
@@ -232,12 +241,20 @@
     box-shadow: none;
 }
 
-
-
-
-/* Dashboard card css */
+.create-form-wrapper .card label{
+    font-weight: 500;
+    margin-bottom: 10px;
+        font-size: 15px;
+}
 
 .card-body {
     flex: 1 1 auto;
     padding: 2rem 1rem !important;
+}
+
+.admin-setting-wrapper .card .card-header{
+    background: #fff;
+    padding: 15px;
+    font-size: 15px;
+    cursor: pointer;
 }

@@ -1,5 +1,5 @@
 <div class="card shadow-sm p-4">
-    <h4 class="mb-3">{{ isset($subcategory) ? 'Edit SubCategory' : 'Add SubCategory' }}</h4>
+    <h4 class="mb-3">{{ isset($subcategory) ? 'Edit SubCategory' : 'Add Sub Category' }}</h4>
 
     {{-- Category Dropdown --}}
     <div class="mb-3">
@@ -16,7 +16,7 @@
 
     {{-- SubCategory Name --}}
     <div class="mb-3">
-        <label for="name" class="form-label">SubCategory Name</label>
+        <label for="name" class="form-label">Sub Category Name</label>
         <input type="text" name="name" id="name" class="form-control"
             value="{{ old('name', $subcategory->name ?? '') }}" required>
     </div>
@@ -55,7 +55,7 @@
     {{-- Submit --}}
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-primary">
-            {{ isset($subcategory) ? 'Update SubCategory' : 'Create SubCategory' }}
+            {{ isset($subcategory) ? 'Update SubCategory' : 'Create Sub Category' }}
         </button>
     </div>
 </div>

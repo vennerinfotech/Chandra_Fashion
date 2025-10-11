@@ -6,7 +6,7 @@
         left: 0;
         width: 250px;
         height: 100%;
-        background-color: #ffffff;
+        background: #fff;
         transition: left 0.3s ease;
         z-index: 1000;
         box-shadow: 0 8px 24px rgba(168, 180, 208, 0.1);
@@ -20,30 +20,22 @@
     .sidebar-wrapper ul {
         padding: 0;
         list-style-type: none;
-        border-top: 1px solid #ddd;
+        border-top: 1px solid #d6d8db;
     }
 
     .sidebar-wrapper ul li a {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 400;
         position: relative;
-        display: flex;
+        display: block;
         align-items: center;
         text-decoration: none;
         color: #2b3d51;
         padding: 15px 20px;
     }
 
-    .sidebar-wrapper ul li a svg {
-        padding-right: 10px;
-    }
-
     .sidebar-wrapper ul li:hover {
-        background-color: #2b3d51;
-    }
-
-    .sidebar-wrapper ul li:hover a {
-        color: #fff;
+        background-color: #f0f0f5;
     }
 
     .sidebar-wrapper ul li:hover a svg {
@@ -51,12 +43,14 @@
     }
 
     .sidebar-wrapper ul li.active {
-        background-color: #2b3d51;
+        background-color: #f0f0f5;
     }
 
     .sidebar-wrapper ul li.active a {
-        color: #fff;
+        color: #2b3d51;
+        font-weight: 700;
     }
+
 
     .sidebar-wrapper ul li.active svg {
         fill: #fff;
@@ -68,6 +62,26 @@
 
     .sidebar-logo img {
         height: 60px;
+    }
+
+    .sidebar-wrapper .dropdown-toggle {
+        position: relative;
+    }
+
+    .sidebar-wrapper .dropdown-toggle::after {
+        position: absolute;
+        right: 15px;
+        top: 25px;
+    }
+
+    .sidebar-wrapper ul ul.dropdown-menu {
+        width: 100%;
+        border: none;
+        /* background: #f0f0f5; */
+    }
+
+    .sidebar-wrapper ul ul.dropdown-menu li {
+        padding-left: 20px;
     }
 
     @media (max-width: 991px) {
@@ -105,13 +119,12 @@
 </style>
 
 <div class="sidebar-wrapper">
-    <div class="sidebar-logo text-center py-3">
-        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid"
-            style="max-height: 60px;">
-        <h5>
-            {{-- {{ auth()->user()->name }} --}}
-            {{-- {{ auth()->user()->role }} --}}
-        </h5>
+    <div class="sidebar-logo text-center py-2">
+        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid" style="max-height: 50px;">
+        {{-- <h5>
+            {{ auth()->user()->name }}
+            {{ auth()->user()->role }}
+        </h5> --}}
     </div>
     <ul>
         <!-- Dashboard -->
@@ -131,7 +144,7 @@
         <!-- SubCategories -->
         <li class="{{ request()->routeIs('admin.subcategories.*') ? 'active' : '' }}">
             <a href="{{ route('admin.subcategories.index') }}">
-                <i class="fa-solid fa-layer-group me-2"></i> SubCategories
+                <i class="fa-solid fa-layer-group me-2"></i> Sub Categories
             </a>
         </li>
 
@@ -149,24 +162,26 @@
             </a>
         </li>
 
-        <!-- Settings -->
-        <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-            {{-- <a href="{{ route('admin.settings.manage') }}">
+        <!-- Settings Dropdown -->
+        <li
+            class="{{ request()->routeIs('admin.settings.manage') || request()->routeIs('admin.about.manage') || request()->routeIs('admin.settings.*') || request()->routeIs('admin.about.*') ? 'active dropdown' : 'dropdown' }}">
+            <a href="javascript:void(0);" class="dropdown-toggle">
                 <i class="fa-solid fa-gear me-2"></i> Settings
-            </a> --}}
-        <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.settings.manage') }}">
-                <i class="fa-solid fa-sliders me-2"></i> General Settings
             </a>
-        </li>
+            <ul class="dropdown-menu">
+                <li class="{{ request()->routeIs('admin.settings.manage') ? 'active' : '' }}">
+                    <a href="{{ route('admin.settings.manage') }}">
+                        <i class="fa-solid fa-gears me-2"></i> General Settings
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin.about.manage') ? 'active' : '' }}">
+                    <a href="{{ route('admin.about.manage') }}">
+                        <i class="fa-solid fa-circle-info me-2"></i> About Us
+                    </a>
+                </li>
+            </ul>
         </li>
 
-        <!-- About as -->
-        <li class="{{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.about.manage') }}">
-                <i class="fa-solid fa-circle-info me-2"></i> About Us
-            </a>
-        </li>
 
 
         <!-- Chat Bot -->
@@ -177,5 +192,3 @@
         </li> --}}
     </ul>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

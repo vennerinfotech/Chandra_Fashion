@@ -17,7 +17,20 @@
 
     {{-- Custom Admin CSS --}}
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
+
+    {{-- Fonts Styles --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
 </head>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+    }
+</style>
 
 <body>
 
@@ -36,6 +49,8 @@
     </footer>
 
 
+     {{-- Jquery JS --}}
+    <script src="{{ asset('js/jquery-min.js') }}"></script>
 
     {{-- Bootstrap JS --}}
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
@@ -47,7 +62,26 @@
     <script src="{{ asset('admin/js/admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
+
+    <script>
+    $(document).ready(function() {
+        // Toggle dropdown menu
+        $('.sidebar-wrapper .dropdown-toggle').on('click', function(e) {
+            console.log('Click')
+            e.preventDefault();
+            $(this).next('.sidebar-wrapper .dropdown-menu').slideToggle();
+        });
+
+        // Close dropdown when clicking outside
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.sidebar-wrapper .dropdown-toggle, .sidebar-wrapper .dropdown-menu').length) {
+                $('.sidebar-wrapper .dropdown-menu').slideUp();
+            }
+        });
+    });
+    </script>
+
+    <script>
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar', // can be 'line', 'pie', 'doughnut', etc.
@@ -81,8 +115,8 @@
                 }
             }
         });
-</script>
-@stack('scripts')
+    </script>
+    @stack('scripts')
 </body>
 
 </html>
