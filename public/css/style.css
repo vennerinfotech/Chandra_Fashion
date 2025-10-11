@@ -180,7 +180,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgb(39 56 71 / 70%);
+    background:rgb(0 0 0 / 50%);
 }
 
 .hero-content {
@@ -201,7 +201,7 @@
 }
 
 .hero-content p {
-    margin: 40px 0 20px 0;
+    margin: 30px 0 20px 0;
     font-weight: 400;
     font-size: 20px;
     line-height: 33px;
@@ -320,19 +320,14 @@
     gap: 20px;
 }
 
-.collections-section .collection-item {
+/* .collections-section .collection-item {
     height: 380px;
-}
-
-.collection-carousel .owl-stage {
-    padding: 10px 0;
-}
+} */
 
 .collection-item {
     border-radius: 12px;
     overflow: hidden;
-    padding: 20px;
-    border: 1px solid #ddd;
+    padding: 0 20px;
     transition: all 0.5s ease-in-out;
 }
 
@@ -401,14 +396,15 @@
 }
 
 .card-section .svg-wrapper {
-    height: 80px;
-    width: 80px;
-    background: #fbf7eb;
-    border-radius: 100%;
+      width: 70px;
+    height: 70px;
+    border-radius: 12px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    transition: all 0.5s ease-in-out;
+    justify-content: center;
+    margin: 0 auto;
+    color: #fff;
+    background: #f0c040;
 }
 
 .card-section .svg-wrapper img {
@@ -419,7 +415,20 @@
 
 .card-section .card {
     border: none;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+    padding: 30px 20px;
+    color: #000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    background: #fff;
+        transition: all 0.3s
+ease-in-out;
+}
+
+.card-section .card:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s
+ease-in-out;
 }
 
 .card-section .card .card-title {
@@ -434,7 +443,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 28px;
-    color: #4b5563;
+    color: #666666;
 }
 
 .card-section .card:hover .svg-wrapper {
@@ -469,7 +478,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: rgb(0 0 0 / 45%);
+    background: rgb(0 0 0 / 40%);
     border-radius: 15px;
     z-index: 1;
 }
@@ -551,6 +560,7 @@
 
 .heritage-section {
     background: #2b3d51;
+        padding: 100px 020px;
 }
 
 .heritage-content {
@@ -662,6 +672,7 @@
 .client-card .client-img img {
     height: 50px;
     width: 50px;
+    object-fit: cover;
     border-radius: 50px;
 }
 
@@ -1703,6 +1714,7 @@ footer .chatbot-btn svg path {
 .collection-page-wrapper .collection-item {
     margin-bottom: 25px;
     background: #f8f9fa;
+        padding: 20px;
 }
 
 .collection-page-wrapper{

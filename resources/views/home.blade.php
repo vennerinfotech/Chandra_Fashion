@@ -19,8 +19,8 @@
                                 <p>{{ $hero->subtitle }}</p>
                                 <div class="hero-sectoin-btn">
                                     <a href="{{ $hero->btn1_link }}" class="btn btn-yellow">{{ $hero->btn1_text }}</a>
-                                    <a href="{{ $hero->btn2_link }}" class="btn btn-outline">{{ $hero->btn2_text }}</a>
-                                    <a href="{{ $hero->btn3_link }}" class="btn btn-light">{{ $hero->btn3_text }}</a>
+                                    {{-- <a href="{{ $hero->btn2_link }}" class="btn btn-outline">{{ $hero->btn2_text }}</a>
+                                    <a href="{{ $hero->btn3_link }}" class="btn btn-light">{{ $hero->btn3_text }}</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
         </button>
     </div>
 
-     <section class="home-feature-section">
+     {{-- <section class="home-feature-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-3">
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="featured-section section-padding">
         <div class="container-fluid">

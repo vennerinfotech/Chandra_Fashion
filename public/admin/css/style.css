@@ -78,11 +78,11 @@
     /* Adjust the timing as needed */
 }
 
-.sidebar-wrapper.open+.menu-bar {
+.sidebar-wrapper.open + .menu-bar {
     padding-left: 15px;
 }
 
-.sidebar-wrapper.open+.main-wrapper {
+.sidebar-wrapper.open + .main-wrapper {
     padding-left: 0px;
 }
 
@@ -98,7 +98,6 @@
 .main-wrapper.collapsed {
     padding-left: 0px;
 }
-
 
 .sidebar-toggle {
     color: #fff;
@@ -122,7 +121,7 @@
     padding: 10px 0;
 }
 
-.btn-check:focus+.btn,
+.btn-check:focus + .btn,
 .btn:focus {
     box-shadow: none !important;
 }
@@ -163,7 +162,7 @@
 
 .custom-table {
     background: #fff;
-        margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .custom-table th,
@@ -225,11 +224,16 @@
 }
 
 /*Form Css*/
-.create-form-wrapper .card h4{
-        font-size: 26px;
+.create-form-wrapper .card h4 {
+    font-size: 26px;
     font-weight: 600;
     color: #222;
 }
+
+.create-form-wrapper .card .form-control {
+    font-size: 15px;
+}
+
 .create-form-wrapper .card .form-control,
 .create-form-wrapper .card .form-select {
     padding: 15px;
@@ -241,10 +245,10 @@
     box-shadow: none;
 }
 
-.create-form-wrapper .card label{
+.create-form-wrapper .card label {
     font-weight: 500;
     margin-bottom: 10px;
-        font-size: 15px;
+    font-size: 15px;
 }
 
 .card-body {
@@ -252,9 +256,32 @@
     padding: 2rem 1rem !important;
 }
 
-.admin-setting-wrapper .card .card-header{
+.admin-setting-wrapper .card .card-header {
     background: #fff;
     padding: 15px;
     font-size: 15px;
     cursor: pointer;
+}
+
+.admin-setting-wrapper .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.admin-setting-wrapper .section-header .toggle-icon {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.admin-setting-wrapper .section-body {
+    display: none;
+}
+
+.admin-setting-wrapper .section-header.active {
+    font-weight: bold;
+}
+
+.admin-setting-wrapper .section-header .toggle-icon {
+    font-weight: bold;
 }

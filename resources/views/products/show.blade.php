@@ -76,7 +76,7 @@
                         </div>
 
                         {{-- Available Colors --}}
-                        <div class="color-variation">
+                        {{-- <div class="color-variation">
                             <h6>Available Colors</h6>
                             <div class="color-selected">
                                 <span class="" style="background:#000000;"></span>
@@ -89,7 +89,7 @@
                                 <span class="" style="background:#b4bb00;"></span>
                                 <span class="" style="background:#0083bb;"></span>
                             </div>
-                            {{-- <div class="color" id="colorContainer">
+                            <div class="color" id="colorContainer">
                                 @foreach ($colors as $index => $color)
                                 <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
                                     data-color="{{ $color }}" data-images='@json($colorImages[$color])'
@@ -99,9 +99,9 @@
                                     style="background-color: {{ $color }};">
                                 </button>
                                 @endforeach
-                            </div> --}}
+                            </div>
 
-                        </div>
+                        </div> --}}
 
 
                         {{-- Available Sizes --}}

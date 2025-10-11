@@ -191,7 +191,8 @@
         font-size: 26px;
     }
 
-    .collection-page-wrapper .col-md-6:last-child .collection-item {
+    .collection-page-wrapper .col-md-6:last-child .collection-item,
+    .card-section .col-md-6:last-child .card  {
         margin-bottom: 0px;
     }
 

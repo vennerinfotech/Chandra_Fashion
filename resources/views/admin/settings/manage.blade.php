@@ -1,10 +1,12 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="container py-4">
-        <h1 class="mb-3">Homepage Settings — Manage All</h1>
+    <div class="create-form-wrapper admin-setting-wrapper">
+        <div class="admin-title">
+            <h1>Homepage Settings</h1>
+        </div>
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
@@ -30,7 +32,8 @@
                             </div>
                             <div class="mb-3">
                                 <label>Subtitle</label>
-                                <input type="text" name="hero_subtitle[]" class="form-control" value="{{ $hero->subtitle }}">
+                                <input type="text" name="hero_subtitle[]" class="form-control"
+                                    value="{{ $hero->subtitle }}">
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -71,9 +74,10 @@
                             <div class="mb-3">
                                 <label>Hero Background Image</label>
                                 <input type="file" name="hero_image[]" class="form-control-file">
-                                @if($hero->background_image)
+                                @if ($hero->background_image)
                                     <div class="mt-2">
-                                        <img src="{{ asset($hero->background_image) }}" alt="Hero Image" style="height: 80px;">
+                                        <img src="{{ asset($hero->background_image) }}" alt="Hero Image"
+                                            style="height: 80px;">
                                     </div>
                                 @endif
                             </div>
@@ -116,8 +120,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Section Subtitle</label>
-                        <textarea name="collections_subtitle" class="form-control"
-                            rows="2">{{ old('collections_subtitle', $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with uncompromising quality standards') }}</textarea>
+                        <textarea name="collections_subtitle" class="form-control" rows="2">{{ old('collections_subtitle', $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with uncompromising quality standards') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -131,15 +134,15 @@
                 </div>
                 <div class="card-body section-body" id="cards-section">
                     <div class="row">
-                        @foreach($cards as $index => $card)
+                        @foreach ($cards as $index => $card)
                             <div class="col-lg-4 mb-3">
                                 <div class="card h-100">
-                                    <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                                    <div class="card-body d-flex flex-column align-items-center gap-3">
                                         <div class="w-100">
                                             <label>SVG Icon</label>
-                                            <input type="file" name="cards[{{ $index }}][svg]" class="form-control-file"
-                                                accept=".svg">
-                                            @if($card->svg_path)
+                                            <input type="file" name="cards[{{ $index }}][svg]"
+                                                class="form-control-file" accept=".svg">
+                                            @if ($card->svg_path)
                                                 <div class="mt-2">
                                                     <img src="{{ asset($card->svg_path) }}" style="height:50px;">
                                                 </div>
@@ -147,9 +150,10 @@
                                         </div>
                                         <div class="mb-2 w-100">
                                             <label>Title</label>
-                                            <input type="hidden" name="cards[{{ $index }}][id]" value="{{ $card->id }}">
-                                            <input type="text" name="cards[{{ $index }}][title]" value="{{ $card->title }}"
-                                                class="form-control" required>
+                                            <input type="hidden" name="cards[{{ $index }}][id]"
+                                                value="{{ $card->id }}">
+                                            <input type="text" name="cards[{{ $index }}][title]"
+                                                value="{{ $card->title }}" class="form-control" required>
                                         </div>
                                         <div class="mb-2 w-100">
                                             <label>Description</label>
@@ -187,10 +191,11 @@
                     <hr>
                     <h5>Collection Cards</h5>
                     <div id="cards-wrapper">
-                        @foreach($featuredCards as $index => $card)
+                        @foreach ($featuredCards as $index => $card)
                             <div class="card mb-3 p-3 border featured-collection-card">
                                 <input type="hidden" name="featured_deleted_ids[]" id="featured-deleted-ids">
-                                <input type="hidden" name="featured_collections[{{ $index }}][id]" value="{{ $card->id }}">
+                                <input type="hidden" name="featured_collections[{{ $index }}][id]"
+                                    value="{{ $card->id }}">
                                 <div class="mb-2 w-100">
                                     <label>Title</label>
                                     <input type="text" name="featured_collections[{{ $index }}][title]"
@@ -203,14 +208,16 @@
                                 </div>
                                 <div class="mb-2">
                                     <label>Card Image</label>
-                                    <input type="file" name="featured_collections[{{ $index }}][image]" class="form-control">
-                                    @if($card->image)
+                                    <input type="file" name="featured_collections[{{ $index }}][image]"
+                                        class="form-control">
+                                    @if ($card->image)
                                         <img src="{{ asset($card->image) }}" alt="Card Image" class="mt-2"
                                             style="max-width: 150px;">
                                     @endif
                                 </div>
                                 <div class="text-end">
-                                    <button type="button" class="btn btn-sm btn-danger remove-featured-card">Remove</button>
+                                    <button type="button"
+                                        class="btn btn-sm btn-danger remove-featured-card">Remove</button>
                                 </div>
                             </div>
                         @endforeach
@@ -238,13 +245,11 @@
                     </div>
                     <div class="mb-3">
                         <label>Paragraph 1</label>
-                        <textarea name="heritage_paragraph1" class="form-control"
-                            rows="3">{{ old('heritage_paragraph1', $heritage->paragraph1 ?? '') }}</textarea>
+                        <textarea name="heritage_paragraph1" class="form-control" rows="3">{{ old('heritage_paragraph1', $heritage->paragraph1 ?? '') }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label>Paragraph 2</label>
-                        <textarea name="heritage_paragraph2" class="form-control"
-                            rows="3">{{ old('heritage_paragraph2', $heritage->paragraph2 ?? '') }}</textarea>
+                        <textarea name="heritage_paragraph2" class="form-control" rows="3">{{ old('heritage_paragraph2', $heritage->paragraph2 ?? '') }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label>Button Text</label>
@@ -255,7 +260,7 @@
                     <div class="mb-3">
                         <label>Heritage Image</label>
                         <input type="file" name="heritage_image" class="form-control-file">
-                        @if(!empty($heritage->image))
+                        @if (!empty($heritage->image))
                             <img src="{{ asset($heritage->image) }}" style="height:120px;margin-top:8px;">
                         @endif
                     </div>
@@ -271,16 +276,18 @@
                 </div>
                 <div class="card-body section-body" id="clients-section">
                     <div id="client-rows">
-                        <button type="button" class="btn btn-sm btn-outline-primary" id="addClientBtn">+ Add New</button>
-                        @foreach($clients as $client)
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="addClientBtn">+ Add
+                            New</button>
+                        @foreach ($clients as $client)
                             <div class="client-row border p-3 mb-2" data-client-id="{{ $client->id }}">
                                 <div class="row align-items-center">
                                     <div class="col-md-2 mb-2">
                                         <label>Image</label>
                                         <input type="file" name="clients[existing][image][{{ $client->id }}]"
                                             class="form-control-file">
-                                        @if($client->image)
-                                            <img src="{{ asset($client->image) }}" width="80" height="80" class="rounded">
+                                        @if ($client->image)
+                                            <img src="{{ asset($client->image) }}" width="80" height="80"
+                                                class="rounded">
                                         @endif
                                     </div>
                                     <div class="col-md-3 mb-2">
@@ -331,8 +338,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Subtitle / Description</label>
-                        <textarea name="subscription_subtitle" class="form-control"
-                            rows="3">{{ old('subscription_subtitle', $subscription->subtitle ?? '') }}</textarea>
+                        <textarea name="subscription_subtitle" class="form-control" rows="3">{{ old('subscription_subtitle', $subscription->subtitle ?? '') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -344,34 +350,38 @@
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="card-body section-body" id="contact-section">
-                    @foreach($contact_infos as $index => $contact)
+                    @foreach ($contact_infos as $index => $contact)
                         <div class="contact-row border p-3 mb-2">
-                            <input type="hidden" name="contact_infos[{{ $index }}][id]" value="{{ $contact->id }}">
+                            <input type="hidden" name="contact_infos[{{ $index }}][id]"
+                                value="{{ $contact->id }}">
                             <div class="row align-items-center">
                                 {{-- Title --}}
                                 <div class="col-md-3 mb-2">
                                     <label>Title</label>
-                                    <input type="text" name="contact_infos[{{ $index }}][title]" value="{{ $contact->title }}"
-                                        class="form-control" required>
+                                    <input type="text" name="contact_infos[{{ $index }}][title]"
+                                        value="{{ $contact->title }}" class="form-control" required>
                                 </div>
 
                                 {{-- Type Dropdown --}}
-                                <div class="col-md-2 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <label>Type</label>
                                     <select name="contact_infos[{{ $index }}][type]" class="form-control">
-                                        <option value="address" {{ $contact->type == 'address' ? 'selected' : '' }}>Address
+                                        <option value="address" {{ $contact->type == 'address' ? 'selected' : '' }}>
+                                            Address
                                         </option>
-                                        <option value="phone" {{ $contact->type == 'phone' ? 'selected' : '' }}>Phone</option>
-                                        <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>Email</option>
-                                        <option value="hours" {{ $contact->type == 'hours' ? 'selected' : '' }}>hours</option>
+                                        <option value="phone" {{ $contact->type == 'phone' ? 'selected' : '' }}>Phone
+                                        </option>
+                                        <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>Email
+                                        </option>
+                                        <option value="hours" {{ $contact->type == 'hours' ? 'selected' : '' }}>hours
+                                        </option>
                                     </select>
                                 </div>
 
                                 {{-- Details --}}
-                                <div class="col-md-5 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <label>Details</label>
-                                    <textarea name="contact_infos[{{ $index }}][details]" class="form-control"
-                                        rows="2">{{ $contact->details }}</textarea>
+                                    <textarea name="contact_infos[{{ $index }}][details]" class="form-control" rows="2">{{ $contact->details }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -380,29 +390,15 @@
             </div>
 
             {{-- ================= SUBMIT BUTTON ================= --}}
-            <div class="card mb-3">
-                <div class="card-body text-end">
-                    <button type="submit" class="btn btn-success btn-lg">
+            <div class="mt-4">
+                <div class="text-left">
+                    <button type="submit" class="btn btn-lg">
                         <i class="fa fa-check-circle me-2"></i> Save All Settings
                     </button>
                 </div>
             </div>
         </form>
     </div>
-
-    <style>
-        .section-body {
-            display: none;
-        }
-
-        .section-header.active {
-            font-weight: bold;
-        }
-
-        .section-header .toggle-icon {
-            font-weight: bold;
-        }
-    </style>
 
     <script>
         const headers = document.querySelectorAll('.section-header');
@@ -469,13 +465,13 @@
             container.appendChild(newRow);
 
             // Add remove event
-            newRow.querySelector('.remove-row').addEventListener('click', function () {
+            newRow.querySelector('.remove-row').addEventListener('click', function() {
                 newRow.remove();
             });
         }
 
         //  JS to dynamically add more rows
-        document.getElementById('addClientBtn').addEventListener('click', function () {
+        document.getElementById('addClientBtn').addEventListener('click', function() {
             const container = document.getElementById('client-rows');
             const newRow = document.createElement('div');
             newRow.classList.add('client-row', 'border', 'p-3', 'mb-2');
@@ -505,12 +501,12 @@
             container.appendChild(newRow);
 
             // Attach Cancel event
-            newRow.querySelector('.cancelClientBtn').addEventListener('click', function () {
+            newRow.querySelector('.cancelClientBtn').addEventListener('click', function() {
                 newRow.remove();
             });
         });
-        document.querySelectorAll('.removeExistingClientBtn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
+        document.querySelectorAll('.removeExistingClientBtn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
                 const row = btn.closest('.client-row');
                 const clientId = row.dataset.clientId;
 
@@ -563,7 +559,7 @@
             container.insertAdjacentHTML('beforeend', html);
         }
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (e.target && e.target.classList.contains('remove-quick-link')) {
                 e.target.closest('.quick-link-row').remove();
             }
@@ -578,7 +574,7 @@
         let featuredCardIndex = {{ $featuredCards->count() }};
 
         // Add new Featured Collection card
-        document.getElementById('add-card-btn').addEventListener('click', function () {
+        document.getElementById('add-card-btn').addEventListener('click', function() {
             const wrapper = document.getElementById('cards-wrapper');
             const cardHtml = `
                                             <div class="card mb-3 p-3 border featured-collection-card">
@@ -629,7 +625,7 @@
 
 
 
-        document.getElementById('add-hero-btn').addEventListener('click', function () {
+        document.getElementById('add-hero-btn').addEventListener('click', function() {
             let container = document.getElementById('hero-sections-body');
             let template = container.querySelector('.hero-section').cloneNode(true);
 
@@ -646,13 +642,10 @@
         });
 
         // Remove hero section
-        document.getElementById('hero-sections-body').addEventListener('click', function (e) {
+        document.getElementById('hero-sections-body').addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-hero-btn')) {
                 e.target.closest('.hero-section').remove();
             }
         });
-
-
-
     </script>
 @endsection
