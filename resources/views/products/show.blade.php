@@ -192,7 +192,15 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn w-100">Submit to Check Price</button>
+                                {{-- <button type="submit" class="btn w-100">Submit to Check Price</button> --}}
+                                <button type="submit" class="btn w-100" id="inquirySubmitBtn">Submit to Check Price</button>
+
+                                <!-- Loader -->
+                                <div id="formLoader" style="display:none; text-align:center; margin-top:10px;">
+                                    <img src="{{ asset('images/loading.gif') }}" alt="Loading..." style="width:50px;">
+                                    <p>Submitting your inquiry, please wait...</p>
+                                </div>
+
                             </form>
                         </div>
                     </div>
@@ -329,7 +337,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -358,11 +366,10 @@
                 }
             });
         });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
+
+        document.addEventListener("DOMContentLoaded", function () {
             var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function(event) {
+            inquiryModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
                 var productId = button.getAttribute('data-product');
                 var inputProduct = inquiryModal.querySelector('#product_id');
@@ -370,7 +377,7 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const colorButtons = document.querySelectorAll('.color-circle');
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
@@ -416,15 +423,15 @@
             });
 
             // Size button click
-            sizeContainer.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-                    e.target.classList.add('selected');
+            // sizeContainer.addEventListener('click', (e) => {
+            //     if (e.target.tagName === 'BUTTON') {
+            //         sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+            //         e.target.classList.add('selected');
 
-                    currentSelection.size = e.target.textContent.trim();
-                    updateHiddenInputs();
-                }
-            });
+            //         currentSelection.size = e.target.textContent.trim();
+            //         updateHiddenInputs();
+            //     }
+            // });
 
 
             function selectColor(colorBtn) {
@@ -529,7 +536,7 @@
 
             const inquiryForm = document.getElementById('inquiryForm');
             if (inquiryForm) {
-                inquiryForm.addEventListener('submit', function() {
+                inquiryForm.addEventListener('submit', function () {
                     updateHiddenInputs();
                 });
             }
@@ -542,13 +549,13 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function() {
+                btn.addEventListener("click", function () {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -562,13 +569,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                        <div class="card" style="width:120px;">
-                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                            <div class="card-body p-2 text-center">
-                                                                                <small>${p.name}</small>
-                                                                            </div>
-                                                                        </div>
-                                                                    `;
+                                                                                    <div class="card" style="width:120px;">
+                                                                                        <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                        <div class="card-body p-2 text-center">
+                                                                                            <small>${p.name}</small>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                `;
                             });
                         });
                 });
@@ -576,12 +583,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function() {
+                thumb.addEventListener('click', function () {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -590,7 +597,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function(e) {
+            container.addEventListener("mousemove", function (e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -602,14 +609,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function() {
+            container.addEventListener("mouseleave", function () {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -620,7 +627,7 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function() {
+                circle.addEventListener('click', function () {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
@@ -679,13 +686,13 @@
             });
 
             // Optional: handle size selection on initial page load
-            sizeContainer.querySelectorAll('.btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove(
-                        'selected'));
-                    btn.classList.add('selected');
-                });
-            });
+            // sizeContainer.querySelectorAll('.btn').forEach(btn => {
+            //     btn.addEventListener('click', () => {
+            //         sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove(
+            //             'selected'));
+            //         btn.classList.add('selected');
+            //     });
+            // });
         });
 
 
@@ -693,7 +700,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function() {
+            circle.addEventListener('click', function () {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -709,7 +716,7 @@
         });
 
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             // Store selections
             let selectedSizes = [];
@@ -719,7 +726,7 @@
             // Example: user clicks on a variant color box
             const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function() {
+                box.addEventListener('click', function () {
                     const color = this.dataset.color;
                     const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
                     const images = JSON.parse(this.dataset.images); // array of image URLs
@@ -762,7 +769,7 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const countrySelect = document.getElementById('country');
             const stateSelect = document.getElementById('state');
             const citySelect = document.getElementById('city');
@@ -830,11 +837,11 @@
             }
 
             //  Event listeners
-            countrySelect.addEventListener('change', function() {
+            countrySelect.addEventListener('change', function () {
                 loadStates(this.value);
             });
 
-            stateSelect.addEventListener('change', function() {
+            stateSelect.addEventListener('change', function () {
                 loadCities(this.value);
             });
         });
@@ -842,12 +849,12 @@
 
 
         // apture Selected Images in JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let selectedImages = [];
 
             // When user clicks any product image
             document.querySelectorAll('.selectable-image').forEach(img => {
-                img.addEventListener('click', function() {
+                img.addEventListener('click', function () {
                     let imgPath = this.getAttribute('data-image');
 
                     if (!selectedImages.includes(imgPath)) {
@@ -862,14 +869,14 @@
             });
 
             // Before form submit
-            document.getElementById('inquiryForm').addEventListener('submit', function() {
+            document.getElementById('inquiryForm').addEventListener('submit', function () {
                 document.getElementById('selected_images').value = JSON.stringify(selectedImages);
             });
         });
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const inquiryForm = document.getElementById('inquiryForm');
             const selectedImagesInput = document.getElementById('selected_images');
             const mainImage = document.getElementById('mainProductImage');
@@ -877,14 +884,14 @@
             if (!inquiryForm || !mainImage) return;
 
             // On form submit, store the current main image into hidden input
-            inquiryForm.addEventListener('submit', function() {
+            inquiryForm.addEventListener('submit', function () {
                 const currentMainImage = mainImage.dataset.image || mainImage.src;
                 selectedImagesInput.value = JSON.stringify([currentMainImage]); // store as array
                 console.log('Storing Main Image to DB:', currentMainImage);
             });
 
             // Optional: if you want clicking gallery to also update main image visually
-            document.getElementById('colorGallery').addEventListener('click', function(e) {
+            document.getElementById('colorGallery').addEventListener('click', function (e) {
                 if (e.target.tagName === 'IMG') {
                     const imgPath = e.target.dataset.image || e.target.src;
                     mainImage.src = imgPath;
@@ -894,51 +901,58 @@
         });
 
         // show a inquiryModal mes
-    document.addEventListener('DOMContentLoaded', function() {
-        @if(session('error') || $errors->any())
-            var inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
-            inquiryModal.show();
-        @endif
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            const inquiryForm = document.getElementById('inquiryForm');
+            const submitBtn = document.getElementById('inquirySubmitBtn');
+            const loader = document.getElementById('formLoader');
+            const quantityInput = inquiryForm.querySelector('input[name="quantity"]');
+            const moqElement = document.getElementById('moqValue');
 
+            if (!inquiryForm) return;
 
-    // moq validations mes
-    document.addEventListener('DOMContentLoaded', function() {
-        const inquiryForm = document.getElementById('inquiryForm');
-        const quantityInput = inquiryForm.querySelector('input[name="quantity"]');
-        const moqElement = document.getElementById('moqValue'); // current MOQ displayed
+            inquiryForm.addEventListener('submit', function (e) {
+                const enteredQty = parseInt(quantityInput.value);
+                const moq = parseInt(moqElement.textContent);
 
-        inquiryForm.addEventListener('submit', function(e) {
-            const enteredQty = parseInt(quantityInput.value);
-            const moq = parseInt(moqElement.textContent);
+                //  VALIDATION
+                if (isNaN(enteredQty)) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Quantity',
+                        text: 'Please enter a valid number for quantity.',
+                    });
+                    return;
+                }
 
-            if (isNaN(enteredQty)) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Quantity',
-                    text: 'Please enter a valid number for quantity.',
-                });
-                return;
-            }
+                if (enteredQty < moq) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Quantity Too Low',
+                        text: `Minimum order quantity is ${moq}. You entered ${enteredQty}.`,
+                    });
+                    return;
+                }
 
-            if (enteredQty < moq) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Quantity Too Low',
-                    text: `Minimum order quantity is ${moq}. You entered ${enteredQty}.`,
-                });
-                return;
-            }
+                //  SUBMISSION LOADER
+                if (submitBtn.disabled) {
+                    e.preventDefault();
+                    return;
+                }
 
-            // Optional: Accept MOQ or MOQ + 1
-            if (enteredQty >= moq && enteredQty <= moq + 1) {
-                // Valid, form will submit
-            }
+                // Save hidden inputs before submit
+                const mainImage = document.getElementById('mainProductImage');
+                const selectedImagesInput = document.getElementById('selected_images');
+                if (mainImage && selectedImagesInput) {
+                    selectedImagesInput.value = JSON.stringify([mainImage.dataset.image || mainImage.src]);
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Submitting...";
+                if (loader) loader.style.display = "block";
+            });
         });
-    });
-
 
 
     </script>
