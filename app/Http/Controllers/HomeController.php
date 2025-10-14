@@ -20,7 +20,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        // Hero, categories, collections, etc.
         $heroSections = HeroSection::all();
         $categories = Category::where('status', 1)->take(5)->get();
         $collections = CollectionSection::first();
@@ -37,13 +36,11 @@ class HomeController extends Controller
         $newArrivals = Product::with('category', 'variants')
                             ->whereHas('category', fn($q) => $q->where('status', 1))
                             ->orderBy('created_at', 'desc')
-                            ->take(10) // or remove ->take() to show all
+                            ->take(10)
                             ->get();
 
-        return view('home', compact(
-            'categories', 'heroSections', 'collections','featuredCollections',
-            'heritage', 'clients', 'subscription', 'footer', 'services', 'quickLinks',
-            'featureCards', 'newArrivals' // <-- pass products
+        return view('home', compact( 'categories', 'heroSections', 'collections','featuredCollections', 'heritage', 'clients', 'subscription', 'footer', 'services', 'quickLinks',
+            'featureCards', 'newArrivals'
         ));
     }
 

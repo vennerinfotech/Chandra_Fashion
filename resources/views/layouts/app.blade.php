@@ -42,6 +42,8 @@
     {{-- Font Awesome JS --}}
     <script src="{{ asset('js/all.min.js') }}"></script>
 
+    {{-- sweetalert2   --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -80,59 +82,6 @@
             background-color: #333;
             color: #fff;
         }
-
-        /* Floating Chatbox - Right Corner */
-        /* #chatbox {
-            position: fixed;
-            bottom: 80px;
-            right: 19px;
-            width: 330px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            font-size: 15px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            display: none;
-        }
-
-        #chatbox .chat-header {
-            background: #000;
-            color: #fff;
-            padding: 10px;
-            border-radius: 12px 12px 0 0;
-            font-weight: bold;
-        }
-
-        #chatbox .chat-body {
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 10px;
-        }
-
-        #chatbox .chat-message {
-            margin-bottom: 8px;
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
-
-        #chatbox .chat-message.bot {
-            background: #f1f1f1;
-            text-align: left;
-        }
-
-        #chatbox .chat-message.user {
-            background: #007bff;
-            color: #fff;
-            text-align: right;
-        }
-
-        #chatbox .chat-footer {
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        } */
-
 
         /* Chat bubbles */
         .chat-message {

@@ -121,10 +121,7 @@
 <div class="sidebar-wrapper">
     <div class="sidebar-logo text-center py-2">
         <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid" style="max-height: 50px;">
-        {{-- <h5>
-            {{ auth()->user()->name }}
-            {{ auth()->user()->role }}
-        </h5> --}}
+
     </div>
     <ul>
         <!-- Dashboard -->
@@ -181,7 +178,6 @@
                 </li>
             </ul>
         </li>
-
 
 
         <!-- Chat Bot -->

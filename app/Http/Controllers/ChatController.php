@@ -32,16 +32,16 @@ class ChatController extends Controller
     }
 
 
-        // Fetch states based on selected country
-public function getStates($countryId)
-{
-    return response()->json(State::where('country_id', $countryId)->get());
-}
+    // Fetch states based on selected country
+    public function getStates($countryId)
+    {
+        return response()->json(State::where('country_id', $countryId)->get());
+    }
 
-public function getCities($stateId)
-{
-    return response()->json(City::where('state_id', $stateId)->get());
-}
+    public function getCities($stateId)
+    {
+        return response()->json(City::where('state_id', $stateId)->get());
+    }
 
 
 }

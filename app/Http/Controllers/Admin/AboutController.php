@@ -21,10 +21,9 @@ class AboutController extends Controller
         return null;
     }
 
-    // Show manage form (single About record)
     public function manage()
     {
-        $about = About::first(); // null if not exists
+        $about = About::first();
         return view('admin.settings.about', compact('about'));
     }
 
@@ -86,8 +85,7 @@ class AboutController extends Controller
         }
         $about->stats = $stats;
 
-        // Team members (dynamic). We expect:
-        // team_name[], team_designation[], team_image[] and existing_team_image[] (hidden paths)
+        // Team members (dynamic). We expect: team_name[], team_designation[], team_image[] and existing_team_image[] (hidden paths)
         $team = [];
         $teamNames = $request->input('team_name', []);
         $teamDesignations = $request->input('team_designation', []);

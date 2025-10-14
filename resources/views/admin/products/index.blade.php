@@ -35,15 +35,13 @@
                                     <td>{{ $product->name }}</td>
                                     <td>
                                         @php
-                                            // Start with main product image
                                             $firstImage = $product->image ?? null;
-                                            // If no main image, take first variant image
                                             if (!$firstImage) {
                                                 foreach ($product->variants as $variant) {
                                                     $images = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
                                                     if (!empty($images)) {
                                                         $firstImage = $images[0];
-                                                        break; // stop after first found
+                                                        break;
                                                     }
                                                 }
                                             }

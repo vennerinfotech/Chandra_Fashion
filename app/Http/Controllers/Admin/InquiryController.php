@@ -40,19 +40,6 @@ class InquiryController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(string $id)
-    // {
-    //     $inquiry = Inquiry::with('product')->findOrFail($id);
-
-    //     // Mark as read
-    //     if (!$inquiry->is_read) {
-    //         $inquiry->is_read = true;
-    //         $inquiry->save();
-    //     }
-
-    //     return view('admin.inquiries.show', compact('inquiry'));
-    // }
-
     public function show(string $id)
     {
         $inquiry = Inquiry::with(['product', 'country', 'state', 'city'])

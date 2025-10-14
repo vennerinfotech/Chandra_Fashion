@@ -35,7 +35,6 @@
                             {{-- Image Column --}}
                             <td>
                                 @if($category->image)
-                                    {{-- <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" width="50" height="50" class="rounded"> --}}
                                      @include('admin.lightbox', ['images' => [asset('images/categories/' . $category->image)]])
                                 @endif
                             </td>

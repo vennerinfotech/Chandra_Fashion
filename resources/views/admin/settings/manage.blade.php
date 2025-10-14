@@ -13,7 +13,7 @@
         <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            {{-- ================= HERO SECTION ================= --}}
+            {{--  HERO SECTION  --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#hero-sections-body">
@@ -104,7 +104,7 @@
             </div>
 
 
-            {{-- ================= COLLECTIONS SECTION ================= --}}
+            {{--  COLLECTIONS SECTION  --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#collections-section">
@@ -125,7 +125,7 @@
                 </div>
             </div>
 
-            {{-- ================= FEATURE CARDS SECTION ================= --}}
+            {{-- FEATURE CARDS SECTION  --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#cards-section">
@@ -168,7 +168,7 @@
                 </div>
             </div>
 
-            {{-- ================= FEATURED COLLECTIONS ================= --}}
+            {{--  FEATURED COLLECTIONS --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#featured-section">
@@ -229,7 +229,7 @@
                 </div>
             </div>
 
-            {{-- ================= HERITAGE ================= --}}
+            {{--  HERITAGE --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#heritage-section">
@@ -267,7 +267,7 @@
                 </div>
             </div>
 
-            {{-- ================= CLIENTS ================= --}}
+            {{--  CLIENTS  --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#clients-section">
@@ -322,7 +322,7 @@
                 </div>
             </div>
 
-            {{-- ================= SUBSCRIPTION ================= --}}
+            {{--  SUBSCRIPTION --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#subscription-section">
@@ -342,7 +342,7 @@
                     </div>
                 </div>
             </div>
-            {{-- ================= CONTACT INFO ================= --}}
+            {{--  CONTACT INFO  --}}
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#contact-section">
@@ -389,7 +389,7 @@
                 </div>
             </div>
 
-            {{-- ================= SUBMIT BUTTON ================= --}}
+            {{-- SUBMIT BUTTON --}}
             <div class="mt-4">
                 <div class="text-left">
                     <button type="submit" class="btn btn-lg">

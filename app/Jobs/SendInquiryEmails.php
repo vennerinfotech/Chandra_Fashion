@@ -27,7 +27,7 @@ class SendInquiryEmails implements ShouldQueue
 
    public function handle(): void
     {
-        // 1. Fetch product and variants
+        //  Fetch product and variants
         $product = Product::with('variants')->find($this->inquiry['product_id']);
 
         if (!$product) {
@@ -35,7 +35,7 @@ class SendInquiryEmails implements ShouldQueue
             return;
         }
 
-        // 2. Product variants from DB
+        // Product variants from DB
         $variants = [];
         foreach ($product->variants as $variant) {
             $images = json_decode($variant->images ?? '[]', true);
@@ -50,19 +50,19 @@ class SendInquiryEmails implements ShouldQueue
             ];
         }
 
-        // 3. User selected variant details (if any)
+        // User selected variant details (if any)
         $selectedVariant = [];
         if (!empty($this->inquiry['variant_details'])) {
             $selectedVariant = $this->inquiry['variant_details'] ?? [];
         }
 
-        // 4. Selected images from user form
+        // Selected images from user form
         $selectedImages = [];
         if (!empty($this->inquiry['selected_images'])) {
             $selectedImages = $this->inquiry['selected_images'] ?? [];
         }
 
-        // 5. Prepare data for email
+        // Prepare data for email
         $data = [
             'inquiry' => [
                 'name'     => $this->inquiry['name'] ?? 'Customer',
@@ -87,7 +87,7 @@ class SendInquiryEmails implements ShouldQueue
         ];
 
 
-        // 5. Send emails
+        // Send emails
         try {
             if (!empty($data['inquiry']['email'])) {
                 Mail::to($data['inquiry']['email'])->queue(new InquiryUserMail($data));

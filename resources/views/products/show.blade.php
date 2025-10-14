@@ -6,6 +6,33 @@
     <div class="product-detail-wrapper top-section-padding">
         <div class="container">
             <div class="row g-4">
+
+                {{-- Display Flash Messages --}}
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
                 {{-- Left Side: Product Image & Thumbnails --}}
                 <div class="col-md-6">
                     <div class="product-detail-left">
@@ -18,8 +45,7 @@
                                         : json_decode($firstVariant->images, true)[0])
                                     : $product->image_url;
                             @endphp
-                            {{-- <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
-                                id="mainProductImage" class="img-fluid"> --}}
+
                             <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
                                 id="mainProductImage" class="img-fluid selectable-image"
                                 data-image="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}">
@@ -28,9 +54,7 @@
 
                         <div id="colorGallery" class="img-thumbnail-main">
                             @foreach ($colorImages[$colors[0]] as $img)
-                                {{-- <img src="{{ asset('images/variants/' . basename($img)) }}"
-                                    class="img-thumbnail gallery-thumb"
-                                    data-full="{{ asset('images/variants/' . basename($img)) }}"> --}}
+
                                 <img src="{{ asset('images/variants/' . basename($img)) }}"
                                     class="img-thumbnail selectable-image"
                                     data-image="{{ asset('images/variants/' . basename($img)) }}">
@@ -47,7 +71,7 @@
                 <div class="col-md-6">
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
-                        <h6 class="product-price"> ₹1,999</h6>
+                        <h6 class="product-price"> ₹{{ $product->price }}</h6>
                         <p class="product-desc">{{ $product->description }}</p>
 
                         <div class="sku-category">
@@ -67,74 +91,17 @@
                                     <span>{{ $product->fabric ?? 'Organic Cotton' }}</span>
                                     <span>Breathable Weave</span>
                                 </div>
-                                {{-- <div class="col-md-6 d-flex flex-column gap-2">
-                                    <span>💧 Moisture Wicking</span>
-                                    <span>✨ Wrinkle Resistant</span>
-                                </div> --}}
+
                             </div>
                         </div>
 
-                        {{-- Available Colors --}}
-                        {{-- <div class="color-variation">
-                            <h6>Available Colors</h6>
-                            <div class="color-selected">
-                                <span class="" style="background:#000000;"></span>
-                                <span class="" style="background:#ff0000;"></span>
-                                <span class="" style="background:#269600;"></span>
-                                <span class="" style="background:#d67201;"></span>
-                                <span class="" style="background:#0c0080;"></span>
-                                <span class="" style="background:#ffffff;"></span>
-                                <span class="" style="background:#620080;"></span>
-                                <span class="" style="background:#b4bb00;"></span>
-                                <span class="" style="background:#0083bb;"></span>
-                            </div>
-                            <div class="color" id="colorContainer">
-                                @foreach ($colors as $index => $color)
-                                <button class="btn {{ $index === 0 ? 'selected' : '' }} color-circle"
-                                    data-color="{{ $color }}" data-images='@json($colorImages[$color])'
-                                    data-sizes='@json($sizesByColor[$color] ?? [])'
-                                    data-code='{{ $skuByColor[$color] ?? $product->variants->first()->product_code }}'
-                                    data-moq='{{ $moqByColor[$color] ?? $product->moq }}' title="{{ $color }}"
-                                    style="background-color: {{ $color }};">
-                                </button>
-                                @endforeach
-                            </div>
-
-                        </div> --}}
-
-
-                        {{-- Available Sizes --}}
-                        {{-- <div class="size-variaton">
-                            <h6 class="">Available Sizes</h6>
-                            <div class="size" id="sizeContainer">
-                                @php
-                                $firstColor = $colors[0] ?? null;
-                                $initialSizes = $firstColor ? ($sizesByColor[$firstColor] ?? []) : [];
-                                @endphp
-
-                                @if (!empty($initialSizes))
-                                @foreach ($initialSizes as $sizeString)
-                                @foreach (explode(',', $sizeString) as $size)
-                                <button class="btn {{ $loop->first && $loop->parent->first ? 'selected' : '' }}">
-                                    {{ strtoupper(trim($size)) }}
-                                </button>
-                                @endforeach
-                                @endforeach
-                                @else
-                                <p class="text-muted">No sizes available</p>
-                                @endif
-                            </div>
-                        </div> --}}
-
-                        {{-- MOQ & Delivery --}}
-
                         <div class="moq">
                             <div class="moq-order">
-                                <h4 id="moqValue">{{ $product->moq ?? '100' }}</h4>
+                                <h4 id="moqValue">{{ $product->variants->first()->moq }}</h4>
                                 <p>Minimum Order Qty</p>
                             </div>
                             <div class="moq-delivery">
-                                <h4 id="deliveryValue">{{ $product->delivery_time ?? '15-20' }}</h4>
+                                <h4 id="deliveryValue">{{ $product->delivery_time }}</h4>
                                 <p>Days Delivery</p>
                             </div>
                         </div>
@@ -146,6 +113,8 @@
                     </div>
                 </div>
             </div>
+
+
 
             <!-- Modal -->
             <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
@@ -923,5 +892,54 @@
                 }
             });
         });
+
+        // show a inquiryModal mes
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('error') || $errors->any())
+            var inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
+            inquiryModal.show();
+        @endif
+    });
+
+
+    // moq validations mes
+    document.addEventListener('DOMContentLoaded', function() {
+        const inquiryForm = document.getElementById('inquiryForm');
+        const quantityInput = inquiryForm.querySelector('input[name="quantity"]');
+        const moqElement = document.getElementById('moqValue'); // current MOQ displayed
+
+        inquiryForm.addEventListener('submit', function(e) {
+            const enteredQty = parseInt(quantityInput.value);
+            const moq = parseInt(moqElement.textContent);
+
+            if (isNaN(enteredQty)) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Quantity',
+                    text: 'Please enter a valid number for quantity.',
+                });
+                return;
+            }
+
+            if (enteredQty < moq) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Quantity Too Low',
+                    text: `Minimum order quantity is ${moq}. You entered ${enteredQty}.`,
+                });
+                return;
+            }
+
+            // Optional: Accept MOQ or MOQ + 1
+            if (enteredQty >= moq && enteredQty <= moq + 1) {
+                // Valid, form will submit
+            }
+        });
+    });
+
+
+
     </script>
 @endpush

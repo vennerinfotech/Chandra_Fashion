@@ -192,6 +192,32 @@ class ProductController extends Controller
             'variants' => 'required|array|min:1',
         ]);
 
+        // Validate variant images
+        foreach ($request->variants as $index => $variantData) {
+            $existingImages = [];
+
+            // Existing images in DB
+            if (isset($variantData['id'])) {
+                $variant = ProductVariant::find($variantData['id']);
+                if ($variant && $variant->images) {
+                    $existingImages = json_decode($variant->images, true);
+                }
+            }
+
+            // New uploaded images
+            $newImages = $variantData['images'] ?? [];
+
+            // Check if after removing old images, there are any left
+            $removedImages = isset($variantData['removed_images']) ? json_decode($variantData['removed_images'], true) : [];
+            $remainingImages = array_diff($existingImages, $removedImages);
+
+            if (empty($remainingImages) && empty($newImages)) {
+                return back()->withInput()->withErrors([
+                    "variants.$index.images" => "Variant images are required."
+                ]);
+            }
+        }
+
         // Main product image
         if ($request->hasFile('image')) {
             if ($product->image) @unlink(public_path($product->image));
@@ -247,6 +273,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
+
 
 
 

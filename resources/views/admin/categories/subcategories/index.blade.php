@@ -34,11 +34,7 @@
                             <td>{{ $subcategory->name }}</td>
                             <td>{{ $subcategory->category->name ?? 'N/A' }}</td>
                             <td>
-                                {{-- @if($subcategory->image)
-                                    <img src="{{ asset('images/subcategories/' . $subcategory->image) }}"
-                                         width="50" height="50" class="rounded">
-                                @endif --}}
-                            @include('admin.lightbox', ['images' => [asset('images/subcategories/' . $subcategory->image)]])
+                                @include('admin.lightbox', ['images' => [asset('images/subcategories/' . $subcategory->image)]])
                             </td>
                             <td>{{ $subcategory->status ? 'Active' : 'Inactive' }}</td>
                             <td>

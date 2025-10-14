@@ -112,7 +112,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ------------------- Line Chart -------------------
+    //  Line Chart
     const ctx = document.getElementById('inquiryChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ------------------- Product Pie Chart -------------------
+    // Product Pie Chart
     const productCtx = document.getElementById('productPieChart').getContext('2d');
     new Chart(productCtx, {
         type: 'pie',
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
         options: { responsive: true, plugins: { legend: { position: 'right' } } }
     });
 
-    // ------------------- User Pie Chart -------------------
+    //  User Pie Chart
     const userCtx = document.getElementById('userPieChart').getContext('2d');
     new Chart(userCtx, {
         type: 'pie',

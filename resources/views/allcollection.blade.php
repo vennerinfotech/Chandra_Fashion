@@ -14,28 +14,6 @@
         </nav>
     </section>
 
-    {{-- <section class="collection-page-wrapper section-padding">
-        <div class="container">
-            <div class="row">
-                @foreach($subcategories as $subcategory)
-                <div class="col-md-6 col-lg-3">
-                    <div class="collection-item">
-                        <a href="#">
-                            <img src="{{ $subcategory->image ? asset('images/subcategories/' . $subcategory->image) : asset('images/placeholder.png') }}"
-                                alt="{{ $subcategory->name }}" class="img-fluid">
-
-                            <div class="collection-info">
-                                <h3>{{ $subcategory->name }}</h3>
-                                <p>{{ $subcategory->description ?? '' }}</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section> --}}
-
     <section class="collection-page-wrapper section-padding">
         <div class="container">
             <div class="row">

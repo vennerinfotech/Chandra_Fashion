@@ -19,7 +19,7 @@ class Inquiry extends Model
         'selected_size',
         'selected_images',
         'variant_details',
-        'country_id',  // Add country_id, state_id, and city_id to the fillable array
+        'country_id',
         'state_id',
         'city_id',
     ];
@@ -40,7 +40,7 @@ class Inquiry extends Model
         return $this->hasOne(ProductVariant::class, 'product_id', 'product_id')->orderBy('id');
     }
 
-    // Define relationship with Country, State, and City
+    // relationship with Country, State, and City
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id');

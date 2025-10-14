@@ -39,35 +39,21 @@ class SettingController extends Controller
     // Manage homepage settings
     public function manage()
     {
-        $heroSections  = HeroSection::orderBy('id')->get(); // Fetch all hero sections
-        $cards         = FeatureCard::orderBy('id', 'desc')->get(); // Feature Cards
+        $heroSections  = HeroSection::orderBy('id')->get();
+        $cards         = FeatureCard::orderBy('id', 'desc')->get();
         $heritage      = Heritage::firstOrNew([]);
-        // $clients       = Client::orderBy('id', 'desc')->take(3)->get();
         $clients = Client::orderBy('id', 'desc')->get();
         $subscription  = SubscriptionSection::firstOrNew([]);
         $footer        = Setting::firstOrNew([]);
         $quick_links   = QuickLink::all();
         $services      = Service::all();
-
-        $featured      = FeaturedCollection::find(1); // Main section (row 1)
-        $featuredCards = FeaturedCollection::all();   // All featured collection cards
-
+        $featured      = FeaturedCollection::find(1);
+        $featuredCards = FeaturedCollection::all();
         $collections   = CollectionSection::latest()->first();
         $contact_infos = ContactInfo::orderBy('id')->get();
 
-        return view('admin.settings.manage', compact(
-            'heroSections',  // pass all hero sections
-            'cards',
-            'heritage',
-            'clients',
-            'subscription',
-            'footer',
-            'quick_links',
-            'services',
-            'featured',
-            'featuredCards',
-            'collections',
-            'contact_infos'
+        return view('admin.settings.manage', compact( 'heroSections',   'cards','heritage', 'clients','subscription','footer', 'quick_links',
+            'services', 'featured', 'featuredCards', 'collections','contact_infos'
         ));
     }
 
@@ -75,7 +61,7 @@ class SettingController extends Controller
     // Update homepage settings
     public function update(Request $request)
     {
-        /* ================= HERO SECTION ================= */
+        /*  HERO SECTION  */
         if ($request->has('hero_title')) {
             $heroTitles    = $request->hero_title;
             $heroSubtitles = $request->hero_subtitle ?? [];
@@ -114,7 +100,7 @@ class SettingController extends Controller
             }
         }
 
-        /* ================= FEATURE CARDS ================= */
+        /*  FEATURE CARDS */
         if ($request->has('cards')) {
             foreach ($request->cards as $index => $cardData) {
                 if (empty($cardData['title'])) continue;
@@ -134,7 +120,7 @@ class SettingController extends Controller
             }
         }
 
-        /* ================= FEATURED COLLECTIONS ================= */
+        /*  FEATURED COLLECTIONS  */
         // Delete removed cards first
         if ($request->filled('featured_deleted_ids')) {
             FeaturedCollection::whereIn('id', $request->featured_deleted_ids)->delete();
@@ -163,10 +149,10 @@ class SettingController extends Controller
         }
 
 
-        /* ================= CLIENTS ================= */
+        /*  CLIENTS */
         if ($request->has('clients')) {
 
-            // 1️⃣ Delete removed clients
+            // Delete removed clients
             if (!empty($request->clients['deleted'])) {
                 foreach ($request->clients['deleted'] as $id) {
                     $client = Client::find($id);
@@ -180,7 +166,7 @@ class SettingController extends Controller
                 }
             }
 
-            // 2️⃣ Update existing clients
+            // Update existing clients
             foreach ($request->clients['existing']['name'] ?? [] as $id => $name) {
                 $client = Client::find($id);
                 if ($client) {
@@ -199,7 +185,7 @@ class SettingController extends Controller
                 }
             }
 
-            // 3️⃣ Add new clients
+            // Add new clients
             foreach ($request->clients['new']['name'] ?? [] as $index => $name) {
                 if (!empty($name)) {
                     $client = new Client();
@@ -217,7 +203,7 @@ class SettingController extends Controller
         }
 
 
-        /* ================= COLLECTIONS SECTION ================= */
+        /* COLLECTIONS SECTION */
         if ($request->has('collections_title')) {
             $collections = \App\Models\CollectionSection::first() ?? new \App\Models\CollectionSection();
             $collections->title = $request->collections_title;
@@ -225,7 +211,7 @@ class SettingController extends Controller
             $collections->save();
         }
 
-        /* ================= HERITAGE SECTION ================= */
+        /*  HERITAGE SECTION  */
         if ($request->has('heritage_title')) {
             $heritage = \App\Models\Heritage::first() ?? new \App\Models\Heritage();
             $heritage->title = $request->heritage_title;
@@ -243,7 +229,7 @@ class SettingController extends Controller
             $heritage->save();
         }
 
-        /* ================= SUBSCRIPTION SECTION ================= */
+        /* SUBSCRIPTION SECTION  */
         if ($request->has('subscription_title')) {
             $subscription = \App\Models\SubscriptionSection::first() ?? new \App\Models\SubscriptionSection();
             $subscription->title = $request->subscription_title;
@@ -251,7 +237,7 @@ class SettingController extends Controller
             $subscription->save();
         }
 
-        /* ================= CONTACT INFOS ================= */
+        /*  CONTACT INFOS */
         if ($request->has('contact_infos')) {
             foreach ($request->contact_infos as $data) {
                 if (!empty($data['id'])) {

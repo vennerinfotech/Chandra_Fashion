@@ -18,14 +18,12 @@ class ProductController extends Controller
                 $q->where('status', 1);
             });
 
-        // --- Dynamic Filters ---
-
+        //  Dynamic Filters
         $categories = Category::where('status', 1)->pluck('name', 'id');
         $fabrics = Product::select('materials')->distinct()->whereNotNull('materials')->pluck('materials');
         $moqRanges = ['50-100', '100-500', '500+'];
 
-        // --- Apply Filters ---
-
+        //  Apply Filters
         if ($request->filled('category')) {
             $query->whereIn('category_id', (array) $request->category);
         }
@@ -62,7 +60,7 @@ class ProductController extends Controller
             $query->where('export_ready', true);
         }
 
-        // --- Sorting ---
+        // Sorting
         $sort = $request->get('sort', 'latest');
         if ($sort == 'price_asc') $query->orderBy('price', 'asc');
         elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
@@ -79,48 +77,6 @@ class ProductController extends Controller
             'moqRanges'
         ));
     }
-    // public function show($id)
-    // {
-    //     $product = Product::with(['category', 'variants'])->findOrFail($id);
-    //     $colors = $product->variants->pluck('color')->unique()->values()->all();
-    //     $countries = Country::orderBy('name', 'asc')->get();
-
-    //     $colorImages = [];
-    //     $sizesByColor = [];
-    //     $skuByColor = [];
-    //     $moqByColor = [];
-    //     $deliveryByColor = [];
-
-    //     foreach ($product->variants as $variant) {
-    //         // Ensure images are arrays
-    //         $imgs = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
-    //         $colorImages[$variant->color] = $imgs;
-
-    //         // Collect sizes per color
-    //         $sizesByColor[$variant->color][] = $variant->size;
-
-    //         // Collect SKU per color
-    //         $skuByColor[$variant->color] = $variant->product_code;
-
-    //         // Collect MOQ per color (fallback to product MOQ)
-    //         $moqByColor[$variant->color] = $variant->moq ?? $product->moq ?? 100;
-
-    //         // Collect Delivery per color (fallback to product delivery_time)
-    //         $deliveryByColor[$variant->color] = $variant->delivery_time ?? $product->delivery_time ?? '15-20';
-    //     }
-
-    //     // Pass everything to Blade
-    //     return view('products.show', compact(
-    //         'product',
-    //         'colors',
-    //         'countries',
-    //         'colorImages',
-    //         'sizesByColor',
-    //         'skuByColor',
-    //         'moqByColor',
-    //         'deliveryByColor'
-    //     ));
-    // }
 
     public function show($id)
     {
@@ -145,23 +101,15 @@ class ProductController extends Controller
             $deliveryByColor[$variant->color] = $variant->delivery_time ?? $product->delivery_time ?? '15-20';
         }
 
-        // --- RELATED PRODUCTS ---
+        //  RELATED PRODUCTS
         $relatedProducts = Product::with('variants')
-            ->where('category_id', $product->category_id) // same category
-            ->where('id', '!=', $product->id)           // exclude current product
-            ->take(6)                                    // limit number of related products
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->take(6)
             ->get();
 
-        return view('products.show', compact(
-            'product',
-            'colors',
-            'countries',
-            'colorImages',
-            'sizesByColor',
-            'skuByColor',
-            'moqByColor',
-            'deliveryByColor',
-            'relatedProducts' // pass to blade
+        return view('products.show', compact( 'product', 'colors','countries','colorImages','sizesByColor','skuByColor','moqByColor',
+            'deliveryByColor', 'relatedProducts'
         ));
     }
 }

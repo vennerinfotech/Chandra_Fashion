@@ -135,10 +135,8 @@
 
                                                     // Check if the product has variants
                                                     if ($product->variants->count()) {
-                                                        // Get the first variant
                                                         $firstVariant = $product->variants->first();
 
-                                                        // Get the first image of that variant
                                                         $images = is_array($firstVariant->images)
                                                             ? $firstVariant->images
                                                             : json_decode($firstVariant->images, true) ?? [];
@@ -146,16 +144,26 @@
                                                         $mainImage = $images[0] ?? null;
                                                     }
 
-                                                    // Fallback to main product image if no variant images exist
+                                                    // Fallback to main product image
                                                     if (!$mainImage) {
                                                         $mainImage = $product->image_url;
                                                     }
+
+                                                    // Check if image file exists
+                                                    $imageExists = $mainImage && file_exists(public_path('images/variants/' . basename($mainImage)));
                                                 @endphp
 
-                                                <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
-                                                    class="img-fluid" alt="{{ $product->name }}">
-
+                                                @if($imageExists)
+                                                    <a href="{{ asset('images/variants/' . basename($mainImage)) }}" data-lightbox="product">
+                                                        <img src="{{ asset('images/variants/' . basename($mainImage)) }}" class="img-fluid" alt="{{ $product->name }}">
+                                                    </a>
+                                                @else
+                                                    <div class="no-image-placeholder text-center">
+                                                        <i class="fa-solid fa-photo-film fa-3x"></i>
+                                                    </div>
+                                                @endif
                                             </div>
+
 
                                             <div class="trending-feature-list">
                                                 <p class="feature trending-feature">Trending</p>
@@ -182,8 +190,8 @@
                                                     {{-- MOQ --}}
                                                     @php
                                                         // If variants exist, get min MOQ from variants, else fallback to product's moq
-$moq = $product->variants->count()
-    ? $product->variants->min('moq')
+                                                        $moq = $product->variants->count()
+                                                            ? $product->variants->min('moq')
                                                             : $product->moq;
                                                     @endphp
                                                     @if ($moq)

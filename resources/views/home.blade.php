@@ -42,60 +42,6 @@
         </button>
     </div>
 
-     {{-- <section class="home-feature-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-box bg-light-yellow">
-                        <div class="icon-box bg-yellow">
-                            <i class="fas fa-tags"></i>
-                        </div>
-                        <div>
-                            <div class="feature-title">Market-leading prices</div>
-                            <div class="feature-subtitle">Best value for every purchase</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-box bg-light-blue">
-                        <div class="icon-box bg-blue">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div>
-                            <div class="feature-title">Strong vendor base</div>
-                            <div class="feature-subtitle">Trusted & verified suppliers</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-box bg-light-green">
-                        <div class="icon-box bg-green">
-                            <i class="fas fa-boxes-stacked"></i>
-                        </div>
-                        <div>
-                            <div class="feature-title">A varied product range</div>
-                            <div class="feature-subtitle">Extensive choices for all needs</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-box bg-light-teal">
-                        <div class="icon-box bg-teal">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <div>
-                            <div class="feature-title">Effective services</div>
-                            <div class="feature-subtitle">Reliable support guaranteed</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
     <section class="featured-section section-padding">
         <div class="container-fluid">
             <div class="row">
