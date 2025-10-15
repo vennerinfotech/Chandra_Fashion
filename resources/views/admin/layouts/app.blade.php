@@ -62,6 +62,9 @@
     <script src="{{ asset('admin/js/admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    {{-- CKEditor js cnd link --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/decoupled-document/ckeditor.js"></script>
 
     <script>
     $(document).ready(function() {

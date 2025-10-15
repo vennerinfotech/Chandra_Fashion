@@ -48,6 +48,8 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'short_description' => 'required|string|max:500',
+            'care_instructions' => 'required|string|max:500',
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:sub_categories,id',
             'materials' => 'required|string|max:255',
@@ -62,6 +64,8 @@ class ProductController extends Controller
         ], [
             'name.required' => 'Product Name is required.',
             'description.required' => 'Description is required.',
+            'short_description.required' => 'Short Description is required.',
+            'care_instructions.required' => 'Care Instructions are required.',
             'category_id.required' => 'Please select a category.',
             'subcategory_id.required' => 'Please select a subcategory.',
             'price.required' => 'Base Price is required.',
@@ -181,16 +185,36 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
+            'short_description' => 'required|string|max:500',
+            'care_instructions' => 'required|string|max:500',
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:sub_categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
             'materials' => 'nullable|string|max:255',
             'export_ready' => 'boolean',
-            'price' => 'nullable|numeric',
-            'delivery_time' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:5120',
+            'price' => 'required|numeric',
+            'delivery_time' => ['required', 'regex:/^\d+(-\d+)?$/'],
             'variants' => 'required|array|min:1',
+            'variants.*.product_code' => ['required', 'integer', Rule::unique('product_variants', 'product_code')->ignore($product->id, 'product_id')],
+            'variants.*.moq' => 'required|integer|min:1',
+        ], [
+            'name.required' => 'Product Name is required.',
+            'description.required' => 'Description is required.',
+            'short_description.required' => 'Short Description is required.',
+            'care_instructions.required' => 'Care Instructions are required.',
+            'category_id.required' => 'Please select a category.',
+            'subcategory_id.required' => 'Please select a subcategory.',
+            'price.required' => 'Base Price is required.',
+            'price.numeric' => 'Base Price must be a valid number.',
+            'delivery_time.regex' => 'Delivery Time must be a number or range like 10 or 10-20.',
+            'variants.required' => 'At least one variant is required.',
+            'variants.*.product_code.required' => 'Product Code is required.',
+            'variants.*.product_code.integer' => 'Product Code must be a number.',
+            'variants.*.product_code.unique' => 'Product Code must be unique.',
+            'variants.*.moq.required' => 'MOQ (kg) is required.',
+            'variants.*.moq.integer' => 'MOQ must be a number.',
         ]);
+
 
         // Validate variant images
         foreach ($request->variants as $index => $variantData) {

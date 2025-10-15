@@ -10,71 +10,80 @@
         @enderror
     </div>
 
+
+    {{-- Category & Subcategory --}}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="category_id" class="form-label">Category</label>
+            <select name="category_id" id="category_id" class="form-control">
+                <option value="">-- Select Category --</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="subcategory_id" class="form-label">Subcategory</label>
+            <select name="subcategory_id" id="subcategory_id" class="form-control">
+                <option value="">-- Select Subcategory --</option>
+            </select>
+            @error('subcategory_id') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+    </div>
+
     {{-- Description --}}
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" id="description" rows="3"
+        <div id="description-toolbar-container"></div>
+        <textarea name="description" id="description" rows="5"
             class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
-        @error('description')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
+        @error('description') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
-    {{-- Category --}}
-    <div class="mb-3">
-        <label for="category_id" class="form-label">Category</label>
-        <select name="category_id" id="category_id" class="form-control">
-            <option value="">-- Select Category --</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-        @error('category_id')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-
-    <!-- Subcategory Field -->
-    <div class="mb-3">
-        <label for="subcategory_id" class="form-label">Subcategory</label>
-        <select name="subcategory_id" id="subcategory_id" class="form-control">
-            <option value="">-- Select Subcategory --</option>
-        </select>
-        @error('subcategory_id')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-
-    {{-- Price --}}
-    <div class="mb-3">
-        <label for="price" class="form-label">Base Price</label>
-        <input type="text" name="price" id="price" class="form-control"
-            value="{{ old('price', $product->price ?? '') }}">
-        @error('price')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-
-
-    {{-- Materials & Delivery Time --}}
+    {{-- Short Description & Care Instructions --}}
     <div class="row">
         <div class="col-md-6 mb-3">
+            <label for="short_description" class="form-label">Short Description</label>
+            <div id="short_description-toolbar-container"></div>
+            <textarea name="short_description" id="short_description" rows="3"
+                class="form-control">{{ old('short_description', $product->short_description ?? '') }}</textarea>
+            @error('short_description') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="care_instructions" class="form-label">Care Instructions</label>
+            <div id="care_instructions-toolbar-container"></div>
+            <textarea name="care_instructions" id="care_instructions" rows="3"
+                class="form-control">{{ old('care_instructions', $product->care_instructions ?? '') }}</textarea>
+            @error('care_instructions') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+    </div>
+
+    {{-- Price - Materials & Delivery Time --}}
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mb-3">
+            <label for="price" class="form-label">Base Price</label>
+            <input type="text" name="price" id="price" class="form-control"
+                value="{{ old('price', $product->price ?? '') }}">
+            @error('price') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-3">
             <label for="materials" class="form-label">Materials</label>
             <input type="text" name="materials" id="materials" class="form-control"
                 value="{{ old('materials', $product->materials ?? '') }}">
-            @error('materials')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
+            @error('materials') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
-        <div class="col-md-6 mb-3">
+
+        <div class="col-md-6 col-lg-4 mb-3">
             <label for="delivery_time" class="form-label">Delivery Time</label>
             <input type="text" name="delivery_time" id="delivery_time" class="form-control"
                 value="{{ old('delivery_time', $product->delivery_time ?? '') }}">
-            @error('delivery_time')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
+            @error('delivery_time') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
     </div>
 
@@ -96,7 +105,7 @@
                 <div class="row g-2">
                     <input type="hidden" name="variants[{{ $index }}][id]" value="{{ $variant->id ?? '' }}">
 
-                    <div class="col-md-3">
+                    <div class="col-md-6 col-lg-4">
                         <label class="form-label">Product Code</label>
                         <input type="text" name="variants[{{ $index }}][product_code]" class="form-control"
                             value="{{ old("variants.$index.product_code", $variant->product_code ?? '') }}">
@@ -105,7 +114,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-6 col-lg-4">
                         <label class="form-label">MOQ (KG)</label>
                         <input type="number" name="variants[{{ $index }}][moq]" class="form-control"
                             value="{{ old("variants.$index.moq", $variant->moq ?? '') }}">
@@ -113,7 +122,7 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6 col-lg-4">
                         <label class="form-label">Images</label>
                         <input type="file" name="variants[{{ $index }}][images][]" class="form-control variant-images"
                             multiple>
@@ -151,6 +160,7 @@
     </div>
 </div>
 @push('scripts')
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var categorySelect = document.getElementById('category_id');
@@ -203,30 +213,30 @@
             document.getElementById('add-variant').addEventListener('click', function () {
                 const index = wrapper.querySelectorAll('.variant-item').length;
                 const html = `
-                        <div class="variant-item border rounded p-3 mb-3 position-relative">
-                            <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-                                <i class="fa-solid fa-circle-xmark text-danger"></i>
-                            </a>
-                            <hr>
-                            <h5>Product Variants</h5>
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <label class="form-label">Product Code</label>
-                                    <input type="text" name="variants[${index}][product_code]" class="form-control" >
-                                </div>
+                                <div class="variant-item border rounded p-3 mb-3 position-relative">
+                                    <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+                                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                                    </a>
+                                    <hr>
+                                    <h5>Product Variants</h5>
+                                    <div class="row g-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Product Code</label>
+                                            <input type="text" name="variants[${index}][product_code]" class="form-control" >
+                                        </div>
 
-                                <div class="col-md-2">
-                                    <label class="form-label">MOQ</label>
-                                    <input type="number" name="variants[${index}][moq]" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Images</label>
-                                    <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-                                    <div class="mt-2 preview-wrapper"></div>
-                                    <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-                                </div>
-                            </div>
-                        </div>`;
+                                        <div class="col-md-2">
+                                            <label class="form-label">MOQ</label>
+                                            <input type="number" name="variants[${index}][moq]" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Images</label>
+                                            <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
+                                            <div class="mt-2 preview-wrapper"></div>
+                                            <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
+                                        </div>
+                                    </div>
+                                </div>`;
                 wrapper.insertAdjacentHTML('beforeend', html);
             });
 
@@ -286,6 +296,36 @@
                 }
             });
         });
+
+
+        // CKEditor full-featured editors
+        function createEditor(selector, toolbarContainer) {
+            DecoupledEditor.create(document.querySelector(selector), {
+                toolbar: {
+                    items: [
+                        'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
+                        'link', 'bulletedList', 'numberedList', 'todoList', '|', 'alignment', '|',
+                        'indent', 'outdent', '|', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
+                        'undo', 'redo', '|', 'fontColor', 'fontBackgroundColor', 'fontSize', 'fontFamily'
+                    ]
+                }
+            }).then(editor => {
+                const toolbarContainerEl = document.querySelector(toolbarContainer);
+                toolbarContainerEl.appendChild(editor.ui.view.toolbar.element);
+            }).catch(error => console.error(error));
+        }
+
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => console.error(error));
+
+        ClassicEditor
+            .create(document.querySelector('#short_description'))
+            .catch(error => console.error(error));
+
+        ClassicEditor
+            .create(document.querySelector('#care_instructions'))
+            .catch(error => console.error(error));
     </script>
 
 @endpush

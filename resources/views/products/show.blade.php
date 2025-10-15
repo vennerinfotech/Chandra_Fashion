@@ -72,7 +72,7 @@
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
                         <h6 class="product-price"> ₹{{ $product->price }}</h6>
-                        <p class="product-desc">{{ $product->description }}</p>
+                        <p class="product-desc">{!! $product->short_description ?? 'No short description available.' !!}</p>
 
                         <div class="sku-category">
                             <p class="">SKU: <span
@@ -213,51 +213,31 @@
             <div class="product-description">
                 <ul class="nav nav-tabs" id="productTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="specs-tab" data-bs-toggle="tab" href="#specs"
+                        <a class="nav-link active" id="desc-tab" data-bs-toggle="tab" href="#desc"
                             role="tab">Description</a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" id="cert-tab" data-bs-toggle="tab" href="#cert" role="tab">Certifications</a>
-                    </li> --}}
                     <li class="nav-item">
-                        <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care
-                            Instructions</a>
+                        <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care Instructions</a>
                     </li>
                 </ul>
-                <div class="tab-content mt-3">
-                    {{-- Specifications --}}
-                    <div class="tab-pane fade show active" id="specs" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="fw-bold">Technical Specifications</h6>
-                                <p>Weight: {{ $product->weight ?? '180 GSM' }}</p>
-                                <p>Weave: {{ $product->weave ?? 'Plain Weave' }}</p>
-                                <p>Thread Count: {{ $product->thread_count ?? '120x80' }}</p>
-                                <p>Shrinkage: {{ $product->shrinkage ?? '<5%' }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="fw-bold">Construction Details</h6>
-                                <p>Collar: {{ $product->collar_type ?? 'Spread Collar' }}</p>
-                                <p>Cuff: {{ $product->cuff_style ?? 'Barrel Cuff' }}</p>
-                                <p>Buttons: {{ $product->buttons ?? 'Mother of Pearl' }}</p>
-                                <p>Fit: {{ $product->fit ?? 'Regular Fit' }}</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    {{-- Certifications --}}
-                    <div class="tab-pane fade" id="cert" role="tabpanel">
-                        <p>✔ GOTS Certified</p>
-                        <p>✔ OEKO-TEX® Standard 100</p>
+                <div class="tab-content mt-3">
+                    {{-- Product Description --}}
+                    <div class="tab-pane fade show active" id="desc" role="tabpanel">
+                        <div class="col-12">
+                            {!! $product->description ?? '<p>No description available.</p>' !!}
+                        </div>
                     </div>
 
                     {{-- Care Instructions --}}
                     <div class="tab-pane fade" id="care" role="tabpanel">
-                        <p>Machine wash cold with like colors.</p>
-                        <p>Do not bleach. Tumble dry low. Warm iron if needed.</p>
+                        <div class="col-12">
+                            {!! $product->care_instructions ?? '<p>No care instructions available.</p>' !!}
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="additional-info">
                 <div class="row">
                     <h2 class="section-title">Why Choose Chandra Fashion</h2>
@@ -569,13 +549,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                                    <div class="card" style="width:120px;">
-                                                                                        <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                                        <div class="card-body p-2 text-center">
-                                                                                            <small>${p.name}</small>
+                                                                                        <div class="card" style="width:120px;">
+                                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                            <div class="card-body p-2 text-center">
+                                                                                                <small>${p.name}</small>
+                                                                                            </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                `;
+                                                                                    `;
                             });
                         });
                 });
