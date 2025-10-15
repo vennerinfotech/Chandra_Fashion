@@ -126,7 +126,7 @@
 
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                                <p class="card-text">{{ Str::limit($product->description, 80) }}</p>
+                                <p class="card-text">{!! $product->short_description ?? 'No short description available.' !!}</p>
 
                                 <div class="material-list">
                                     @if ($product->materials)

@@ -365,7 +365,7 @@
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td>{{ $product->description }}</td>
+                        <td>{!! $product->short_description ?? 'No short description available.' !!}</td>
                     </tr>
                     <tr>
                         <td>Category:</td>

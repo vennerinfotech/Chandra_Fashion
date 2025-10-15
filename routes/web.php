@@ -30,6 +30,8 @@ Route::get('/states/{countryId}', [ChatController::class, 'getStates'])->name('s
 Route::get('/cities/{stateId}', [ChatController::class, 'getCities'])->name('cities.get');
 Route::post('/inquiries/store', [InquiryController::class, 'store'])->name('inquiries.store');
 
+Route::get('/inquiry/user-check', [InquiryController::class, 'checkUser'])->name('inquiry.userCheck');
+
 Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('send.chat');
 
 Route::get('/allcollection', [AllCollectionController::class, 'index'])->name('allcollection');

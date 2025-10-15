@@ -75,21 +75,20 @@
                         <p class="product-desc">{!! $product->short_description ?? 'No short description available.' !!}</p>
 
                         <div class="sku-category">
-                            <p class="">SKU: <span
-                                    id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span></p>
-
-                            <p class="">
-                                Category: <span>{{ $product->category->name ?? 'N/A' }}</span>
+                            <p>SKU: <span id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span>
                             </p>
+                            <p>Category: <span>{{ $product->category->name ?? 'N/A' }}</span></p>
+                            <p>Subcategory: <span>{{ $product->subcategory->name ?? 'N/A' }}</span></p>
                         </div>
+
 
                         {{-- Fabric & Materials --}}
                         <div class="fabric">
                             <h6 class="">Fabric & Materials:</h6>
                             <div class="row mt-2">
                                 <div class="col-md-12 d-flex flex-column gap-2">
-                                    <span>{{ $product->fabric ?? 'Organic Cotton' }}</span>
-                                    <span>Breathable Weave</span>
+                                    <span>{{ $product->materials }}</span>
+                                    {{-- <span>Breathable Weave</span> --}}
                                 </div>
 
                             </div>
@@ -549,13 +548,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                                        <div class="card" style="width:120px;">
-                                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                                            <div class="card-body p-2 text-center">
-                                                                                                <small>${p.name}</small>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    `;
+                                                                                                    <div class="card" style="width:120px;">
+                                                                                                        <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                                        <div class="card-body p-2 text-center">
+                                                                                                            <small>${p.name}</small>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                `;
                             });
                         });
                 });
@@ -932,6 +931,69 @@
                 submitBtn.innerText = "Submitting...";
                 if (loader) loader.style.display = "block";
             });
+        });
+
+
+        // exsting user detalis fatch js
+        document.addEventListener('DOMContentLoaded', function () {
+            const nameInput = document.querySelector('#inquiryForm input[name="name"]');
+            const emailInput = document.querySelector('#inquiryForm input[name="email"]');
+            const companyInput = document.querySelector('#inquiryForm input[name="company"]');
+            const phoneInput = document.querySelector('#inquiryForm input[name="phone"]');
+            const countrySelect = document.querySelector('#inquiryForm select[name="country_id"]');
+            const stateSelect = document.querySelector('#inquiryForm select[name="state_id"]');
+            const citySelect = document.querySelector('#inquiryForm select[name="city_id"]');
+            // const quantityInput = document.querySelector('#inquiryForm input[name="quantity"]');
+
+            function fetchUserDetails() {
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+
+                if (!name && !email) return;
+
+                let url = `{{ route('inquiry.userCheck') }}?`;
+                if (email) url += `email=${encodeURIComponent(email)}&`;
+                if (name) url += `name=${encodeURIComponent(name)}`;
+
+                fetch(url)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.exists) {
+                            const data = res.data;
+
+                            // Set basic fields
+                            if (data.name) nameInput.value = data.name;
+                            if (data.email) emailInput.value = data.email; // Fix for email
+                            if (data.company) companyInput.value = data.company;
+                            if (data.phone) phoneInput.value = data.phone;
+                            // if (data.quantity) quantityInput.value = data.quantity; // Fix for quantity
+
+                            // Country -> load states
+                            if (data.country_id) {
+                                countrySelect.value = data.country_id;
+                                countrySelect.dispatchEvent(new Event('change'));
+                            }
+
+                            // Wait a little for states to populate, then select state & city
+                            setTimeout(() => {
+                                if (data.state_id) {
+                                    stateSelect.value = data.state_id;
+                                    stateSelect.dispatchEvent(new Event('change'));
+                                }
+                            }, 500);
+
+                            setTimeout(() => {
+                                if (data.city_id) {
+                                    citySelect.disabled = false; // enable city
+                                    citySelect.value = data.city_id;
+                                }
+                            }, 1000); // wait longer for states -> cities
+                        }
+                    });
+            }
+
+            nameInput.addEventListener('blur', fetchUserDetails);
+            emailInput.addEventListener('blur', fetchUserDetails);
         });
 
 
