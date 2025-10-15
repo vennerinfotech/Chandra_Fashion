@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <!-- Column 1: Brand Info -->
-      <div class="col-md-6 col-lg-3 brand-info">
+      <div class="col-sm-6 col-md-6 col-lg-3 brand-info">
         <h3>Chandra Fashion</h3>
         <p>Premium B2B clothing manufacturer serving global fashion brands since 1985.</p>
         <div class="social-links mt-3">
@@ -14,7 +14,7 @@
       </div>
 
       <!-- Column 2: Quick Links -->
-      <div class="col-md-6 col-lg-3 quick-links">
+      <div class="col-sm-6 col-md-6 col-lg-3 quick-links">
         <h4>Quick Links</h4>
         <ul>
             <li><a href="{{ route('about') }}">About Us</a></li>
@@ -25,7 +25,7 @@
       </div>
 
       <!-- Column 3: Services -->
-      <div class="col-md-6 col-lg-3 services">
+      <div class="col-sm-6 col-md-6 col-lg-3 services">
         <h4>Collection</h4>
         <ul>
           <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Column 4: Contact Info -->
-      <div class="col-md-6 col-lg-3 contact-info">
+      <div class="col-sm-6 col-md-6 col-lg-3 contact-info">
         <h4>Contact Info</h4>
         <ul>
             <li><a href="#"><i class="fa-solid fa-location-dot"></i>Surat, Gujarat</a></li>

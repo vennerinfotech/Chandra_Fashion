@@ -105,10 +105,9 @@
         }
 
         .main-wrapper {
-            padding: 0px 5px;
+            padding: 20px 10px;
             transition: all 0.5s ease-in-out;
         }
-
         .header-top {
             margin-left: 0px;
         }

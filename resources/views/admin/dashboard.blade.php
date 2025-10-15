@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="dashboard-wrapper">
 
     {{-- Welcome Message --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -80,7 +80,7 @@
     </div>
 
     {{-- Pie Charts --}}
-    <div class="row g-4 mt-4">
+    <div class="row g-4 mt-3">
         {{-- Product Pie --}}
         <div class="col-md-6">
             <div class="card shadow-sm border-0 rounded-3">

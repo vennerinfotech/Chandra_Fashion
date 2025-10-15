@@ -195,7 +195,7 @@
                     @php
                         $card = $cards[$i] ?? null;
                     @endphp
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-sm-6 col-md-6 col-lg-4">
                         <div class="card">
                             <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 

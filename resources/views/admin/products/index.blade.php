@@ -59,7 +59,7 @@
                                     <td>{{ $product->subcategory->name ?? '-' }}</td>
                                     <td>{{ $product->price }}</td>
                                     <td>{{ $product->export_ready ? 'Yes' : 'No' }}</td>
-                                    <td>
+                                    <td class="action-btn">
                                         <a href="{{ route('admin.products.edit', $product->id) }}" title="Edit"
                                             class="btn-action btn-sm"><i class="fa-solid fa-pencil"></i></a>
                                         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"

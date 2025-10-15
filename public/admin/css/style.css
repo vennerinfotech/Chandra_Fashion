@@ -285,3 +285,11 @@
 .admin-setting-wrapper .section-header .toggle-icon {
     font-weight: bold;
 }
+
+
+@media (max-width:1024px){
+    .action-btn .btn-action{
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}
