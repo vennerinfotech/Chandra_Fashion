@@ -296,7 +296,7 @@
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
-                                    <p class="card-text">{{ Str::limit($rProduct->description, 50) }}</p>
+                                    <p class="card-text">{!! $product->short_description ?? 'No short description available.' !!}</p>
                                     <div class="material-list">
                                         <small class="badge-material">{{ $rProduct->materials }}</small>
                                         <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
@@ -908,8 +908,8 @@
                     e.preventDefault();
                     Swal.fire({
                         icon: 'error',
-                        title: 'Quantity Too Low',
-                        text: `Minimum order quantity is ${moq}. You entered ${enteredQty}.`,
+                        title: 'Kg Too Low',
+                        text: `Minimum order Kg is ${moq}. You entered ${enteredQty}.`,
                     });
                     return;
                 }

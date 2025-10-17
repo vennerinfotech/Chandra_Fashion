@@ -11,6 +11,12 @@
     {{-- Bootstrap CSS --}}
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"/>
+
     {{-- Font Awesome CSS --}}
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
 
@@ -66,7 +72,12 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/decoupled-document/ckeditor.js"></script>
 
-    <script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    {{-- <script>
     $(document).ready(function() {
         // Toggle dropdown menu
         $('.sidebar-wrapper .dropdown-toggle').on('click', function(e) {
@@ -82,43 +93,8 @@
             }
         });
     });
-    </script>
+    </script> --}}
 
-    <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar', // can be 'line', 'pie', 'doughnut', etc.
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
-                datasets: [{
-                    label: 'Sales',
-                    data: [12, 19, 3, 5, 2],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
     @stack('scripts')
 </body>
 

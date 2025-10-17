@@ -135,7 +135,7 @@
                             </svg>
                             Email Address
                         </label>
-                        <input type="email" name="email" class="form-control" placeholder="admin@chandrafashion.com"
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email"
                             required>
                     </div>
 

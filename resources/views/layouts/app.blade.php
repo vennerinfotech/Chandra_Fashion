@@ -42,7 +42,7 @@
     {{-- Font Awesome JS --}}
     <script src="{{ asset('js/all.min.js') }}"></script>
 
-    {{-- sweetalert2   --}}
+    {{-- sweetalert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -182,10 +182,10 @@
     @include('partials.footer')
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const header = document.querySelector(".header-wrapper");
 
-            window.addEventListener("scroll", function() {
+            window.addEventListener("scroll", function () {
                 if (window.scrollY > 50) {
                     header.classList.add("scrolled");
                 } else {
@@ -193,10 +193,8 @@
                 }
             });
         });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const collapse = document.querySelector('#navbarNav');
             const closeBtn = document.querySelector('#closeMenu');
             const toggler = document.querySelector('.navbar-toggler');
@@ -207,24 +205,20 @@
             });
 
             // Close button click
-            closeBtn.addEventListener('click', function() {
+            closeBtn.addEventListener('click', function () {
                 const bsCollapse = bootstrap.Collapse.getInstance(collapse);
                 bsCollapse.hide();
             });
         });
-    </script>
 
-
-
-    <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             function equalizeHeights() {
                 var maxHeight = 0;
                 var $boxes = $(
                     '.new-arrival-box, .product-filter-right .card, .collection-page-wrapper .collection-item');
                 $boxes.css('height', 'auto'); // reset first
 
-                $boxes.each(function() {
+                $boxes.each(function () {
                     var thisHeight = $(this).outerHeight();
                     if (thisHeight > maxHeight) maxHeight = thisHeight;
                 });
@@ -235,10 +229,8 @@
             // Run after images load
             $(window).on('load resize', equalizeHeights);
         });
-    </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const filterToggle = document.getElementById("filterToggle");
             const filterSidebar = document.querySelector(".product-filter-left");
 
@@ -247,20 +239,18 @@
             overlay.classList.add("filter-overlay");
             document.body.appendChild(overlay);
 
-            filterToggle.addEventListener("click", function() {
+            filterToggle.addEventListener("click", function () {
                 filterSidebar.classList.toggle("active");
                 overlay.classList.toggle("active");
             });
 
-            overlay.addEventListener("click", function() {
+            overlay.addEventListener("click", function () {
                 filterSidebar.classList.remove("active");
                 overlay.classList.remove("active");
             });
         });
-    </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const chatBtn = document.querySelector(".chatbot-btn");
             const chatWindow = document.getElementById("chat-window");
             const chatInput = document.getElementById("chat-input");
@@ -268,27 +258,32 @@
             const sendBtn = document.getElementById("send-btn");
             const closeBox = document.getElementById("close-box");
 
-            closeBox.addEventListener("click", function() {
-                chatWindow.style.display = "none";
-
+            closeBox.addEventListener("click", () => chatWindow.style.display = "none");
+            chatBtn.addEventListener("click", () => {
+                chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
             });
 
-            // Toggle chat window
-            chatBtn.addEventListener("click", function() {
-                chatWindow.style.display = (chatWindow.style.display === "none" || chatWindow.style
-                    .display === "") ? "flex" : "none";
-            });
-
-            // Append message
             function appendMessage(sender, text) {
                 const msg = document.createElement("div");
                 msg.classList.add("chat-message", sender);
-                msg.textContent = text;
+
+                // Convert Markdown links to HTML
+                text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+                // Convert Markdown images to HTML
+                text = text.replace(/!\[.*?\]\((.*?)\)/g, '<img src="$1" style="max-width:100%;margin:5px 0;">');
+
+                // Preserve line breaks
+                text = text.replace(/\r?\n/g, '<br>');
+
+                msg.innerHTML = text;
                 chatMessages.appendChild(msg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Typing indicator
+
+
+
             function appendTyping() {
                 const typing = document.createElement("div");
                 typing.classList.add("chat-message", "bot");
@@ -298,47 +293,39 @@
                 return typing;
             }
 
-            // Send message
             function sendMessage() {
                 const message = chatInput.value.trim();
                 if (!message) return;
 
-                // User message
                 appendMessage("user", message);
                 chatInput.value = "";
-
-                // Typing indicator
                 const typingIndicator = appendTyping();
 
-                // Fetch backend response (Laravel route)
                 fetch("{{ route('send.chat') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                'content')
-                        },
-                        body: JSON.stringify({
-                            message
-                        })
-                    })
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ message })
+                })
                     .then(res => res.json())
                     .then(data => {
+                        console.log(data);
                         typingIndicator.remove();
                         appendMessage("bot", data.reply);
                     })
                     .catch(err => {
                         typingIndicator.remove();
-                        appendMessage("bot", "Error: " + err.message);
+                        appendMessage("bot", "Server error, please try again.");
+                        console.error(err);
                     });
             }
 
-            // Event listeners
             sendBtn.addEventListener("click", sendMessage);
-            chatInput.addEventListener("keypress", function(e) {
-                if (e.key === "Enter") sendMessage();
-            });
+            chatInput.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
         });
+
     </script>
     @stack('scripts')
 </body>

@@ -15,7 +15,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered custom-table">
+                    <table class="table table-bordered custom-table" id="productsTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -82,6 +82,19 @@
             </div>
         </div>
 
-        {{ $products->links() }}
+        {{-- {{ $products->links() }} --}}
     </div>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#productsTable').DataTable({
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 100],
+            "ordering": true,
+            "searching": true,
+            "order": [[0, 'desc']] // Default sorting by ID column (descending order)
+        });
+    });
+</script>
+@endpush

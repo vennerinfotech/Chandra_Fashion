@@ -3,7 +3,7 @@
 @section('content')
     <div class="create-form-wrapper admin-setting-wrapper">
         <div class="admin-title">
-            <h1>About Page</h1>
+            <h1>About Page Settings</h1>
         </div>
 
         @if (session('success'))

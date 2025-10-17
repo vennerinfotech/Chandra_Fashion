@@ -49,7 +49,7 @@
     <hr class="border-light" />
 
     <div class="text-center bottom-text">
-      &copy; 2025 Chandra Fashion. All Rights Reserved.
+      &copy; {{ date('Y') }} Chandra Fashion | All rights reserved.
     </div>
   </div>
 

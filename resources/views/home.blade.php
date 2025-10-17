@@ -112,10 +112,11 @@
                         @endphp
 
                         <div class="new-arrival-box card">
-                            <div class="new-arrival-box-img">
-                                <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
-                            </div>
-
+                            <a href="{{ route('products.show', $product) }}">
+                                <div class="new-arrival-box-img">
+                                    <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
+                                </div>
+                            </a>
                             <div class="arrival-list">
                                 @if ($product->is_featured)
                                     <p>FEATURED</p>

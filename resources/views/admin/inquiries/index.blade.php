@@ -9,7 +9,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table custom-table">
+                <table class="table custom-table" id="inquiriesTable">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -71,10 +71,23 @@
             </div>
 
             <div class="d-flex justify-content-center mt-3">
-                {{ $inquiries->links() }}
+                {{-- {{ $inquiries->links() }} --}}
             </div>
         </div>
     </div>
 </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#inquiriesTable').DataTable({
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 100],
+            "ordering": true,
+            "searching": true,
+            "order": [[0, 'desc']] // Default sorting by ID column (descending order)
+        });
+    });
+</script>
+@endpush

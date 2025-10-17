@@ -3,7 +3,7 @@
 @section('content')
     <div class="create-form-wrapper admin-setting-wrapper">
         <div class="admin-title">
-            <h1>Homepage Settings</h1>
+            <h1>Home Page Settings</h1>
         </div>
 
         @if (session('success'))
@@ -77,7 +77,7 @@
                                 @if ($hero->background_image)
                                     <div class="mt-2">
                                         <img src="{{ asset($hero->background_image) }}" alt="Hero Image"
-                                            style="height: 80px;">
+                                            style="height: 80px;" class="rounded">
                                     </div>
                                 @endif
                             </div>
@@ -211,8 +211,8 @@
                                     <input type="file" name="featured_collections[{{ $index }}][image]"
                                         class="form-control">
                                     @if ($card->image)
-                                        <img src="{{ asset($card->image) }}" alt="Card Image" class="mt-2"
-                                            style="max-width: 150px;">
+                                        <img src="{{ asset($card->image) }}" alt="Card Image" class="mt-2 rounded"
+                                            width="80" height="80" >
                                     @endif
                                 </div>
                                 <div class="text-end">
@@ -261,7 +261,7 @@
                         <label>Heritage Image</label>
                         <input type="file" name="heritage_image" class="form-control-file">
                         @if (!empty($heritage->image))
-                            <img src="{{ asset($heritage->image) }}" style="height:120px;margin-top:8px;">
+                            <img src="{{ asset($heritage->image) }}" style="height:120px;margin-top:8px;" class="rounded">
                         @endif
                     </div>
                 </div>
@@ -286,8 +286,7 @@
                                         <input type="file" name="clients[existing][image][{{ $client->id }}]"
                                             class="form-control-file">
                                         @if ($client->image)
-                                            <img src="{{ asset($client->image) }}" width="80" height="80"
-                                                class="rounded">
+                                            <img src="{{ asset($client->image) }}" width="80" height="80" class="mt-2 rounded">
                                         @endif
                                     </div>
                                     <div class="col-md-3 mb-2">

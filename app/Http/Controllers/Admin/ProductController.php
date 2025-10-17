@@ -10,7 +10,7 @@ use App\Models\ProductVariant;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-
+use Yajra\DataTables\Facades\DataTables;
 class ProductController extends Controller
 {
     /**
@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'subcategory'])->latest()->paginate(10);
+        $products = Product::with(['category', 'subcategory'])->latest()->get();
         return view('admin.products.index', compact('products'));
     }
 

@@ -15,7 +15,7 @@ class InquiryController extends Controller
     {
         $inquiries = Inquiry::with(['product', 'country', 'state', 'city'])
             ->latest()
-            ->paginate(10);
+            ->get();
 
         return view('admin.inquiries.index', compact('inquiries'));
     }
