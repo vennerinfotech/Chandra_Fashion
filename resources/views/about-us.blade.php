@@ -79,12 +79,23 @@
     </section>
 
     {{-- Stats --}}
+    @php
+        $icons = [
+            'fas fa-user',
+            'fa-solid fa-users',
+            'fa-solid fa-medal',
+            'fas fa-shopping-cart'
+        ];
+    @endphp
+
     <section class="states-section section-padding">
         <div class="container">
             <div class="stats-container">
-                @foreach ($about->stats ?? [] as $s)
+                @foreach ($about->stats ?? [] as $index => $s)
                     <div class="stat-box">
-                        <div class="stat-icon"><i class="fas fa-user"></i></div>
+                        <div class="stat-icon">
+                            <i class="{{ $icons[$index % count($icons)] }}"></i>
+                        </div>
                         <div class="d-flex justify-content-center">
                             <div class="stat-number" data-count="{{ $s['number'] }}">{{ $s['number'] }}</div>
                             <span>{{ $s['suffix'] }}</span>
