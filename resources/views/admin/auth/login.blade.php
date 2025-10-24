@@ -169,7 +169,7 @@
                 <!-- Footer Text -->
                 <div class="text-center mt-4">
                     <p class="text-muted mb-0" style="font-size: 13px;">
-                        &copy; 2025 Chandra Fashion. All rights reserved.
+                        &copy; {{ date('Y') }} Chandra Fashion | All rights reserved.
                     </p>
                 </div>
             </div>

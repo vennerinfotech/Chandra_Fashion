@@ -328,6 +328,7 @@
 
     </script>
     @stack('scripts')
+    <script src='https://www.noupe.com/embed/019a1536f0447795af5d5134709222c29822.js'></script>
 </body>
 
 </html>

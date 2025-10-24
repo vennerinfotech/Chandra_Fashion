@@ -220,16 +220,16 @@
                                     <hr>
                                     <h5>Product Variants</h5>
                                     <div class="row g-2">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6 col-lg-4">
                                             <label class="form-label">Product Code</label>
                                             <input type="text" name="variants[${index}][product_code]" class="form-control" >
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-6 col-lg-4">
                                             <label class="form-label">MOQ</label>
                                             <input type="number" name="variants[${index}][moq]" class="form-control">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6 col-lg-4">
                                             <label class="form-label">Images</label>
                                             <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
                                             <div class="mt-2 preview-wrapper"></div>
