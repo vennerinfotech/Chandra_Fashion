@@ -67,9 +67,16 @@ class DashboardController extends Controller
 
 
         // User-wise inquiries (Pie chart)
-        $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
-            ->groupBy('name')
-            ->pluck('total', 'name');
+        // $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
+        //     ->groupBy('name')
+        //     ->pluck('total', 'name');
+
+        // User-wise inquiries (Pie chart) - Top 3 users
+$userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
+    ->groupBy('name')
+    ->orderByDesc('total')   // order by highest count
+    ->take(10)                // take only top 3
+    ->pluck('total', 'name');
 
         // User-wise inquiries (Pie chart) using "Name (Email)" as label
         // $userInquiries = Inquiry::select(DB::raw("CONCAT(name, ' (', email, ')') as label"), DB::raw('COUNT(*) as total'))

@@ -55,6 +55,11 @@
     .back-btn:hover {
         background-color: #0b5ed7;
     }
+
+    canvas {
+        width: 100% !important;
+        height: 400px !important;
+    }
 </style>
 
 <body>
@@ -120,9 +125,18 @@
         // });
 
         // { --Back Button Script- }
+        // function goBack() {
+        //     window.history.back();
+        // }
+
         function goBack() {
-            window.history.back();
+            if (document.referrer) {
+                window.location.href = document.referrer; // go to previous page
+            } else {
+                window.location.href = '/'; // fallback to homepage
+            }
         }
+
     </script>
 
 

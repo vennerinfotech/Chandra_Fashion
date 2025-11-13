@@ -112,7 +112,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    //  Line Chart
+    //  Line Chart (Last 30 Days / Monthly)
     const ctx = document.getElementById('inquiryChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -159,10 +159,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 borderWidth: 1
             }]
         },
-        options: { responsive: true, plugins: { legend: { position: 'right' } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // ensure same size
+            plugins: { legend: { position: 'right' } }
+        }
     });
 
-    //  User Pie Chart
+    // User Pie Chart
     const userCtx = document.getElementById('userPieChart').getContext('2d');
     new Chart(userCtx, {
         type: 'pie',
@@ -179,7 +183,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 borderWidth: 1
             }]
         },
-        options: { responsive: true, plugins: { legend: { position: 'right' } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // ensure same size
+            plugins: { legend: { position: 'right' } }
+        }
     });
 
 });

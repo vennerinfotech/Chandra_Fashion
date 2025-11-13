@@ -116,8 +116,7 @@
                                         <h6>Available Colors</h6>
                                         <div class="color d-flex flex-wrap gap-2">
                                             @foreach ($colorArray as $index => $color)
-                                                <button
-                                                    class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
+                                                <button class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
                                                     data-color="{{ $color }}"
                                                     style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
                                                     title="{{ $color }}">
@@ -135,27 +134,25 @@
 
                         {{-- Available Colors --}}
                         {{-- <input type="hidden" name="selected_size" id="selected_size">
-@if (!empty($colorArray))
-<div class="color-variation mt-3">
-    <h6>Available Colors</h6>
-    <div class="color d-flex flex-wrap gap-2">
-        @foreach ($colorArray as $index => $color)
-        <button
-            type="button"
-            class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
-            data-color="{{ $color }}"
-            style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
-            title="{{ $color }}">
-        </button>
-        @endforeach
-    </div>
-</div>
-@endif --}}
+                        @if (!empty($colorArray))
+                        <div class="color-variation mt-3">
+                            <h6>Available Colors</h6>
+                            <div class="color d-flex flex-wrap gap-2">
+                                @foreach ($colorArray as $index => $color)
+                                <button type="button" class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
+                                    data-color="{{ $color }}"
+                                    style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
+                                    title="{{ $color }}">
+                                </button>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif --}}
 
                         <div class="moq">
                             <div class="moq-order">
                                 <h4 id="moqValue">{{ $product->variants->first()->moq }}</h4>
-                                <p>Minimum Order Qty</p>
+                                <p>Minimum Order Qty (KG)</p>
                             </div>
                             <div class="moq-delivery">
                                 <h4 id="deliveryValue">{{ $product->delivery_time }}</h4>
@@ -243,7 +240,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Quantity Interested</label>
+                                            <label class="form-label">Quantity Interested (KG)</label>
                                             <input type="number" name="quantity" class="form-control" required>
                                         </div>
                                     </div>
@@ -305,7 +302,7 @@
                     <div class="col-md-4">
                         <div class="feature-box">
                             <div class="feature-icon bg-green">
-                                <img src="{{ asset('/images/vector.png') }}" alt="vector" class="img-fluid">
+                                <img src="{{ asset('/images/vector.svg') }}" alt="vector" class="img-fluid">
                             </div>
                             <div class="feature-title">Sustainable Manufacturing</div>
                             <p>GOTS certified organic materials and eco-friendly processes</p>
@@ -315,7 +312,7 @@
                     <div class="col-md-4">
                         <div class="feature-box">
                             <div class="feature-icon bg-blue">
-                                <img src="{{ asset('/images/vector (1).png') }}" alt="vector" class="img-fluid">
+                                <img src="{{ asset('/images/vector(1).svg') }}" alt="vector" class="img-fluid">
                             </div>
                             <div class="feature-title">Quality Certified</div>
                             <p>ISO 9001:2015 and OEKO-TEX Standard 100 certified</p>
@@ -325,7 +322,7 @@
                     <div class="col-md-4">
                         <div class="feature-box">
                             <div class="feature-icon bg-purple">
-                                <img src="{{ asset('/images/vector (2).png') }}" alt="vector" class="img-fluid">
+                                <img src="{{ asset('/images/vector(2).svg') }}" alt="vector" class="img-fluid">
                             </div>
                             <div class="feature-title">Global Export</div>
                             <p>Serving 50+ countries with reliable shipping</p>
@@ -355,7 +352,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
                                     <p class="card-text">
-                                        {!! $product->short_description ?? 'No short description available.' !!}</p>
+                                        {!! $product->short_description ?? 'No short description available.' !!}
+                                    </p>
                                     <div class="material-list">
                                         <small class="badge-material">{{ $rProduct->materials }}</small>
                                         <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
@@ -607,13 +605,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                                                        <div class="card" style="width:120px;">
-                                                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                                                            <div class="card-body p-2 text-center">
-                                                                                                                <small>${p.name}</small>
+                                                                                                            <div class="card" style="width:120px;">
+                                                                                                                <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                                                <div class="card-body p-2 text-center">
+                                                                                                                    <small>${p.name}</small>
+                                                                                                                </div>
                                                                                                             </div>
-                                                                                                        </div>
-                                                                                                    `;
+                                                                                                        `;
                             });
                         });
                 });
@@ -1057,64 +1055,64 @@
 
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    const colorButtons = document.querySelectorAll('.color-btn');
-    const selectedColorInput = document.getElementById('selected_size');
-    const mainImage = document.getElementById('mainProductImage');
-    const gallery = document.getElementById('colorGallery');
+        document.addEventListener("DOMContentLoaded", function () {
+            const colorButtons = document.querySelectorAll('.color-btn');
+            const selectedColorInput = document.getElementById('selected_size');
+            const mainImage = document.getElementById('mainProductImage');
+            const gallery = document.getElementById('colorGallery');
 
-    // Array to store all selected colors
-    let selectedColors = [];
+            // Array to store all selected colors
+            let selectedColors = [];
 
-    function toggleColor(btn) {
-        const color = btn.dataset.color;
+            function toggleColor(btn) {
+                const color = btn.dataset.color;
 
-        // Toggle selection
-        if(selectedColors.includes(color)) {
-            // Remove from selection
-            selectedColors = selectedColors.filter(c => c !== color);
-            btn.classList.remove('selected');
-        } else {
-            // Add to selection
-            selectedColors.push(color);
-            btn.classList.add('selected');
-        }
+                // Toggle selection
+                if (selectedColors.includes(color)) {
+                    // Remove from selection
+                    selectedColors = selectedColors.filter(c => c !== color);
+                    btn.classList.remove('selected');
+                } else {
+                    // Add to selection
+                    selectedColors.push(color);
+                    btn.classList.add('selected');
+                }
 
-        // Save all selected colors in hidden input as JSON array
-        selectedColorInput.value = JSON.stringify(selectedColors);
-        console.log("Selected colors stored:", selectedColors);
+                // Save all selected colors in hidden input as JSON array
+                selectedColorInput.value = JSON.stringify(selectedColors);
+                console.log("Selected colors stored:", selectedColors);
 
-        // Optional: if you want main image to always show the first selected color
-        if(selectedColors.length > 0 && btn.dataset.images) {
-            const firstSelectedBtn = document.querySelector(`.color-btn[data-color="${selectedColors[0]}"]`);
-            if(firstSelectedBtn && firstSelectedBtn.dataset.images) {
-                const images = JSON.parse(firstSelectedBtn.dataset.images);
-                if(images.length > 0) {
-                    mainImage.src = '/images/variants/' + images[0].split('/').pop();
+                // Optional: if you want main image to always show the first selected color
+                if (selectedColors.length > 0 && btn.dataset.images) {
+                    const firstSelectedBtn = document.querySelector(`.color-btn[data-color="${selectedColors[0]}"]`);
+                    if (firstSelectedBtn && firstSelectedBtn.dataset.images) {
+                        const images = JSON.parse(firstSelectedBtn.dataset.images);
+                        if (images.length > 0) {
+                            mainImage.src = '/images/variants/' + images[0].split('/').pop();
 
-                    // Update gallery
-                    gallery.innerHTML = '';
-                    images.forEach(img => {
-                        const imgTag = document.createElement('img');
-                        imgTag.src = '/images/variants/' + img.split('/').pop();
-                        imgTag.dataset.image = '/images/variants/' + img.split('/').pop();
-                        imgTag.className = 'img-thumbnail selectable-image';
-                        gallery.appendChild(imgTag);
+                            // Update gallery
+                            gallery.innerHTML = '';
+                            images.forEach(img => {
+                                const imgTag = document.createElement('img');
+                                imgTag.src = '/images/variants/' + img.split('/').pop();
+                                imgTag.dataset.image = '/images/variants/' + img.split('/').pop();
+                                imgTag.className = 'img-thumbnail selectable-image';
+                                gallery.appendChild(imgTag);
 
-                        imgTag.addEventListener('click', () => {
-                            mainImage.src = imgTag.dataset.image;
-                        });
-                    });
+                                imgTag.addEventListener('click', () => {
+                                    mainImage.src = imgTag.dataset.image;
+                                });
+                            });
+                        }
+                    }
                 }
             }
-        }
-    }
 
-    // Attach click listeners
-    colorButtons.forEach(btn => {
-        btn.addEventListener('click', () => toggleColor(btn));
-    });
-});
+            // Attach click listeners
+            colorButtons.forEach(btn => {
+                btn.addEventListener('click', () => toggleColor(btn));
+            });
+        });
 
 
 
