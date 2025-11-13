@@ -132,6 +132,26 @@
                         </div>
 
 
+
+                        {{-- Available Colors --}}
+                        {{-- <input type="hidden" name="selected_size" id="selected_size">
+@if (!empty($colorArray))
+<div class="color-variation mt-3">
+    <h6>Available Colors</h6>
+    <div class="color d-flex flex-wrap gap-2">
+        @foreach ($colorArray as $index => $color)
+        <button
+            type="button"
+            class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
+            data-color="{{ $color }}"
+            style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
+            title="{{ $color }}">
+        </button>
+        @endforeach
+    </div>
+</div>
+@endif --}}
+
                         <div class="moq">
                             <div class="moq-order">
                                 <h4 id="moqValue">{{ $product->variants->first()->moq }}</h4>
@@ -1034,6 +1054,68 @@
             nameInput.addEventListener('blur', fetchUserDetails);
             emailInput.addEventListener('blur', fetchUserDetails);
         });
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const colorButtons = document.querySelectorAll('.color-btn');
+    const selectedColorInput = document.getElementById('selected_size');
+    const mainImage = document.getElementById('mainProductImage');
+    const gallery = document.getElementById('colorGallery');
+
+    // Array to store all selected colors
+    let selectedColors = [];
+
+    function toggleColor(btn) {
+        const color = btn.dataset.color;
+
+        // Toggle selection
+        if(selectedColors.includes(color)) {
+            // Remove from selection
+            selectedColors = selectedColors.filter(c => c !== color);
+            btn.classList.remove('selected');
+        } else {
+            // Add to selection
+            selectedColors.push(color);
+            btn.classList.add('selected');
+        }
+
+        // Save all selected colors in hidden input as JSON array
+        selectedColorInput.value = JSON.stringify(selectedColors);
+        console.log("Selected colors stored:", selectedColors);
+
+        // Optional: if you want main image to always show the first selected color
+        if(selectedColors.length > 0 && btn.dataset.images) {
+            const firstSelectedBtn = document.querySelector(`.color-btn[data-color="${selectedColors[0]}"]`);
+            if(firstSelectedBtn && firstSelectedBtn.dataset.images) {
+                const images = JSON.parse(firstSelectedBtn.dataset.images);
+                if(images.length > 0) {
+                    mainImage.src = '/images/variants/' + images[0].split('/').pop();
+
+                    // Update gallery
+                    gallery.innerHTML = '';
+                    images.forEach(img => {
+                        const imgTag = document.createElement('img');
+                        imgTag.src = '/images/variants/' + img.split('/').pop();
+                        imgTag.dataset.image = '/images/variants/' + img.split('/').pop();
+                        imgTag.className = 'img-thumbnail selectable-image';
+                        gallery.appendChild(imgTag);
+
+                        imgTag.addEventListener('click', () => {
+                            mainImage.src = imgTag.dataset.image;
+                        });
+                    });
+                }
+            }
+        }
+    }
+
+    // Attach click listeners
+    colorButtons.forEach(btn => {
+        btn.addEventListener('click', () => toggleColor(btn));
+    });
+});
+
 
 
     </script>
