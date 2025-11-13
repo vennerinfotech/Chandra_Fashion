@@ -14,7 +14,7 @@
       </div>
 
       <!-- Column 2: Quick Links -->
-      <div class="col-sm-6 col-md-6 col-lg-3 quick-links">
+      <div class="col-sm-6 col-md-6 col-lg-2 quick-links">
         <h4>Quick Links</h4>
         <ul>
             <li><a href="{{ route('about') }}">About Us</a></li>
@@ -25,14 +25,28 @@
       </div>
 
       <!-- Column 3: Services -->
-      <div class="col-sm-6 col-md-6 col-lg-3 services">
+      <div class="col-sm-6 col-md-6 col-lg-4 services">
         <h4>Collection</h4>
-        <ul>
-          <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
-          <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
-          <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
-          <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
+        <div class="collection-list">
+            <ul>
+                <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
+                <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
+                 <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
+                <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
         </ul>
+        </div>
       </div>
 
       <!-- Column 4: Contact Info -->

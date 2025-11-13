@@ -1,5 +1,9 @@
 <div class="card shadow-sm p-4">
-    <h4 class="mb-3">{{ isset($product) ? 'Edit Product' : 'Add Product' }}</h4>
+    {{-- <h4 class="mb-3">{{ isset($product) ? 'Edit Product' : 'Add Product' }}</h4> --}}
+    {{-- <h4 class="mb-3">{{ $product->exists ? 'Edit Product' : 'Add Product' }}</h4> --}}
+
+    <h4 class="mb-3">{{ isset($product) && $product->exists ? 'Edit Product' : 'Add Product' }}</h4>
+
 
     {{-- Name --}}
     <div class="mb-3">
@@ -122,6 +126,98 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
+
+                    {{--
+                    <div class="col-md-6 col-lg-4">
+                        <label class="form-label">Colors</label>
+                        <div class="multi-color-picker border rounded p-2">
+                            <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" class="form-control form-control-color add-color-picker"
+                                    title="Pick color">
+                                <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add
+                                    Color</button>
+                            </div>
+                            <input type="hidden" name="variants[{{ $index }}][colors]" class="color-values" value="{{ old("
+                                variants.$index.colors", is_array($variant->colors ?? null) ? implode(',', $variant->colors)
+                            : ($variant->colors ?? '')) }}">
+                        </div>
+                    </div> --}}
+
+
+
+                    {{-- <div class="col-md-6 col-lg-4">
+                        <label class="form-label">Colors</label>
+                        <div class="multi-color-picker border rounded p-2">
+                            <div class="d-flex flex-wrap gap-2 mb-2 selected-colors">
+                                @if (!empty($colors))
+                                @foreach ($colors as $color)
+                                <div class="position-relative" data-color="{{ $color }}">
+                                    <div class="rounded-circle border"
+                                        style="width:30px; height:30px; background-color: {{ $color }}; cursor:pointer;">
+                                    </div>
+                                    <span
+                                        class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
+                                        style="cursor:pointer;">×</span>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" class="form-control form-control-color add-color-picker"
+                                    title="Pick color">
+                                <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add
+                                    Color</button>
+                            </div>
+
+                            <input type="hidden" name="variants[{{ $index }}][colors]" class="color-values"
+                                value="{{ old('variants.' . $index . '.colors', is_array($colors ?? null) ? implode(',', $colors) : ($colors ?? '')) }}">
+
+                        </div>
+                    </div> --}}
+
+                    @foreach ($product->variants as $index => $variant)
+                        @php
+                            // Decode variant colors safely
+                            $decodedColors = [];
+                            if (!empty($variant->color)) {
+                                $decoded = json_decode($variant->color, true);
+                                $decodedColors = is_array($decoded) ? $decoded : [];
+                            }
+                        @endphp
+
+                        <div class="col-md-6 col-lg-4">
+                            <label class="form-label">Colors (Variant {{ $index + 1 }})</label>
+
+                            <div class="multi-color-picker border rounded p-2" data-variant-index="{{ $index }}">
+                                <div class="d-flex flex-wrap gap-2 mb-2 selected-colors">
+                                    @foreach ($decodedColors as $color)
+                                        <div class="position-relative" data-color="{{ $color }}">
+                                            <div class="rounded-circle border"
+                                                style="width:30px; height:30px; background-color: {{ $color }}; cursor:pointer;">
+                                            </div>
+                                            <span
+                                                class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
+                                                style="cursor:pointer;">×</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="color" class="form-control form-control-color add-color-picker"
+                                        title="Pick color">
+                                    <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add
+                                        Color</button>
+                                </div>
+
+                                <input type="hidden" name="variants[{{ $index }}][color]" class="color-values"
+                                    value="{{ old('variants.' . $index . '.color', implode(',', $decodedColors)) }}">
+                            </div>
+                        </div>
+                    @endforeach
+
+
                     <div class="col-md-6 col-lg-4">
                         <label class="form-label">Images</label>
                         <input type="file" name="variants[{{ $index }}][images][]" class="form-control variant-images"
@@ -153,11 +249,18 @@
         <button type="button" id="add-variant" class="btn btn-outline-primary btn-sm">+ Add Variant</button>
     </div>
 
-    <div class="d-flex justify-content-center">
+    {{-- <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-success">
             {{ isset($product) ? 'Update Product' : 'Create Product' }}
         </button>
+    </div> --}}
+
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-success">
+            {{ $product->exists ? 'Update Product' : 'Create Product' }}
+        </button>
     </div>
+
 </div>
 @push('scripts')
 
@@ -213,30 +316,42 @@
             document.getElementById('add-variant').addEventListener('click', function () {
                 const index = wrapper.querySelectorAll('.variant-item').length;
                 const html = `
-                                <div class="variant-item border rounded p-3 mb-3 position-relative">
-                                    <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-                                        <i class="fa-solid fa-circle-xmark text-danger"></i>
-                                    </a>
-                                    <hr>
-                                    <h5>Product Variants</h5>
-                                    <div class="row g-2">
-                                        <div class="col-md-6 col-lg-4">
-                                            <label class="form-label">Product Code</label>
-                                            <input type="text" name="variants[${index}][product_code]" class="form-control" >
-                                        </div>
+                                                <div class="variant-item border rounded p-3 mb-3 position-relative">
+                                                    <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+                                                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                                                    </a>
+                                                    <hr>
+                                                    <h5>Product Variants</h5>
+                                                    <div class="row g-2">
+                                                        <div class="col-md-6 col-lg-4">
+                                                            <label class="form-label">Product Code</label>
+                                                            <input type="text" name="variants[${index}][product_code]" class="form-control" >
+                                                        </div>
 
-                                        <div class="col-md-6 col-lg-4">
-                                            <label class="form-label">MOQ</label>
-                                            <input type="number" name="variants[${index}][moq]" class="form-control">
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <label class="form-label">Images</label>
-                                            <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-                                            <div class="mt-2 preview-wrapper"></div>
-                                            <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-                                        </div>
-                                    </div>
-                                </div>`;
+                                                        <div class="col-md-6 col-lg-4">
+                                                            <label class="form-label">MOQ</label>
+                                                            <input type="number" name="variants[${index}][moq]" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 col-lg-3">
+                                                            <label class="form-label">Colors</label>
+                                                            <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
+                                                                <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
+                                                                    <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
+                                                                </div>
+                                                                <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-lg-4">
+                                                            <label class="form-label">Images</label>
+                                                            <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
+                                                            <div class="mt-2 preview-wrapper"></div>
+                                                            <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>`;
                 wrapper.insertAdjacentHTML('beforeend', html);
             });
 
@@ -326,6 +441,84 @@
         ClassicEditor
             .create(document.querySelector('#care_instructions'))
             .catch(error => console.error(error));
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            function initMultiColorPickers() {
+                document.querySelectorAll('.multi-color-picker').forEach(wrapper => {
+                    if (wrapper.dataset.initialized === "true") return;
+                    wrapper.dataset.initialized = "true";
+
+                    const colorInput = wrapper.querySelector('.add-color-picker');
+                    const addBtn = wrapper.querySelector('.add-color-btn');
+                    const selectedWrapper = wrapper.querySelector('.selected-colors');
+                    const hiddenInput = wrapper.querySelector('.color-values');
+
+                    // Clear any accidental duplicates (avoid merging from others)
+                    selectedWrapper.innerHTML = '';
+
+                    // Load existing colors for this variant only
+                    const existing = hiddenInput.value ? hiddenInput.value.split(',') : [];
+                    existing.forEach(color => {
+                        if (color.trim()) addColorBox(color.trim());
+                    });
+
+                    function addColorBox(color) {
+                        const box = document.createElement('div');
+                        box.className = 'position-relative';
+                        box.dataset.color = color;
+                        box.innerHTML = `
+                        <div class="rounded-circle border"
+                             style="width:30px; height:30px; background:${color}; cursor:pointer;"></div>
+                        <span class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
+                              style="cursor:pointer;">×</span>
+                    `;
+                        selectedWrapper.appendChild(box);
+                        updateHiddenInput();
+                    }
+
+                    function updateHiddenInput() {
+                        const colors = Array.from(selectedWrapper.querySelectorAll('[data-color]'))
+                            .map(el => el.dataset.color);
+                        hiddenInput.value = colors.join(',');
+                    }
+
+                    // Add color
+                    addBtn.addEventListener('click', function () {
+                        const color = colorInput.value;
+                        const currentColors = hiddenInput.value ? hiddenInput.value.split(',') : [];
+                        if (color && !currentColors.includes(color)) {
+                            addColorBox(color);
+                        }
+                    });
+
+                    // Remove color
+                    selectedWrapper.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('remove-color')) {
+                            const box = e.target.closest('[data-color]');
+                            if (box) box.remove();
+                            updateHiddenInput();
+                        }
+                    });
+                });
+            }
+
+            // Initialize all pickers once
+            initMultiColorPickers();
+
+            // Reinitialize if new variant is dynamically added
+            const addVariantBtn = document.getElementById('add-variant');
+            if (addVariantBtn) {
+                addVariantBtn.addEventListener('click', function () {
+                    setTimeout(initMultiColorPickers, 300);
+                });
+            }
+        });
+
+
+
     </script>
 
 @endpush

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\NewsletterSubscription;
 
 class InquiryController extends Controller
 {
@@ -86,5 +87,16 @@ class InquiryController extends Controller
             return redirect()->route('admin.inquiries.index')
                             ->with('error', 'Failed to delete inquiry.');
         }
+    }
+
+
+     /**
+     *  Show all Newsletter Subscriptions.
+     */
+    public function newsletter()
+    {
+        $subscriptions = NewsletterSubscription::latest()->paginate(20);
+
+        return view('admin.newsletter.index', compact('subscriptions'));
     }
 }

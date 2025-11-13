@@ -37,3 +37,5 @@ Route::post('/chat/send', [ChatController::class, 'sendChat'])->name('send.chat'
 Route::get('/allcollection', [AllCollectionController::class, 'index'])->name('allcollection');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/allcollection/{category?}', [AllCollectionController::class, 'index'])->name('allcollection');
+
+Route::post('/subscribe', [HomeController::class, 'subscribe'])->name('subscribe');
