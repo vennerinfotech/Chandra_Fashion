@@ -42,7 +42,7 @@
         </button>
     </div>
 
-    <section class="featured-section section-padding">
+    {{-- <section class="featured-section section-padding">
         <div class="container-fluid">
             <div class="row">
                 <h2 class="section-title">
@@ -55,23 +55,118 @@
             <div class="row">
                 <div class="custom-owl-carousel owl-carousel featured-carousel">
                     @foreach ($featuredCollections as $card)
-                        <div class="featured-collection-grid">
-                            <div class="featured-img">
-                                @if ($card->image)
-                                    <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
-                                @endif
-                            </div>
-                            <div class="featured-content">
-                                <h2>{{ $card->title }}</h2>
-                                <p>{{ $card->subtitle }}</p>
-                            </div>
+                    <div class="featured-collection-grid">
+                        <div class="featured-img">
+                            @if ($card->image)
+                            <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
+                            @endif
                         </div>
+                        <div class="featured-content">
+                            <h2>{{ $card->title }}</h2>
+                            <p>{{ $card->subtitle }}</p>
+                        </div>
+                    </div>
                     @endforeach
                 </div>
 
             </div>
         </div>
+    </section> --}}
+
+
+    <section class="featured-section section-padding">
+        <div class="container-fluid">
+            <div class="row">
+                <h2 class="section-title">
+                    {{ $featured->main_title ?? 'Featured Collections' }}
+                </h2>
+                <p class="section-sub-title">
+                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="custom-owl-carousel owl-carousel featured-carousel">
+                    @foreach ($categories as $category)
+                        <div class="featured-collection-grid">
+                            <a href="{{ route('allcollection') }}" class="featured-link">
+                                <div class="featured-img">
+                                    <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                                        alt="{{ $category->name }}">
+                                </div>
+                                <div class="featured-content">
+                                    <h2>{{ $category->name }}</h2>
+                                    <p>{{ $category->description ?? '' }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </section>
+
+
+
+    {{-- <section class="featured-section section-padding">
+        <div class="container-fluid">
+            <div class="row">
+                <h2 class="section-title">
+                    {{ $featured->main_title ?? 'Featured Collections' }}
+                </h2>
+                <p class="section-sub-title">
+                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
+                </p>
+            </div>
+
+            Featured Collections
+            <div class="row mb-5">
+                <div class="custom-owl-carousel owl-carousel featured-carousel">
+                    @foreach ($featuredCollections as $card)
+                    <div class="featured-collection-grid">
+                        <div class="featured-img">
+                            @if ($card->image)
+                            <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
+                            @endif
+                        </div>
+                        <div class="featured-content">
+                            <h2>{{ $category->name }}</h2>
+                            <p>{{ $card->subtitle }}</p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            Categories / Collections (merged section)
+            <div class="row mt-5">
+                <h2 class="section-title">
+                    {{ $collections->title ?? 'Our Collections' }}
+                </h2>
+                <p class="section-sub-title">
+                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with
+                    uncompromising quality standards' }}
+                </p>
+
+                <div class="custom-owl-carousel owl-carousel collection-carousel">
+                    @foreach ($categories as $category)
+                    <div class="collection-item">
+                        <a href="{{ route('allcollection') }}">
+                            <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                                alt="{{ $category->name }}">
+
+                            <div class="collection-info">
+                                <h3>{{ $category->name }}</h3>
+                                <p>{{ $category->description ?? '' }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section> --}}
+
 
     <section class="new-arriaval section-padding">
         <div class="container">
@@ -104,8 +199,8 @@
                             // Prepare final image path
                             $imagePath =
                                 $mainImage && file_exists(public_path('images/variants/' . basename($mainImage)))
-                                    ? asset('images/variants/' . basename($mainImage))
-                                    : asset('images/default-product.jpg');
+                                ? asset('images/variants/' . basename($mainImage))
+                                : asset('images/default-product.jpg');
 
                             // Determine MOQ
                             $moq = $product->variants->count() ? $product->variants->min('moq') : $product->moq;
@@ -127,7 +222,8 @@
 
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                                <p class="card-text">{!! $product->short_description ?? 'No short description available.' !!}</p>
+                                <p class="card-text">{!! $product->short_description ?? 'No short description available.' !!}
+                                </p>
 
                                 <div class="material-list">
                                     @if ($product->materials)
@@ -151,32 +247,33 @@
         </div>
     </section>
 
-    <section class="collections-section section-padding">
+    {{-- <section class="collections-section section-padding">
         <div class="container">
             <div class="row">
                 <h2 class="section-title">{{ $collections->title ?? 'Our Collections' }}</h2>
                 <p class="section-sub-title">
-                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with uncompromising quality standards' }}
+                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with
+                    uncompromising quality standards' }}
                 </p>
             </div>
 
             <div class="custom-owl-carousel owl-carousel collection-carousel">
                 @foreach ($categories as $category)
-                    <div class="collection-item">
-                        <a href="{{ route('allcollection') }}">
-                            <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
-                                alt="{{ $category->name }}">
+                <div class="collection-item">
+                    <a href="{{ route('allcollection') }}">
+                        <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                            alt="{{ $category->name }}">
 
-                            <div class="collection-info">
-                                <h3>{{ $category->name }}</h3>
-                                <p>{{ $category->description ?? '' }}</p>
-                            </div>
-                        </a>
-                    </div>
+                        <div class="collection-info">
+                            <h3>{{ $category->name }}</h3>
+                            <p>{{ $category->description ?? '' }}</p>
+                        </div>
+                    </a>
+                </div>
                 @endforeach
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="card-section section-padding">
         <div class="container">
@@ -193,37 +290,37 @@
                 @endphp
 
                 @for ($i = 0; $i < 3; $i++)
-                    @php
-                        $card = $cards[$i] ?? null;
-                    @endphp
-                    <div class="col-sm-6 col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                        @php
+                            $card = $cards[$i] ?? null;
+                        @endphp
+                        <div class="col-sm-6 col-md-6 col-lg-4">
+                            <div class="card">
+                                <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
-                                <div class="svg-wrapper">
-                                    @if ($card && $card->svg_path)
-                                        <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
-                                    @else
-                                        <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
-                                    @endif
+                                    <div class="svg-wrapper">
+                                        @if ($card && $card->svg_path)
+                                            <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
+                                        @else
+                                            <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                        @endif
+                                    </div>
+
+                                    <h5 class="card-title m-0">
+                                        {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                    </h5>
+
+                                    <p class="card-text">
+                                        {{ $card->description ??
+                    [
+                        'Flexible minimum order quantities starting from 100 pieces per style',
+                        'Serving 25+ countries across Europe, North America, and Asia',
+                        'ISO certified facility with rigorous quality control processes.',
+                    ][$i] }}
+                                    </p>
+
                                 </div>
-
-                                <h5 class="card-title m-0">
-                                    {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
-                                </h5>
-
-                                <p class="card-text">
-                                    {{ $card->description ??
-                                        [
-                                            'Flexible minimum order quantities starting from 100 pieces per style',
-                                            'Serving 25+ countries across Europe, North America, and Asia',
-                                            'ISO certified facility with rigorous quality control processes.',
-                                        ][$i] }}
-                                </p>
-
                             </div>
                         </div>
-                    </div>
                 @endfor
 
             </div>
@@ -251,13 +348,13 @@
                 </div>
 
                 <div class="col-lg-6">
-                        <div class="heritage-img">
-                            @if ($heritage->image)
-                                <img src="{{ asset($heritage->image) }}" alt="{{ $heritage->title }}">
-                            @else
-                                <img src="{{ asset('images/Heritage.png') }}" alt="Heritage Image">
-                            @endif
-                        </div>
+                    <div class="heritage-img">
+                        @if ($heritage->image)
+                            <img src="{{ asset($heritage->image) }}" alt="{{ $heritage->title }}">
+                        @else
+                            <img src="{{ asset('images/Heritage.png') }}" alt="Heritage Image">
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -310,23 +407,85 @@
     </section>
 
     {{-- Subscription Section --}}
-    <section class="subscription-section">
+    {{-- <section class="subscription-section">
         <div class="subscription-content">
             <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
-            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}
+            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special
+                offers' }}
             </p>
             <form action="#">
                 <input type="email" placeholder="Enter your email" required>
                 <button type="submit">Subscribe</button>
             </form>
         </div>
+    </section> --}}
+
+
+    <section class="subscription-section">
+        <div class="subscription-content">
+            <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
+            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}
+            </p>
+
+            {{-- @if(session('success'))
+            <div class="alert alert-success mt-2">{{ session('success') }}</div>
+            @endif
+
+            @if($errors->any())
+            <div class="alert alert-danger mt-2">
+                @foreach($errors->all() as $error)
+                <div>{{ $error }}</div>
+                @endforeach
+            </div>
+            @endif --}}
+
+            <form action="{{ route('subscribe') }}" method="POST">
+                @csrf
+                <input type="text" name="mobile" placeholder="Enter your mobile number" maxlength="10" required
+                    pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number">
+
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
     </section>
+    @if(session('success') || $errors->any())
+        <div id="toastMessage"
+            class="toast align-items-center text-white {{ session('success') ? 'bg-success' : 'bg-danger' }} border-0 position-fixed bottom-0 end-0 m-4"
+            role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{-- ✅ Success Message --}}
+                    @if(session('success'))
+                        {{ session('success') }}
+                    @endif
+
+                    {{-- ❌ Error Messages --}}
+                    @if($errors->any())
+                        @foreach($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    @endif
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+
+        <style>
+            #toastMessage {
+                z-index: 9999;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            }
+        </style>
+    @endif
+
 
 
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".featured-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -348,6 +507,9 @@
                     },
                     992: {
                         items: 3
+                    },
+                     1200: {
+                        items: 6
                     }
                 }
             });
@@ -427,6 +589,15 @@
                     }
                 }
             });
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const toastEl = document.getElementById('toastMessage');
+            if (toastEl) {
+                const toast = new bootstrap.Toast(toastEl, { delay: 5000 }); //  stays 5 seconds
+                toast.show();
+            }
         });
     </script>
 @endpush

@@ -108,6 +108,7 @@
             padding: 20px 10px;
             transition: all 0.5s ease-in-out;
         }
+
         .header-top {
             margin-left: 0px;
         }
@@ -119,7 +120,8 @@
 
 <div class="sidebar-wrapper">
     <div class="sidebar-logo text-center py-2">
-        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid" style="max-height: 50px;">
+        <img src="{{ asset('images/cf-logo-1.png') }}" alt="Chandra Admin Logo" class="img-fluid"
+            style="max-height: 50px;">
 
     </div>
     <ul>
@@ -155,6 +157,13 @@
         <li class="{{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }}">
             <a href="{{ route('admin.inquiries.index') }}">
                 <i class="fa-solid fa-user-pen me-2"></i> Inquiries
+            </a>
+        </li>
+
+        <!-- newsletters user -->
+        <li class="{{ request()->routeIs('admin.newsletter.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.newsletters.index') }}">
+                <i class="fa-solid fa-user-pen me-2"></i> newsletters
             </a>
         </li>
 

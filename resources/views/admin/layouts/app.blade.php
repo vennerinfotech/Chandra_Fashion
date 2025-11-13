@@ -12,10 +12,9 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- DataTables CSS -->
-    <link rel="stylesheet"
-        href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
 
     {{-- Font Awesome CSS --}}
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
@@ -36,6 +35,26 @@
     body {
         font-family: 'Open Sans', sans-serif;
     }
+
+
+    /* Back Button Styling */
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #0d6efd;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 14px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s ease-in-out;
+    }
+
+    .back-btn:hover {
+        background-color: #0b5ed7;
+    }
 </style>
 
 <body>
@@ -46,6 +65,12 @@
     </header>
     <main class="main-wrapper" style="min-height: calc(100vh - 90px);">
         <div class="container-fluid">
+            {{--Back Button Added Here --}}
+            <div class="mb-3 mt-2">
+                <button class="btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
             @yield('content')
         </div>
     </main>
@@ -55,7 +80,7 @@
     </footer>
 
 
-     {{-- Jquery JS --}}
+    {{-- Jquery JS --}}
     <script src="{{ asset('js/jquery-min.js') }}"></script>
 
     {{-- Bootstrap JS --}}
@@ -77,23 +102,33 @@
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
-    {{-- <script>
-    $(document).ready(function() {
-        // Toggle dropdown menu
-        $('.sidebar-wrapper .dropdown-toggle').on('click', function(e) {
-            console.log('Click')
-            e.preventDefault();
-            $(this).next('.sidebar-wrapper .dropdown-menu').slideToggle();
-        });
+    <script>
+        // $(document).ready(function() {
+        //     // Toggle dropdown menu
+        //     $('.sidebar-wrapper .dropdown-toggle').on('click', function(e) {
+        //         console.log('Click')
+        //         e.preventDefault();
+        //         $(this).next('.sidebar-wrapper .dropdown-menu').slideToggle();
+        //     });
 
-        // Close dropdown when clicking outside
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.sidebar-wrapper .dropdown-toggle, .sidebar-wrapper .dropdown-menu').length) {
-                $('.sidebar-wrapper .dropdown-menu').slideUp();
-            }
-        });
-    });
-    </script> --}}
+        //     // Close dropdown when clicking outside
+        //     $(document).on('click', function(e) {
+        //         if (!$(e.target).closest('.sidebar-wrapper .dropdown-toggle, .sidebar-wrapper .dropdown-menu').length) {
+        //             $('.sidebar-wrapper .dropdown-menu').slideUp();
+        //         }
+        //     });
+        // });
+
+        // { --Back Button Script- }
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+
+    <script>
+
+    </script>
 
     @stack('scripts')
 </body>

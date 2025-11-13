@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use App\Models\CollectionSection;
 use App\Models\FeaturedCollection;
 use App\Models\SubscriptionSection;
+use Illuminate\Support\Facades\Validator;
+use App\Models\NewsletterSubscription;
 
 class HomeController extends Controller
 {
@@ -44,6 +46,19 @@ class HomeController extends Controller
         ));
     }
 
+    public function subscribe(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'mobile' => ['required', 'digits:10', 'unique:newsletter_subscriptions,mobile'],
+        ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        NewsletterSubscription::create(['mobile' => $request->mobile]);
+
+        return back()->with('success', 'Thank you for subscribing!');
+    }
 
 }

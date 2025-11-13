@@ -94,6 +94,44 @@
                             </div>
                         </div>
 
+
+                        {{-- Available Colors --}}
+                        <div class="color-variation mt-3">
+                            {{-- <h6>Available Colors</h6> --}}
+                            <div class="color d-flex flex-wrap gap-2">
+                                @php
+                                    $variant = $product->variants->first();
+                                    $colorArray = [];
+
+                                    if ($variant && !empty($variant->color)) {
+                                        $decoded = json_decode($variant->color, true);
+                                        if (is_array($decoded) && count($decoded) > 0) {
+                                            $colorArray = $decoded;
+                                        }
+                                    }
+                                @endphp
+
+                                @if (!empty($colorArray))
+                                    <div class="color-variation mt-3">
+                                        <h6>Available Colors</h6>
+                                        <div class="color d-flex flex-wrap gap-2">
+                                            @foreach ($colorArray as $index => $color)
+                                                <button
+                                                    class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
+                                                    data-color="{{ $color }}"
+                                                    style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
+                                                    title="{{ $color }}">
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+
+                            </div>
+                        </div>
+
+
                         <div class="moq">
                             <div class="moq-order">
                                 <h4 id="moqValue">{{ $product->variants->first()->moq }}</h4>
@@ -296,7 +334,8 @@
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">{{ $rProduct->name }}</h5>
-                                    <p class="card-text">{!! $product->short_description ?? 'No short description available.' !!}</p>
+                                    <p class="card-text">
+                                        {!! $product->short_description ?? 'No short description available.' !!}</p>
                                     <div class="material-list">
                                         <small class="badge-material">{{ $rProduct->materials }}</small>
                                         <small class="badge-moq">MOQ: {{ $rProduct->moq ?? 50 }}</small>
@@ -548,13 +587,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                                                    <div class="card" style="width:120px;">
-                                                                                                        <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                                                        <div class="card-body p-2 text-center">
-                                                                                                            <small>${p.name}</small>
+                                                                                                        <div class="card" style="width:120px;">
+                                                                                                            <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                                            <div class="card-body p-2 text-center">
+                                                                                                                <small>${p.name}</small>
+                                                                                                            </div>
                                                                                                         </div>
-                                                                                                    </div>
-                                                                                                `;
+                                                                                                    `;
                             });
                         });
                 });

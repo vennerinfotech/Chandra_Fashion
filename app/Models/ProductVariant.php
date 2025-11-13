@@ -13,7 +13,9 @@ class ProductVariant extends Model
 
     protected $casts = [
         'images' => 'array',
+        'color' => 'array',
     ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
