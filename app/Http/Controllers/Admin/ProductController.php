@@ -37,7 +37,7 @@ class ProductController extends Controller
 
         // Create an empty product instance so Blade has it
         $product = new Product();
-        return view('admin.products.create', compact('categories', 'subcategories', 'nextCode','product'));
+        return view('admin.products.create', compact('categories', 'subcategories', 'nextCode', 'product'));
     }
 
 
@@ -149,108 +149,108 @@ class ProductController extends Controller
     //     return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     // }
 
-public function store(Request $request)
-{
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'short_description' => 'required|string|max:500',
-        'care_instructions' => 'required|string',
-        'category_id' => 'required|exists:categories,id',
-        'subcategory_id' => 'required|exists:sub_categories,id',
-        'materials' => 'required|string|max:255',
-        'export_ready' => 'boolean',
-        'price' => 'required|regex:/^[0-9]+$/',
-        'delivery_time' => ['required', 'regex:/^\d+(-\d+)?$/'],
-        'variants' => 'required|array|min:1',
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'short_description' => 'required|string|max:500',
+            'care_instructions' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
+            'materials' => 'required|string|max:255',
+            'export_ready' => 'boolean',
+            'price' => 'required|regex:/^[0-9]+$/',
+            'delivery_time' => ['required', 'regex:/^\d+(-\d+)?$/'],
+            'variants' => 'required|array|min:1',
 
-        'variants.*.product_code' => 'required|integer|distinct',
-        'variants.*.moq' => 'required|integer|min:1',
-        'variants.*.color' => 'nullable|string|max:100',
-        'variants.*.images' => 'required|array|min:1',
-        'variants.*.images.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
-    ], [
-        'name.required' => 'Product Name is required.',
-        'description.required' => 'Description is required.',
-        'short_description.required' => 'Short Description is required.',
-        'care_instructions.required' => 'Care Instructions are required.',
-        'category_id.required' => 'Please select a category.',
-        'subcategory_id.required' => 'Please select a subcategory.',
-        'materials.required' => 'Materials field is required.',
-        'price.required' => 'Base Price is required.',
-        'price.regex' => 'Base Price must be a valid number only.',
-        'delivery_time.regex' => 'Delivery Time must be in format 10 or 10-20.',
-        'variants.required' => 'At least one variant is required.',
-        'variants.*.product_code.required' => 'Product Code is required.',
-        'variants.*.product_code.distinct' => 'Product Code must be unique.',
-        'variants.*.product_code.integer' => 'Product Code must be a number.',
-        'variants.*.moq.required' => 'MOQ (kg) is required.',
-        'variants.*.moq.integer' => 'MOQ must be a number.',
-        'variants.*.images.required' => 'Each variant must have at least one image.',
-        'variants.*.images.*.image' => 'Each file must be an image (jpg, jpeg, png, webp).',
-    ]);
-
-    // 🔹 Step 1: Check duplicate product codes inside the same form submission
-    $productCodes = array_map(fn($v) => $v['product_code'], $data['variants']);
-    if (count($productCodes) !== count(array_unique($productCodes))) {
-        return back()->withInput()->withErrors(['variants' => 'Duplicate Product Codes are not allowed.']);
-    }
-
-    // 🔹 Step 2: Check duplicate product codes in DB
-    foreach ($data['variants'] as $index => $variant) {
-        if (ProductVariant::where('product_code', $variant['product_code'])->exists()) {
-            return back()->withInput()->withErrors([
-                "variants.$index.product_code" => "Product Code {$variant['product_code']} already exists."
-            ]);
-        }
-    }
-
-    // 🔹 Step 3: Check duplicate colors
-    $colors = array_filter(array_map(fn($v) => strtolower(trim($v['color'] ?? '')), $data['variants']));
-    if (count($colors) !== count(array_unique($colors))) {
-        return back()->withInput()->withErrors(['variants' => 'Each variant must have a unique color.']);
-    }
-
-    // 🔹 Step 4: Handle main product image
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('images/products'), $imageName);
-        $data['image'] = 'images/products/' . $imageName;
-    }
-
-    // 🔹 Step 5: Create Product
-    $product = Product::create($data);
-
-    // 🔹 Step 6: Handle variants and images
-    foreach ($data['variants'] as $variantData) {
-        $variant = ProductVariant::create([
-            'product_id' => $product->id,
-            'product_code' => $variantData['product_code'],
-            'color' => isset($variantData['color'])
-                ? json_encode(array_filter(explode(',', $variantData['color'])))
-                : null,
-            'size' => $variantData['size'] ?? null,
-            'moq' => $variantData['moq'] ?? null,
+            'variants.*.product_code' => 'required|integer|distinct',
+            'variants.*.moq' => 'required|integer|min:1',
+            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.images' => 'required|array|min:1',
+            'variants.*.images.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+        ], [
+            'name.required' => 'Product Name is required.',
+            'description.required' => 'Description is required.',
+            'short_description.required' => 'Short Description is required.',
+            'care_instructions.required' => 'Care Instructions are required.',
+            'category_id.required' => 'Please select a category.',
+            'subcategory_id.required' => 'Please select a subcategory.',
+            'materials.required' => 'Materials field is required.',
+            'price.required' => 'Base Price is required.',
+            'price.regex' => 'Base Price must be a valid number only.',
+            'delivery_time.regex' => 'Delivery Time must be in format 10 or 10-20.',
+            'variants.required' => 'At least one variant is required.',
+            'variants.*.product_code.required' => 'Product Code is required.',
+            'variants.*.product_code.distinct' => 'Product Code must be unique.',
+            'variants.*.product_code.integer' => 'Product Code must be a number.',
+            'variants.*.moq.required' => 'MOQ (kg) is required.',
+            'variants.*.moq.integer' => 'MOQ must be a number.',
+            'variants.*.images.required' => 'Each variant must have at least one image.',
+            'variants.*.images.*.image' => 'Each file must be an image (jpg, jpeg, png, webp).',
         ]);
 
-        // Handle variant images
-        $images = [];
-        foreach ($variantData['images'] as $imageFile) {
-            $imageName = time() . '_' . $imageFile->getClientOriginalName();
-            $imageFile->move(public_path('images/variants'), $imageName);
-            $images[] = 'images/variants/' . $imageName;
+        // 🔹 Step 1: Check duplicate product codes inside the same form submission
+        $productCodes = array_map(fn($v) => $v['product_code'], $data['variants']);
+        if (count($productCodes) !== count(array_unique($productCodes))) {
+            return back()->withInput()->withErrors(['variants' => 'Duplicate Product Codes are not allowed.']);
         }
 
-        if (!empty($images)) {
-            $variant->images = json_encode($images);
-            $variant->save();
+        // 🔹 Step 2: Check duplicate product codes in DB
+        foreach ($data['variants'] as $index => $variant) {
+            if (ProductVariant::where('product_code', $variant['product_code'])->exists()) {
+                return back()->withInput()->withErrors([
+                    "variants.$index.product_code" => "Product Code {$variant['product_code']} already exists."
+                ]);
+            }
         }
+
+        // 🔹 Step 3: Check duplicate colors
+        $colors = array_filter(array_map(fn($v) => strtolower(trim($v['color'] ?? '')), $data['variants']));
+        if (count($colors) !== count(array_unique($colors))) {
+            return back()->withInput()->withErrors(['variants' => 'Each variant must have a unique color.']);
+        }
+
+        // 🔹 Step 4: Handle main product image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images/products'), $imageName);
+            $data['image'] = 'images/products/' . $imageName;
+        }
+
+        // 🔹 Step 5: Create Product
+        $product = Product::create($data);
+
+        // 🔹 Step 6: Handle variants and images
+        foreach ($data['variants'] as $variantData) {
+            $variant = ProductVariant::create([
+                'product_id' => $product->id,
+                'product_code' => $variantData['product_code'],
+                'color' => isset($variantData['color'])
+                    ? json_encode(array_filter(explode(',', $variantData['color'])))
+                    : null,
+                'size' => $variantData['size'] ?? null,
+                'moq' => $variantData['moq'] ?? null,
+            ]);
+
+            // Handle variant images
+            $images = [];
+            foreach ($variantData['images'] as $imageFile) {
+                $imageName = time() . '_' . $imageFile->getClientOriginalName();
+                $imageFile->move(public_path('images/variants'), $imageName);
+                $images[] = 'images/variants/' . $imageName;
+            }
+
+            if (!empty($images)) {
+                $variant->images = json_encode($images);
+                $variant->save();
+            }
+        }
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Product created successfully!');
     }
-
-    return redirect()->route('admin.products.index')
-        ->with('success', 'Product created successfully!');
-}
 
 
     /**
@@ -391,14 +391,27 @@ public function store(Request $request)
                     'product_id' => $product->id,
                     'product_code' => $variantData['product_code'],
                     // 'color' => $variantData['color'] ?? null,
-                    'color' => isset($variantData['colors'])
-                        ? json_encode(array_filter(explode(',', $variantData['colors'])))
-                        : null,
+                    // 'color' => isset($variantData['colors'])
+                    //     ? json_encode(array_filter(explode(',', $variantData['colors'])))
+                    //     : null,
+                    'color' => isset($variantData['color']) && $variantData['color'] !== null
+                        ? json_encode(array_filter(explode(',', $variantData['color'])))
+                        : $variant->color, // keep old value if not provided
 
                     'size' => $variantData['size'] ?? null,
                     'moq' => $variantData['moq'] ?? null,
                 ]
             );
+
+            // Update color separately to avoid overwriting
+            // if (isset($variantData['color'])) {
+            //     // Split by comma, trim spaces, filter empty
+            //     $colorsArray = array_filter(array_map('trim', explode(',', $variantData['color'])));
+            //     // Encode once
+            //     $variant->color = json_encode($colorsArray);
+            //     $variant->save();
+            // }
+
 
             $variantIds[] = $variant->id;
 

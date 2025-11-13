@@ -1394,7 +1394,7 @@ footer .chatbot-btn svg path {
 .product-detail-right .color-variation .color .btn {
     width: 48px;
     height: 48px;
-    border: 2px solid #d1d5db;
+    border: 2px solid #d1d5db !important;
     cursor: pointer;
     border-radius: 50px;
 }
@@ -1412,7 +1412,7 @@ footer .chatbot-btn svg path {
 }
 
 .product-detail-right .color-variation .color .btn.selected {
-    border-color: #000;
+    border-color: #000 !important;
 }
 
 .product-detail-right .fabric {

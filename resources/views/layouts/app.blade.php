@@ -166,6 +166,7 @@
             background-color: #212529 !important;
             border-color: #212529 !important;
         }
+
     </style>
 
     @stack('styles')
