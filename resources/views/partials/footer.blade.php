@@ -29,22 +29,13 @@
         <h4>Collection</h4>
         <div class="collection-list">
             <ul>
+                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
                 <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">T-shirt Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Tubular Fabric</a></li>
                 <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
-                <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
-                 <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
-                <li><a href="{{ route('products.index') }}">Lycra Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Knitted Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Fabric</a></li>
-                <li><a href="{{ route('products.index') }}">Polyester Lycra</a></li>
+                <li><a href="{{ route('products.index') }}">Jacquard Fabric</a></li>
+                <li><a href="{{ route('products.index') }}">Printed Fabric</a></li>
         </ul>
         </div>
       </div>

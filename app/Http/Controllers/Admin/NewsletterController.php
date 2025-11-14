@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\NewsletterSubscription;
+use App\Exports\NewsletterExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class NewsletterController extends Controller
 {
     /**
@@ -38,10 +41,21 @@ class NewsletterController extends Controller
             $subscription->delete();
 
             return redirect()->route('admin.newsletters.index')
-                             ->with('success', 'Subscription deleted successfully.');
+                ->with('success', 'Subscription deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->route('admin.newsletters.index')
-                             ->with('error', 'Failed to delete subscription.');
+                ->with('error', 'Failed to delete subscription.');
         }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new NewsletterExport(
+                $request->from_date,
+                $request->to_date
+            ),
+            'newsletter_subscriptions.xlsx'
+        );
     }
 }
