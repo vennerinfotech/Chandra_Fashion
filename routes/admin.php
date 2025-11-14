@@ -18,6 +18,9 @@ Route::middleware('admin.auth')->group(function () {
     // Route::get('/dashboard1', [DashboardController::class, 'index'])->name('admin.main');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
     Route::resource('inquiries', \App\Http\Controllers\Admin\InquiryController::class, ['as' => 'admin']);
+
+    Route::get( '/inquiries-export', [\App\Http\Controllers\Admin\InquiryController::class, 'export'])->name('admin.inquiries.export');
+
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class, ['as' => 'admin']);
     Route::resource('subcategories', \App\Http\Controllers\Admin\SubCategoryController::class, ['as' => 'admin']);
     Route::get('/get-subcategories/{categoryId}', [\App\Http\Controllers\Admin\ProductController::class, 'getSubcategories']);
@@ -25,6 +28,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/newsletters', [NewsletterController::class, 'index'])->name('admin.newsletters.index');
     Route::get('/newsletters/{id}', [NewsletterController::class, 'show'])->name('admin.newsletters.show');
     Route::delete('/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
+    Route::get('newsletters-export', [NewsletterController::class, 'export'])->name('admin.newsletters.export');
+
 
 
 

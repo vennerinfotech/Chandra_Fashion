@@ -6,6 +6,8 @@ use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\NewsletterSubscription;
+use App\Exports\InquiriesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InquiryController extends Controller
 {
@@ -82,21 +84,25 @@ class InquiryController extends Controller
         try {
             $inquiry->delete();
             return redirect()->route('admin.inquiries.index')
-                            ->with('success', 'Inquiry deleted successfully.');
+                ->with('success', 'Inquiry deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->route('admin.inquiries.index')
-                            ->with('error', 'Failed to delete inquiry.');
+                ->with('error', 'Failed to delete inquiry.');
         }
     }
 
 
-     /**
-     *  Show all Newsletter Subscriptions.
-     */
-    public function newsletter()
-    {
-        $subscriptions = NewsletterSubscription::latest()->paginate(20);
 
-        return view('admin.newsletter.index', compact('subscriptions'));
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new InquiriesExport(
+                $request->from_date,
+                $request->to_date,
+                $request->month,
+                $request->year
+            ),
+            'inquiries.xlsx'
+        );
     }
 }
