@@ -14,6 +14,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Imports\ProductsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use App\Exports\ProductImportFormatExport;
 
 class ProductController extends Controller
 {
@@ -70,45 +71,51 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
 
+    // public function downloadImportFormat()
+    // {
+    //     $filename = "product_import_format.csv";
+
+    //     $headers = [
+    //         "Content-type"        => "text/csv",
+    //         "Content-Disposition" => "attachment; filename=$filename",
+    //         "Pragma"              => "no-cache",
+    //         "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+    //         "Expires"             => "0"
+    //     ];
+
+    //     $columns = [
+    //         'name',
+    //         'description',
+    //         'short_description',
+    //         'care_instructions',
+    //         'materials',
+    //         'price',
+    //         'category',
+    //         'subcategory',
+    //         'product_code',
+    //         'images',
+    //         'moq',
+    //         'gsm',
+    //         'dai',
+    //         'chadti'
+    //     ];
+
+    //     // Convert all column headers to uppercase
+    //     $columns = array_map('strtoupper', $columns);
+
+    //     $callback = function () use ($columns) {
+    //         $file = fopen('php://output', 'w');
+    //         fputcsv($file, $columns);
+    //         fclose($file);
+    //     };
+
+    //     return response()->stream($callback, 200, $headers);
+    // }
+
+
     public function downloadImportFormat()
     {
-        $filename = "product_import_format.csv";
-
-        $headers = [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        ];
-
-        $columns = [
-            'name',
-            'description',
-            'short_description',
-            'care_instructions',
-            'materials',
-            'price',
-            'category',
-            'subcategory',
-            'product_code',
-            'images',
-            'moq',
-            'gsm',
-            'dai',
-            'chadti'
-        ];
-
-        // Convert all column headers to uppercase
-        $columns = array_map('strtoupper', $columns);
-
-        $callback = function () use ($columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return Excel::download(new ProductImportFormatExport, 'product_import_format.xlsx');
     }
 
     public function store(Request $request)
