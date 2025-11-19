@@ -8,7 +8,7 @@ class ProductVariant extends Model
 {
      protected $table = 'product_variants';
     protected $fillable = [
-        'product_id', 'product_code', 'color', 'size', 'moq', 'images'
+        'product_id', 'product_code', 'color', 'size', 'moq', 'images','gsm', 'dai', 'chadti'
     ];
 
     protected $casts = [

@@ -91,6 +91,10 @@ class ProductController extends Controller
         $moqByColor = [];
         $deliveryByColor = [];
 
+        $gsmByColor = [];
+        $daiByColor = [];
+        $chadtiByColor = [];
+
         foreach ($product->variants as $variant) {
             $imgs = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
             $colorImages[$variant->color] = $imgs;
@@ -99,6 +103,10 @@ class ProductController extends Controller
             $skuByColor[$variant->color] = $variant->product_code;
             $moqByColor[$variant->color] = $variant->moq ?? $product->moq ?? 100;
             $deliveryByColor[$variant->color] = $variant->delivery_time ?? $product->delivery_time ?? '15-20';
+
+            $gsmByColor[$variant->color] = $variant->gsm ?? 'N/A';
+            $daiByColor[$variant->color] = $variant->dai ?? 'N/A';
+            $chadtiByColor[$variant->color] = $variant->chadti ?? 'N/A';
         }
 
         //  RELATED PRODUCTS
@@ -109,7 +117,7 @@ class ProductController extends Controller
             ->get();
 
         return view('products.show', compact( 'product', 'colors','countries','colorImages','sizesByColor','skuByColor','moqByColor',
-            'deliveryByColor', 'relatedProducts'
+            'deliveryByColor','gsmByColor','daiByColor','chadtiByColor', 'relatedProducts'
         ));
     }
 }

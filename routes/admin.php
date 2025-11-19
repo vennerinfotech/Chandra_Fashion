@@ -17,9 +17,15 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     // Route::get('/dashboard1', [DashboardController::class, 'index'])->name('admin.main');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
+
+    // Product Import Route
+    Route::post('/products/import', [\App\Http\Controllers\Admin\ProductController::class, 'import'])->name('admin.products.import');
+
+    Route::get('/admin/products/import-format', [\App\Http\Controllers\Admin\ProductController::class, 'downloadImportFormat'])->name('admin.products.import.format');
+
     Route::resource('inquiries', \App\Http\Controllers\Admin\InquiryController::class, ['as' => 'admin']);
 
-    Route::get( '/inquiries-export', [\App\Http\Controllers\Admin\InquiryController::class, 'export'])->name('admin.inquiries.export');
+    Route::get('/inquiries-export', [\App\Http\Controllers\Admin\InquiryController::class, 'export'])->name('admin.inquiries.export');
 
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class, ['as' => 'admin']);
     Route::resource('subcategories', \App\Http\Controllers\Admin\SubCategoryController::class, ['as' => 'admin']);
@@ -30,17 +36,12 @@ Route::middleware('admin.auth')->group(function () {
     Route::delete('/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
     Route::get('newsletters-export', [NewsletterController::class, 'export'])->name('admin.newsletters.export');
 
-
-
-
-
     Route::get('/settings', [SettingController::class, 'manage'])->name('admin.settings.manage');
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
 
     // Admin About manage routes
     Route::get('/about', [\App\Http\Controllers\Admin\AboutController::class, 'manage'])->name('admin.about.manage');
     Route::post('/about', [\App\Http\Controllers\Admin\AboutController::class, 'update'])->name('admin.about.update');
-
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });

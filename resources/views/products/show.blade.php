@@ -73,27 +73,38 @@
                         <h2 class="product-title">{{ $product->name }}</h2>
                         <h6 class="product-price"> ₹{{ $product->price }}</h6>
                         <p class="product-desc">{!! $product->short_description ?? 'No short description available.' !!}</p>
-
-                        <div class="sku-category">
-                            <p>SKU: <span id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span>
-                            </p>
-                            <p>Category: <span>{{ $product->category->name ?? 'N/A' }}</span></p>
-                            <p>Subcategory: <span>{{ $product->subcategory->name ?? 'N/A' }}</span></p>
-                        </div>
-
-
-                        {{-- Fabric & Materials --}}
                         <div class="fabric">
-                            <h6 class="">Fabric & Materials:</h6>
-                            <div class="row mt-2">
-                                <div class="col-md-12 d-flex flex-column gap-2">
-                                    <span>{{ $product->materials }}</span>
-                                    {{-- <span>Breathable Weave</span> --}}
-                                </div>
+                            <h6 class="product-specification">Product Specifications :</h6>
+                            <div class="sku-category">
+                                <p>SKU: <span
+                                        id="productSKU">{{ $product->variants->first()->product_code ?? 'N/A' }}</span>
+                                </p>
+                                <p>Category: <span>{{ $product->category->name ?? 'N/A' }}</span></p>
+                                <p>Subcategory: <span>{{ $product->subcategory->name ?? 'N/A' }}</span></p>
+                            </div>
 
+                            {{-- GSM / DAI / CHADTI --}}
+
+                            <div class="sku-category">
+                                <p>GSM: <span>{{ $firstVariant->gsm ?? 'N/A' }}</span>
+                                </p>
+                                <p>Dai: <span>{{ $firstVariant->dai ?? 'N/A' }}</span></p>
+                                <p>Chadti: <span>{{ $firstVariant->chadti ?? 'N/A' }}</span></p>
+                            </div>
+
+
+                            {{-- Fabric & Materials --}}
+                            <div class="fabric">
+                                <h6 class="">Fabric & Materials :</h6>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 d-flex flex-column gap-2">
+                                        <span>{{ $product->materials }}</span>
+                                        {{-- <span>Breathable Weave</span> --}}
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-
 
                         {{-- Available Colors --}}
                         <div class="color-variation mt-3">
@@ -130,33 +141,14 @@
                             </div>
                         </div>
 
-
-
-                        {{-- Available Colors --}}
-                        {{-- <input type="hidden" name="selected_size" id="selected_size">
-                        @if (!empty($colorArray))
-                        <div class="color-variation mt-3">
-                            <h6>Available Colors</h6>
-                            <div class="color d-flex flex-wrap gap-2">
-                                @foreach ($colorArray as $index => $color)
-                                <button type="button" class="btn border color-btn {{ $index === 0 ? 'selected' : '' }}"
-                                    data-color="{{ $color }}"
-                                    style="background-color: {{ $color }}; width: 32px; height: 32px; border-radius: 50%;"
-                                    title="{{ $color }}">
-                                </button>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endif --}}
-
                         <div class="moq">
                             <div class="moq-order">
                                 <h4 id="moqValue">{{ $product->variants->first()->moq }}</h4>
                                 <p>Minimum Order Qty (KG)</p>
                             </div>
                             <div class="moq-delivery">
-                                <h4 id="deliveryValue">{{ $product->delivery_time }}</h4>
-                                <p>Days Delivery</p>
+                                <h4 id="deliveryValue">{{ $product->delivery_time }} <span class="time">Hour's</span></h4>
+                                <p>Same Day Delivery</p>
                             </div>
                         </div>
 
@@ -458,17 +450,6 @@
                 }
             });
 
-            // Size button click
-            // sizeContainer.addEventListener('click', (e) => {
-            //     if (e.target.tagName === 'BUTTON') {
-            //         sizeContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-            //         e.target.classList.add('selected');
-
-            //         currentSelection.size = e.target.textContent.trim();
-            //         updateHiddenInputs();
-            //     }
-            // });
-
 
             function selectColor(colorBtn) {
                 const color = colorBtn.dataset.color;
@@ -605,13 +586,13 @@
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
                                 relatedDiv.innerHTML += `
-                                                                                                            <div class="card" style="width:120px;">
-                                                                                                                <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
-                                                                                                                <div class="card-body p-2 text-center">
-                                                                                                                    <small>${p.name}</small>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        `;
+                                                                                                                                    <div class="card" style="width:120px;">
+                                                                                                                                        <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
+                                                                                                                                        <div class="card-body p-2 text-center">
+                                                                                                                                            <small>${p.name}</small>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                `;
                             });
                         });
                 });
@@ -721,14 +702,6 @@
                 });
             });
 
-            // Optional: handle size selection on initial page load
-            // sizeContainer.querySelectorAll('.btn').forEach(btn => {
-            //     btn.addEventListener('click', () => {
-            //         sizeContainer.querySelectorAll('.btn').forEach(b => b.classList.remove(
-            //             'selected'));
-            //         btn.classList.add('selected');
-            //     });
-            // });
         });
 
 
