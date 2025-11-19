@@ -11,6 +11,17 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
+
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <strong>Import Failed:</strong>
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="card shadow p-3 mb-4">
             <h4 class="mb-3">Import Products</h4>
 

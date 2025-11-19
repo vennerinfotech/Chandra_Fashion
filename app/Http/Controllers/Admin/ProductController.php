@@ -57,7 +57,7 @@ class ProductController extends Controller
             $messages = [];
 
             foreach ($e->failures() as $failure) {
-                $messages[] = "Row {$failure->row()}: " . implode(', ', $failure->errors());
+                $messages[] =  implode(', ', $failure->errors());
             }
 
             return back()->withErrors($messages);
@@ -65,6 +65,7 @@ class ProductController extends Controller
 
         return back()->with('success', 'Products imported successfully!');
     }
+
 
 
     /**
@@ -136,7 +137,7 @@ class ProductController extends Controller
             // 'variants.*.product_code' => 'required|integer|distinct',
             'variants.*.product_code' => ['required', 'string', 'distinct',  Rule::unique('product_variants', 'product_code')],
             'variants.*.moq' => 'required|integer|min:1',
-            // 'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.color' => 'nullable',
             'variants.*.images' => 'required|array|min:1',
             'variants.*.images.*' => 'image|mimes:jpg,jpeg,png,webp|min:1|max:5120',
             'variants.*.gsm' => 'nullable|string|max:50',
