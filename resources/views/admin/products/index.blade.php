@@ -11,6 +11,43 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
+        <div class="card shadow p-3 mb-4">
+            <h4 class="mb-3">Import Products (CSV / XLSX)</h4>
+
+            <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="import-file-main">
+                    <div class="import-file-info">
+                        <div class="">
+                            {{-- <label class="form-label">Select File</label> --}}
+                            <input type="file" name="file" class="form-control" required>
+                            <small class="text-muted">Allowed: .csv, .xlsx</small>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fa-solid fa-upload"></i> Import Products
+                        </button>
+                    </div>
+                    <div class="">
+                        <a href="{{ route('admin.products.import.format') }}" class="btn">
+                            <i class="fa-solid fa-download"></i> Download Template
+                        </a>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+
+
+
+        {{-- Full Screen Loader --}}
+        <div id="fullScreenLoader">
+            <div class="loader-inner">
+                <div class="loader-spinner"></div>
+                <p class="loader-text">Importing products, please wait...</p>
+            </div>
+        </div>
 
         <div class="card shadow-sm">
             <div class="card-body">
@@ -86,15 +123,20 @@
     </div>
 @endsection
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $('#productsTable').DataTable({
-            "pageLength": 10,
-            "lengthMenu": [10, 25, 50, 100],
-            "ordering": true,
-            "searching": true,
-            "order": [[0, 'desc']] // Default sorting by ID column (descending order)
+    <script>
+        $(document).ready(function () {
+            $('#productsTable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "ordering": true,
+                "searching": true,
+                "order": [[0, 'desc']] // Default sorting by ID column (descending order)
+            });
         });
-    });
-</script>
+
+
+        $("form[action='{{ route('admin.products.import') }}']").on('submit', function () {
+            $("#fullScreenLoader").show();
+        });
+    </script>
 @endpush

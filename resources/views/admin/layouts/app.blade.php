@@ -60,6 +60,58 @@
         width: 100% !important;
         height: 400px !important;
     }
+
+
+    #fullScreenLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.85);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 999999;
+    }
+
+    .loader-spinner {
+        width: 70px;
+        height: 70px;
+        border: 8px solid #ddd;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .loader-text {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        width: max-content;
+    }
+
+    .loader-inner{
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <body>
@@ -137,12 +189,12 @@
             }
         }
 
+        window.addEventListener('load', function () {
+            $("#fullScreenLoader").hide();
+        });
+
     </script>
 
-
-    <script>
-
-    </script>
 
     @stack('scripts')
 </body>

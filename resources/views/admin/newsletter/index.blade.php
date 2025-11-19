@@ -28,7 +28,7 @@
 
                 <div class="d-flex align-items-end">
                     <button class="btn btn-success">
-                        <i class="fa fa-file-excel"></i> Export Excel
+                        <i class="fa fa-file-excel"></i> Download Excel
                     </button>
                 </div>
 

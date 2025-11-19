@@ -271,7 +271,7 @@
             <div class="card mb-3">
                 <div class="card-header section-header d-flex justify-content-between align-items-center"
                     data-target="#clients-section">
-                    <strong>Client Section</strong>
+                    <strong>Client Trust (Review)</strong>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="card-body section-body" id="clients-section">
@@ -295,14 +295,14 @@
                                             value="{{ old('clients.existing.name.' . $client->id, $client->name) }}"
                                             class="form-control">
                                     </div>
-                                    <div class="col-md-3 mb-2">
+                                    {{-- <div class="col-md-3 mb-2">
                                         <label>Designation</label>
                                         <input type="text" name="clients[existing][designation][{{ $client->id }}]"
                                             value="{{ old('clients.existing.designation.' . $client->id, $client->designation) }}"
                                             class="form-control">
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-3 mb-2">
-                                        <label>Quote</label>
+                                        <label>Quote (message)</label>
                                         <input type="text" name="clients[existing][quote][{{ $client->id }}]"
                                             value="{{ old('clients.existing.quote.' . $client->id, $client->quote) }}"
                                             class="form-control">
@@ -385,6 +385,38 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="row mt-3">
+                        <h5>Social Links</h5>
+                        <div class="col-md-4 mb-2">
+                            <label>Facebook</label>
+                            <input type="text" name="contact_infos[{{ $index }}][facebook]"
+                                value="{{ $contact->facebook }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label>Instagram</label>
+                            <input type="text" name="contact_infos[{{ $index }}][instagram]"
+                                value="{{ $contact->instagram }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label>LinkedIn</label>
+                            <input type="text" name="contact_infos[{{ $index }}][linkedin]"
+                                value="{{ $contact->linkedin }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label>Twitter (X)</label>
+                            <input type="text" name="contact_infos[{{ $index }}][twitter]"
+                                value="{{ $contact->twitter }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label>YouTube</label>
+                            <input type="text" name="contact_infos[{{ $index }}][youtube]"
+                                value="{{ $contact->youtube }}" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -485,11 +517,7 @@
                                                                                     <input type="text" name="clients[new][name][]" placeholder="Name" class="form-control">
                                                                                 </div>
                                                                                 <div class="col-md-3 mb-2">
-                                                                                    <label>Designation</label>
-                                                                                    <input type="text" name="clients[new][designation][]" placeholder="Designation" class="form-control">
-                                                                                </div>
-                                                                                <div class="col-md-3 mb-2">
-                                                                                    <label>Quote</label>
+                                                                                    <label>Quote(message)</label>
                                                                                     <input type="text" name="clients[new][quote][]" placeholder="Quote" class="form-control">
                                                                                 </div>
                                                                                 <div class="col-md-1 mb-2 d-flex align-items-end">

@@ -286,6 +286,41 @@
     font-weight: bold;
 }
 
+.import-file-main{
+    display: flex;
+    justify-content: space-between;
+    gap:15px;
+}
+
+.import-file-info {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.import-file-info .form-control{
+    height: 45px;
+    padding: 9px;
+}
+
+.import-file-info .btn{
+    height: max-content;
+}
+
+@media (min-width:320px) and (max-width:991px){
+.import-file-main,
+.import-file-info{
+    display: block;
+    }
+    .import-file-main .text-muted{
+        margin-bottom: 10px;
+                display: block;
+    }
+    .import-file-info{
+        margin-bottom: 10px;
+    }
+}
+
 
 @media (max-width:1024px){
     .action-btn .btn-action{
