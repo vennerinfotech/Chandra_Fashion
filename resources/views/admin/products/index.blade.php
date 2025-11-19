@@ -12,7 +12,7 @@
         @endif
 
         <div class="card shadow p-3 mb-4">
-            <h4 class="mb-3">Import Products (CSV / XLSX)</h4>
+            <h4 class="mb-3">Import Products</h4>
 
             <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -22,7 +22,7 @@
                         <div class="">
                             {{-- <label class="form-label">Select File</label> --}}
                             <input type="file" name="file" class="form-control" required>
-                            <small class="text-muted">Allowed: .csv, .xlsx</small>
+                            {{-- <small class="text-muted">Allowed: .csv, .xlsx</small> --}}
                         </div>
                         <button type="submit" class="btn">
                             <i class="fa-solid fa-upload"></i> Import Products
