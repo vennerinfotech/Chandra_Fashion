@@ -2024,3 +2024,31 @@ footer .chatbot-btn svg path {
     line-height: 26px;
     font-weight: 500;
 }
+
+
+.time{
+    font-size: 22px;
+}
+
+/* .product-detail-right .product-info{
+    display: flex;
+    gap: 30px;
+}
+
+
+.product-detail-right .product-info p{
+font-size: 16px;
+    color: #000;
+    line-height: 20px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.product-detail-right .product-info p span{
+    color: #4b5563;
+    font-weight: 400;
+} */
+
+.product-specification{
+    margin-bottom: 17px;
+}

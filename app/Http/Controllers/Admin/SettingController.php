@@ -52,8 +52,19 @@ class SettingController extends Controller
         $collections   = CollectionSection::latest()->first();
         $contact_infos = ContactInfo::orderBy('id')->get();
 
-        return view('admin.settings.manage', compact( 'heroSections',   'cards','heritage', 'clients','subscription','footer', 'quick_links',
-            'services', 'featured', 'featuredCards', 'collections','contact_infos'
+        return view('admin.settings.manage', compact(
+            'heroSections',
+            'cards',
+            'heritage',
+            'clients',
+            'subscription',
+            'footer',
+            'quick_links',
+            'services',
+            'featured',
+            'featuredCards',
+            'collections',
+            'contact_infos'
         ));
     }
 
@@ -259,6 +270,24 @@ class SettingController extends Controller
                 }
             }
         }
+
+        foreach ($request->contact_infos as $info) {
+            ContactInfo::updateOrCreate(
+                ['id' => $info['id'] ?? null],
+                [
+                    'title'     => $info['title'],
+                    'type'      => $info['type'],
+                    'details'   => $info['details'],
+                    'order'     => $info['order'] ?? 0,
+                    'facebook'  => $info['facebook'] ?? null,
+                    'instagram' => $info['instagram'] ?? null,
+                    'linkedin'  => $info['linkedin'] ?? null,
+                    'twitter'   => $info['twitter'] ?? null,
+                    'youtube'   => $info['youtube'] ?? null,
+                ]
+            );
+        }
+
 
         return back()->with('success', 'Settings Updated Successfully!');
     }

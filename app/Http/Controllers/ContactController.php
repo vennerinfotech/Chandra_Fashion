@@ -12,8 +12,9 @@ class ContactController extends Controller
     public function index()
     {
         $countries = Country::orderBy('name')->get(); // Fetch all countries
-         $contact_infos = ContactInfo::orderBy('order')->get();
-        return view('contact', compact('countries','contact_infos'));
+        $contact_infos = ContactInfo::orderBy('order')->get();
+        $social = ContactInfo::where('type', 'social')->first();
+        return view('contact', compact('countries','contact_infos','social'));
     }
 
     // Store form data into DB

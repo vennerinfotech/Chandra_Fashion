@@ -23,7 +23,7 @@ class HomeController extends Controller
     public function index()
     {
         $heroSections = HeroSection::all();
-        $categories = Category::where('status', 1)->get();
+        $categories = Category::where('status', 1)->orderBy('id', 'desc')->get();
         $collections = CollectionSection::first();
         $featuredCollections = FeaturedCollection::orderBy('created_at', 'desc')->get();
         $featureCards = FeatureCard::orderBy('created_at', 'desc')->get();

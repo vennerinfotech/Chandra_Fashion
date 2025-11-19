@@ -91,12 +91,6 @@
         </div>
     </div>
 
-    {{-- Export Ready --}}
-    {{-- <div class="form-check mb-3">
-        <input type="checkbox" name="export_ready" id="export_ready" class="form-check-input" {{ old('export_ready',
-            $product->export_ready ?? false) ? 'checked' : '' }}>
-        <label for="export_ready" class="form-check-label">Export Ready</label>
-    </div> --}}
 
     {{-- Variants --}}
     @php
@@ -131,48 +125,47 @@
                         @enderror
                     </div>
 
-                    {{-- Colors --}}
-                    {{-- <div class="col-md-6 col-lg-4">
-                        @php
-                        $colors = [];
-                        if(!empty($variant['color'] ?? $variant->color)){
-                        $colors = is_array($variant['color']) ? $variant['color'] : explode(',', $variant['color']);
-                        }
-                        @endphp
-                        <label class="form-label">Colors</label>
-                        <div class="multi-color-picker border rounded p-2" data-variant-index="{{ $index }}">
-                            <div class="d-flex flex-wrap gap-2 mb-2 selected-colors">
-                                @foreach($colors as $color)
-                                <div class="position-relative" data-color="{{ $color }}">
-                                    <div class="rounded-circle border"
-                                        style="width:30px; height:30px; background-color: {{ $color }}; cursor:pointer;">
-                                    </div>
-                                    <span
-                                        class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
-                                        style="cursor:pointer;">×</span>
-                                </div>
-                                @endforeach
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <input type="color" class="form-control form-control-color add-color-picker"
-                                    title="Pick color">
-                                <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add
-                                    Color</button>
-                            </div>
-                            <input type="hidden" name="variants[{{ $index }}][color]" class="color-values"
-                                value="{{ implode(',', $colors) }}">
-                        </div>
-                    </div> --}}
+                    <div class="col-md-4">
+                        <label class="form-label">GSM</label>
+                        <input type="text" name="variants[{{ $index }}][gsm]" class="form-control"
+                            value="{{ $variant['gsm'] ?? $variant->gsm ?? '' }}">
+                        @error("variants.$index.gsm")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Dai</label>
+                        <input type="text" name="variants[{{ $index }}][dai]" class="form-control"
+                            value="{{ $variant['dai'] ?? $variant->dai ?? '' }}">
+                        @error("variants.$index.dai")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Chadti</label>
+                        <input type="text" name="variants[{{ $index }}][chadti]" class="form-control"
+                            value="{{ $variant['chadti'] ?? $variant->chadti ?? '' }}">
+                        @error("variants.$index.chadti")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+
                     <div class="col-md-6 col-lg-4">
                         @php
-                            // Decode stored color JSON safely
                             $colors = [];
-                            if (!empty($variant['color'] ?? $variant->color)) {
-                                $colors = is_array($variant['color'])
-                                    ? $variant['color']
-                                    : json_decode($variant['color'], true) ?? [];
+
+                            if (is_array($variant)) {
+                                // When $variant is from old() input
+                                $colors = !empty($variant['color']) ? json_decode($variant['color'], true) ?? [] : [];
+                            } elseif (isset($variant->color)) {
+                                // When $variant is a model instance
+                                $colors = !empty($variant->color) ? json_decode($variant->color, true) ?? [] : [];
                             }
                         @endphp
+
 
                         <label class="form-label">Colors</label>
                         <div class="multi-color-picker border rounded p-2" data-variant-index="{{ $index }}">
@@ -203,32 +196,23 @@
                     </div>
 
 
-                    {{-- Images --}}
-                    {{-- <div class="col-md-6 col-lg-4">
-                        <label class="form-label">Images</label>
-                        <input type="file" name="variants[{{ $index }}][images][]" class="form-control variant-images"
-                            multiple>
-                        <div class="mt-2 preview-wrapper d-flex flex-wrap gap-1">
-                            @if(!empty($variant['images'] ?? $variant->images))
-                            @foreach(json_decode($variant['images'] ?? '[]') as $img)
-                            <div class="position-relative d-inline-block me-1 mb-1">
-                                <img src="{{ asset($img) }}" width="80" height="80" class="rounded border">
-                                <span class="position-absolute top-0 end-0 p-1 cursor-pointer remove-old-image">
-                                    <i class="fa-solid fa-circle-xmark text-danger"></i>
-                                </span>
-                                <input type="hidden" value="{{ $img }}">
-                            </div>
-                            @endforeach
-                            @endif
-                        </div>
-                        <input type="hidden" name="variants[{{ $index }}][removed_images]" class="removed-images" value="">
-                    </div> --}}
 
 
                     <div class="col-md-6 col-lg-4">
                         <label class="form-label">Images</label>
                         <input type="file" name="variants[{{ $index }}][images][]" class="form-control variant-images"
                             multiple>
+
+
+                        @error("variants.$index.images")
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+
+                        @foreach($errors->get("variants.$index.images.*") as $variantImageErrors)
+                            @foreach($variantImageErrors as $error)
+                                <small class="text-danger">{{ $error }}</small>
+                            @endforeach
+                        @endforeach
                         <div class="mt-2 preview-wrapper d-flex flex-wrap gap-1">
                             @php
                                 $variantImages = [];
@@ -323,197 +307,114 @@
 
 
 
-        // // product variant - remove and Image perview in add-update product from
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     const wrapper = document.getElementById('variants-wrapper');
-
-        //     // Add new variant
-        //     document.getElementById('add-variant').addEventListener('click', function () {
-        //         const index = wrapper.querySelectorAll('.variant-item').length;
-        //         const html = `
-        //                                         <div class="variant-item border rounded p-3 mb-3 position-relative">
-        //                                             <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-        //                                                 <i class="fa-solid fa-circle-xmark text-danger"></i>
-        //                                             </a>
-        //                                             <hr>
-        //                                             <h5>Product Variants</h5>
-        //                                             <div class="row g-2">
-        //                                                 <div class="col-md-6 col-lg-4">
-        //                                                     <label class="form-label">Product Code</label>
-        //                                                     <input type="text" name="variants[${index}][product_code]" class="form-control" >
-        //                                                 </div>
-
-        //                                                 <div class="col-md-6 col-lg-4">
-        //                                                     <label class="form-label">MOQ</label>
-        //                                                     <input type="number" name="variants[${index}][moq]" class="form-control">
-        //                                                 </div>
-
-        //                                                 <div class="col-md-6 col-lg-3">
-        //                                                     <label class="form-label">Colors</label>
-        //                                                     <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
-        //                                                         <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
-        //                                                         <div class="d-flex align-items-center gap-2">
-        //                                                             <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
-        //                                                             <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
-        //                                                         </div>
-        //                                                         <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
-        //                                                     </div>
-        //                                                 </div>
-        //                                                 <div class="col-md-6 col-lg-4">
-        //                                                     <label class="form-label">Images</label>
-        //                                                     <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-        //                                                     <div class="mt-2 preview-wrapper"></div>
-        //                                                     <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-        //                                                 </div>
-        //                                             </div>
-        //                                         </div>`;
-        //         wrapper.insertAdjacentHTML('beforeend', html);
-        //     });
-
-        //     // Remove variant
-        //     wrapper.addEventListener('click', function (e) {
-        //         if (e.target.closest('.remove-variant')) {
-        //             const item = e.target.closest('.variant-item');
-        //             if (item) item.remove();
-        //         }
-        //     });
-
-        //     // Remove old images
-        //     wrapper.addEventListener('click', function (e) {
-        //         if (e.target.closest('.remove-old-image')) {
-        //             const container = e.target.closest('div.position-relative');
-        //             if (container) {
-        //                 const input = container.querySelector('input[type=hidden]');
-        //                 const removedInput = container.closest('.variant-item').querySelector('.removed-images');
-        //                 if (input && removedInput) {
-        //                     let removed = removedInput.value ? JSON.parse(removedInput.value) : [];
-        //                     removed.push(input.value);
-        //                     removedInput.value = JSON.stringify(removed);
-        //                 }
-        //                 container.remove();
-        //             }
-        //         }
-        //     });
-
-        //     // Preview new images
-        //     wrapper.addEventListener('change', function (e) {
-        //         if (e.target.classList.contains('variant-images')) {
-        //             const previewWrapper = e.target.closest('.col-md-3').querySelector('.preview-wrapper');
-        //             if (!previewWrapper) return;
-
-        //             previewWrapper.innerHTML = '';
-        //             Array.from(e.target.files).forEach(file => {
-        //                 const reader = new FileReader();
-        //                 reader.onload = function (event) {
-        //                     const imgContainer = document.createElement('div');
-        //                     imgContainer.classList.add('position-relative', 'd-inline-block', 'me-2', 'mb-2');
-        //                     const img = document.createElement('img');
-        //                     img.src = event.target.result;
-        //                     img.width = 100; img.height = 100;
-        //                     img.classList.add('rounded', 'border');
-
-        //                     const removeBtn = document.createElement('span');
-        //                     removeBtn.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i>`;
-        //                     removeBtn.classList.add('position-absolute', 'top-0', 'end-0', 'p-1', 'cursor-pointer');
-        //                     removeBtn.addEventListener('click', () => imgContainer.remove());
-
-        //                     imgContainer.appendChild(img);
-        //                     imgContainer.appendChild(removeBtn);
-        //                     previewWrapper.appendChild(imgContainer);
-        //                 }
-        //                 reader.readAsDataURL(file);
-        //             });
-        //         }
-        //     });
-        // });
 
         document.addEventListener('DOMContentLoaded', function () {
             const wrapper = document.getElementById('variants-wrapper');
             const addBtn = document.getElementById('add-variant');
 
-            // function addVariant() {
+
+            // function addVariant(defaultData = {}) {
             //     const index = wrapper.querySelectorAll('.variant-item').length;
             //     const html = `
-            //         <div class="variant-item border rounded p-3 mb-3 position-relative">
-            //             <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-            //                 <i class="fa-solid fa-circle-xmark text-danger"></i>
-            //             </a>
-            //             <hr>
-            //             <h5>Product Variants</h5>
-            //             <div class="row g-2">
-            //                 <div class="col-md-6 col-lg-4">
-            //                     <label class="form-label">Product Code</label>
-            //                     <input type="text" name="variants[${index}][product_code]" class="form-control" value="">
-            //                 </div>
-
-            //                 <div class="col-md-6 col-lg-4">
-            //                     <label class="form-label">MOQ</label>
-            //                     <input type="number" name="variants[${index}][moq]" class="form-control" value="">
-            //                 </div>
-
-            //                 <div class="col-md-6 col-lg-3">
-            //                     <label class="form-label">Colors</label>
-            //                     <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
-            //                         <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
-            //                         <div class="d-flex align-items-center gap-2">
-            //                             <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
-            //                             <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
+            //             <div class="variant-item border rounded p-3 mb-3 position-relative">
+            //                 <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+            //                     <i class="fa-solid fa-circle-xmark text-danger"></i>
+            //                 </a>
+            //                 <div class="row g-2">
+            //                     <div class="col-md-6 col-lg-4">
+            //                         <label class="form-label">Product Code</label>
+            //                         <input type="text" name="variants[${index}][product_code]" class="form-control"
+            //                             value="${defaultData.product_code || ''}">
+            //                     </div>
+            //                     <div class="col-md-6 col-lg-4">
+            //                         <label class="form-label">MOQ</label>
+            //                         <input type="number" name="variants[${index}][moq]" class="form-control"
+            //                             value="${defaultData.moq || ''}">
+            //                     </div>
+            //                     <div class="col-md-6 col-lg-4">
+            //                         <label class="form-label">Colors</label>
+            //                         <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
+            //                             <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
+            //                             <div class="d-flex align-items-center gap-2">
+            //                                 <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
+            //                                 <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
+            //                             </div>
+            //                             <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
             //                         </div>
-            //                         <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
+            //                     </div>
+            //                     <div class="col-md-6 col-lg-4">
+            //                         <label class="form-label">Images</label>
+            //                         <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
+            //                         <div class="mt-2 preview-wrapper"></div>
+            //                         <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
             //                     </div>
             //                 </div>
-
-            //                 <div class="col-md-6 col-lg-4">
-            //                     <label class="form-label">Images</label>
-            //                     <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-            //                     <div class="mt-2 preview-wrapper"></div>
-            //                     <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-            //                 </div>
-            //             </div>
-            //         </div>`;
+            //             </div>`;
             //     wrapper.insertAdjacentHTML('beforeend', html);
             // }
-
 
             function addVariant(defaultData = {}) {
                 const index = wrapper.querySelectorAll('.variant-item').length;
                 const html = `
-            <div class="variant-item border rounded p-3 mb-3 position-relative">
-                <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
-                    <i class="fa-solid fa-circle-xmark text-danger"></i>
-                </a>
-                <div class="row g-2">
-                    <div class="col-md-6 col-lg-4">
-                        <label class="form-label">Product Code</label>
-                        <input type="text" name="variants[${index}][product_code]" class="form-control"
-                            value="${defaultData.product_code || ''}">
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <label class="form-label">MOQ</label>
-                        <input type="number" name="variants[${index}][moq]" class="form-control"
-                            value="${defaultData.moq || ''}">
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <label class="form-label">Colors</label>
-                        <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
-                            <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
-                            <div class="d-flex align-items-center gap-2">
-                                <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
-                                <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
+                        <div class="variant-item border rounded p-3 mb-3 position-relative">
+                            <a href="javascript:void(0);" class="btn-action btn-sm remove-variant position-absolute top-0 end-0 m-2">
+                                <i class="fa-solid fa-circle-xmark text-danger"></i>
+                            </a>
+                            <div class="row g-2">
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label">Product Code</label>
+                                    <input type="text" name="variants[${index}][product_code]" class="form-control"
+                                        value="${defaultData.product_code || ''}">
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label">MOQ</label>
+                                    <input type="number" name="variants[${index}][moq]" class="form-control"
+                                        value="${defaultData.moq || ''}">
+                                </div>
+
+                                <!-- New fields -->
+                                <div class="col-md-4">
+                                    <label class="form-label">GSM</label>
+                                    <input type="text" name="variants[${index}][gsm]" class="form-control"
+                                        value="${defaultData.gsm || ''}">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Dai</label>
+                                    <input type="text" name="variants[${index}][dai]" class="form-control"
+                                        value="${defaultData.dai || ''}">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Chadti</label>
+                                    <input type="text" name="variants[${index}][chadti]" class="form-control"
+                                        value="${defaultData.chadti || ''}">
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label">Colors</label>
+                                    <div class="multi-color-picker border rounded p-2" data-variant-index="${index}">
+                                        <div class="d-flex flex-wrap gap-2 mb-2 selected-colors"></div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="color" class="form-control form-control-color add-color-picker" title="Pick color">
+                                            <button type="button" class="btn btn-sm btn-outline-primary add-color-btn">Add Color</button>
+                                        </div>
+                                        <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label">Images</label>
+                                    <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
+                                    <div class="mt-2 preview-wrapper"></div>
+                                    <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
+                                </div>
                             </div>
-                            <input type="hidden" name="variants[${index}][color]" class="color-values" value="">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <label class="form-label">Images</label>
-                        <input type="file" name="variants[${index}][images][]" class="form-control variant-images" multiple>
-                        <div class="mt-2 preview-wrapper"></div>
-                        <input type="hidden" name="variants[${index}][removed_images]" class="removed-images" value="">
-                    </div>
-                </div>
-            </div>`;
+                        </div>`;
                 wrapper.insertAdjacentHTML('beforeend', html);
             }
+
 
 
             //  Default: Add one variant automatically
@@ -644,11 +545,11 @@
                         box.className = 'position-relative';
                         box.dataset.color = color;
                         box.innerHTML = `
-                                    <div class="rounded-circle border"
-                                         style="width:30px; height:30px; background:${color}; cursor:pointer;"></div>
-                                    <span class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
-                                          style="cursor:pointer;">×</span>
-                                `;
+                                                    <div class="rounded-circle border"
+                                                         style="width:30px; height:30px; background:${color}; cursor:pointer;"></div>
+                                                    <span class="position-absolute top-0 end-0 translate-middle badge bg-danger remove-color"
+                                                          style="cursor:pointer;">×</span>
+                                                `;
                         selectedWrapper.appendChild(box);
                         updateHiddenInput();
                     }
