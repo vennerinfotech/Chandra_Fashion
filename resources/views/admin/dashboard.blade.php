@@ -5,11 +5,63 @@
 @section('content')
 <div class="dashboard-wrapper">
 
-    {{-- Welcome Message --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    {{-- Welcome Message --}}   <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold">Dashboard</h3>
         <p class="text-muted mb-0">Welcome back, {{ Auth::user()->name }}</p>
     </div>
+
+    {{-- Recent Import Notifications --}}
+    @if(isset($recentImports) && $recentImports->count() > 0)
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-file-import me-2"></i>Recent Product Imports</h5>
+                <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-outline-primary">View Products</a>
+            </div>
+            <div class="card-body">
+                @foreach($recentImports as $import)
+                    <div class="alert alert-{{ $import->status === 'completed' ? 'success' : ($import->status === 'failed' ? 'danger' : ($import->status === 'processing' ? 'info' : 'warning')) }} mb-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                @if($import->status === 'completed')
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <strong>Import Completed Successfully</strong>
+                                    <p class="mb-0 mt-1 small">
+                                        File: <code>{{ $import->file_name }}</code><br>
+                                        Products Processed: <strong>{{ $import->processed_rows }}</strong> 
+                                        @if($import->skipped_rows > 0)
+                                            ({{ $import->skipped_rows }} skipped)
+                                        @endif
+                                    </p>
+                                @elseif($import->status === 'processing')
+                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                    <strong>Import in Progress...</strong>
+                                    <p class="mb-0 mt-1 small">
+                                        File: <code>{{ $import->file_name }}</code><br>
+                                        Progress: <strong>{{ $import->processed_rows }} / {{ $import->total_rows }}</strong>
+                                    </p>
+                                @elseif($import->status === 'failed')
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <strong>Import Failed</strong>
+                                    <p class="mb-0 mt-1 small">
+                                        File: <code>{{ $import->file_name }}</code><br>
+                                        Error: {{ $import->error_message }}
+                                    </p>
+                                @else
+                                    <i class="fas fa-clock me-2"></i>
+                                    <strong>Import Pending</strong>
+                                    <p class="mb-0 mt-1 small">
+                                        File: <code>{{ $import->file_name }}</code><br>
+                                        Waiting to start...
+                                    </p>
+                                @endif
+                            </div>
+                            <small class="text-muted">{{ $import->created_at->diffForHumans() }}</small>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     {{-- Dashboard Stat Cards --}}
     <div class="row g-4">

@@ -214,37 +214,42 @@
                     $('#progressBar').css('width', percentage + '%');
                     $('#progressBar').text(percentage.toFixed(1) + '%');
 
-                    // Update progress text based on data
-                    if (data.total > 0) {
+                    // Update loader text based on status
+                    if (data.status === 'starting' || data.status === 'pending') {
+                        $('.loader-text').html('Preparing import...<br><small>Please wait...</small>');
+                    } else if (data.status === 'processing') {
                         let current = data.current || 0;
-
-                        if (current > 0) {
-                            // Calculate current batch (2 products per batch)
-                            let currentBatch = Math.ceil(current / 2);
-                            let totalBatches = Math.ceil(data.total / 2);
-
-                            $('#progressText').html(
-                                '<strong>' + percentage.toFixed(1) + '% - Batch: ' + currentBatch + ' / ' + totalBatches + '</strong><br>' +
-                                '<small style="opacity: 0.9;">Products: ' + current + ' / ' + data.total + ' (2 per batch)</small>'
-                            );
-                        } else {
-                            // Starting state - show 0%
-                            $('#progressText').html('<strong>Starting import...</strong><br><small>Total: ' + data.total + ' products</small>');
-                        }
-                    } else {
-                        // Preparing/waiting state
-                        $('#progressText').html('<strong>Preparing import...</strong><br><small>Please wait</small>');
+                        let total = data.total || 0;
+                        $('.loader-text').html(
+                            'Importing products...<br>' +
+                            '<small><strong>' + current + ' / ' + total + '</strong> products processed (' + percentage.toFixed(1) + '%)</small>'
+                        );
+                    } else if (data.status === 'completed') {
+                        $('.loader-text').html(
+                            '✅ Import completed!<br>' +
+                            '<small>Successfully imported <strong>' + (data.total || 0) + '</strong> products</small>'
+                        );
+                    } else if (data.status === 'failed') {
+                        $('.loader-text').html(
+                            '❌ Import failed!<br>' +
+                            '<small class="text-danger">' + (data.error || 'Unknown error occurred') + '</small>'
+                        );
+                        $('#progressBar').removeClass('bg-success').addClass('bg-danger');
                     }
 
-                    // Stop polling when complete
+                    // Stop polling when complete or failed
                     if (data.status === 'completed' || data.percentage >= 100) {
                         clearInterval(progressInterval);
                         $('#progressBar').css('width', '100%');
                         $('#progressBar').text('100%');
-                        $('#progressText').html('<strong>✅ Import completed!</strong><br><small>Refreshing page...</small>');
                         setTimeout(function () {
                             location.reload();
-                        }, 1500);
+                        }, 2000);
+                    } else if (data.status === 'failed') {
+                        clearInterval(progressInterval);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -277,8 +282,7 @@
 
                 // Update UI immediately
                 $('#progressBar').removeClass('bg-success').addClass('bg-danger');
-                $('#progressText').html('<strong>⚠️ Cancelling Import...</strong><br><small>Stopping after current product...</small>');
-                $('.loader-text').text('Cancelling import...');
+                $('.loader-text').html('⚠️ Cancelling Import...<br><small>Stopping after current product...</small>');
 
                 // Hide loader and reload page after delay
                 setTimeout(function () {

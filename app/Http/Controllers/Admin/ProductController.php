@@ -10,6 +10,9 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -50,13 +53,21 @@ class ProductController extends Controller
             'file' => 'required|mimes:csv,xlsx,xls'
         ]);
 
-        // Increase execution time and memory for large imports with images
-        set_time_limit(0);  // Unlimited execution time
-        ini_set('max_execution_time', 0);
-        ini_set('memory_limit', '1024M');  // 1GB memory for large imports (1800-2000+ products)
-
         try {
             $file = $request->file('file');
+
+            // Create storage directory if it doesn't exist
+            $storageDir = public_path('images/Product_Sheet');
+            if (!file_exists($storageDir)) {
+                mkdir($storageDir, 0777, true);
+            }
+
+            // Store the uploaded file with timestamp
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $storageDir . DIRECTORY_SEPARATOR . $fileName;
+            $file->move($storageDir, $fileName);
+
+            Log::info("File uploaded to: {$filePath}");
 
             // Clear any previous import cancellation flag
             session()->forget('import_cancelled');
@@ -66,59 +77,50 @@ class ProductController extends Controller
             session(['current_import_key' => $sessionKey]);
 
             // Initialize progress
-            \Cache::put($sessionKey, [
+            Cache::put($sessionKey, [
                 'total' => 0,
                 'current' => 0,
                 'percentage' => 0,
                 'status' => 'starting'
-            ], now()->addHours(1));
+            ], now()->addHours(24));
 
-            // Try to count rows (best effort)
+            // Count total rows
             $totalRows = 0;
             try {
                 $tempImport = new \App\Imports\ProductsImport(0, 'temp_count_' . time());
-                $reader = \Maatwebsite\Excel\Facades\Excel::toCollection($tempImport, $file);
+                $reader = Excel::toCollection($tempImport, $filePath);
                 $totalRows = $reader->first()->count();
+                Log::info("Counted {$totalRows} rows in CSV");
             } catch (\Exception $e) {
-                // If counting fails, proceed without exact count
-                \Log::warning('Could not count rows for progress: ' . $e->getMessage());
+                Log::warning('Could not count rows for progress: ' . $e->getMessage());
             }
 
-            // Create import instance with total rows
-            $importWithProgress = new \App\Imports\ProductsImport($totalRows, $sessionKey);
+            // Create import log record
+            $importLog = \App\Models\ProductImportLog::create([
+                'file_name' => $fileName,
+                'file_path' => $filePath,
+                'total_rows' => $totalRows,
+                'status' => 'pending',
+                'session_key' => $sessionKey,
+                'user_id' => \Auth::id() ?? null,
+            ]);
 
-            // Perform the import
-            Excel::import($importWithProgress, $file);
+            Log::info("Created import log with ID: {$importLog->id}");
 
-            // Mark as completed
-            \Cache::put($sessionKey, [
-                'total' => $totalRows,
-                'current' => $totalRows,
-                'percentage' => 100,
-                'status' => 'completed'
-            ], now()->addHours(1));
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $messages = [];
+            // Dispatch the job to queue
+            \App\Jobs\ImportProductsJob::dispatch($filePath, $totalRows, $sessionKey, $importLog->id);
 
-            foreach ($e->failures() as $failure) {
-                $row = $failure->row();
-                $errors = implode(', ', $failure->errors());
-                $messages[] = "Row {$row}: {$errors}";
-            }
+            Log::info('Job dispatched to queue successfully');
 
-            return back()
-                ->withErrors(['import_error' => 'Import validation failed. Please check the error details below.'])
-                ->with('validation_details', $messages);
+            return back()->with('success', 'Import job has been queued! Processing will run in the background. You can monitor progress below.');
         } catch (\Exception $e) {
-            \Log::error('Product import failed: ' . $e->getMessage());
-            \Log::error($e->getTraceAsString());
+            Log::error('Product import failed: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
 
             return back()->withErrors([
-                'import_error' => 'Import failed. Please verify your file format is correct and all required columns are present. If the issue persists, please contact support.'
+                'import_error' => 'Import failed: ' . $e->getMessage()
             ]);
         }
-
-        return back()->with('success', 'Products imported successfully!');
     }
 
     public function importProgress()

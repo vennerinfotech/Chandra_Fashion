@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Inquiry;
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\ProductImportLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -16,8 +17,8 @@ class DashboardController extends Controller
     {
         // Total counts
         $totalCategories = Category::count();
-        $totalProducts   = Product::count();
-        $totalInquiries  = Inquiry::count();
+        $totalProducts = Product::count();
+        $totalInquiries = Inquiry::count();
 
         // Chart type: 'month' or 'day'
         $chartType = $request->get('chart', 'day');
@@ -25,7 +26,7 @@ class DashboardController extends Controller
         // Line chart data
         if ($chartType === 'day') {
             $startDate = Carbon::now()->subDays(29)->startOfDay();
-            $endDate   = Carbon::now()->endOfDay();
+            $endDate = Carbon::now()->endOfDay();
 
             $inquiriesData = Inquiry::whereBetween('created_at', [$startDate, $endDate])
                 ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
@@ -60,11 +61,9 @@ class DashboardController extends Controller
 
         // Product-wise inquiries (Pie chart) using product name
         $productInquiries = Inquiry::join('products', 'inquiries.product_id', '=', 'products.id')
-            ->select(DB::raw("products.name as product_name"), DB::raw('COUNT(*) as total'))
+            ->select(DB::raw('products.name as product_name'), DB::raw('COUNT(*) as total'))
             ->groupBy('products.name')
             ->pluck('total', 'product_name');
-
-
 
         // User-wise inquiries (Pie chart)
         // $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
@@ -72,17 +71,21 @@ class DashboardController extends Controller
         //     ->pluck('total', 'name');
 
         // User-wise inquiries (Pie chart) - Top 3 users
-$userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
-    ->groupBy('name')
-    ->orderByDesc('total')   // order by highest count
-    ->take(10)                // take only top 3
-    ->pluck('total', 'name');
+        $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
+            ->groupBy('name')
+            ->orderByDesc('total')  // order by highest count
+            ->take(10)  // take only top 3
+            ->pluck('total', 'name');
 
         // User-wise inquiries (Pie chart) using "Name (Email)" as label
         // $userInquiries = Inquiry::select(DB::raw("CONCAT(name, ' (', email, ')') as label"), DB::raw('COUNT(*) as total'))
         //     ->groupBy('label')
         //     ->pluck('total', 'label');
 
+        // Fetch recent import logs (last 5)
+        $recentImports = ProductImportLog::latest()
+            ->take(5)
+            ->get();
 
         // Pass all data to Blade
         return view('admin.dashboard', compact(
@@ -93,11 +96,10 @@ $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
             'totals',
             'chartType',
             'productInquiries',
-            'userInquiries'
+            'userInquiries',
+            'recentImports'
         ));
     }
-
-
 
     // public function index(Request $request)
     // {
@@ -171,9 +173,7 @@ $userInquiries = Inquiry::select('name', DB::raw('COUNT(*) as total'))
     // labels: @json(array_keys($productInquiries->toArray())),
     // data: @json(array_values($productInquiries->toArray())),
 
-
     // // User Pie Chart
     // labels: @json(array_keys($userInquiries->toArray())),
     // data: @json(array_values($userInquiries->toArray())),
-
 }
