@@ -50,12 +50,16 @@ class ProductController extends Controller
             'file' => 'required|mimes:csv,xlsx,xls'
         ]);
 
-        // Increase execution time for large imports with images
-        set_time_limit(0);  // Unlimited
+        // Increase execution time and memory for large imports with images
+        set_time_limit(0);  // Unlimited execution time
         ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '1024M');  // 1GB memory for large imports (1800-2000+ products)
 
         try {
             $file = $request->file('file');
+
+            // Clear any previous import cancellation flag
+            session()->forget('import_cancelled');
 
             // Create session key for progress tracking
             $sessionKey = 'import_progress_' . time();
@@ -72,7 +76,7 @@ class ProductController extends Controller
             // Try to count rows (best effort)
             $totalRows = 0;
             try {
-                $tempImport = new \App\Imports\ProductsImport();
+                $tempImport = new \App\Imports\ProductsImport(0, 'temp_count_' . time());
                 $reader = \Maatwebsite\Excel\Facades\Excel::toCollection($tempImport, $file);
                 $totalRows = $reader->first()->count();
             } catch (\Exception $e) {

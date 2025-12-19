@@ -20,7 +20,7 @@
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-                
+
                 @if(session('validation_details'))
                     <hr>
                     <p class="mb-1"><strong>Error Details:</strong></p>
@@ -68,20 +68,36 @@
             <button id="cancelImportBtn" class="cancel-import-btn" title="Cancel Import">
                 <i class="fa fa-times"></i>
             </button>
-            
+
             <div class="loader-inner">
                 <div class="loader-spinner"></div>
-                <p class="loader-text">Importing products, please wait...</p>
-                <div class="progress-container" style="width: 80%; max-width: 500px; margin: 20px auto;">
-                    <div class="progress" style="height: 30px; background-color: #e9ecef; border-radius: 15px; overflow: hidden;">
+                <p class="loader-text" style="font-size: 20px; margin-top: 20px; margin-bottom: 10px;">Importing products,
+                    please wait...</p>
+
+                {{-- Large Progress Percentage Display --}}
+                <!-- <div style="text-align: center; margin: 20px 0;">
+                    <h1 id="largeProgressDisplay"
+                        style="color: #fff; font-size: 48px; font-weight: bold; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        Preparing...
+                    </h1>
+                </div> -->
+
+                <div class="progress-container" style="width: 80%; max-width: 600px; margin: 20px auto;">
+                    <div class="progress"
+                        style="height: 35px; background-color: rgba(255,255,255,0.2); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
                         <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                             role="progressbar" style="width: 0%; font-size: 14px; font-weight: bold; line-height: 30px;">
+                                 role="progressbar" style="width: 0%; font-size: 16px; font-weight: bold; line-height: 35px;">
+                                0%
+                            </div>
+                        <!-- <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                            role="progressbar" style="width: 0%; min-width: 60px;">
                             0%
-                        </div>
+                        </div> -->
+
                     </div>
-                    <div class="progress-info" style="text-align: center; margin-top: 10px; color: #fff;">
+                    <!-- <div class="progress-info" style="text-align: center; margin-top: 15px; color: #fff; font-size: 16px;">
                         <span id="progressText">Preparing import...</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -176,9 +192,13 @@
         let progressInterval;
 
         $("form[action='{{ route('admin.products.import') }}']").on('submit', function () {
-            $("#fullScreenLoader").show();
-            
-            // Start polling for progress - faster interval for real-time updates
+            // Show loader with flex display for proper layout
+            $("#fullScreenLoader").css('display', 'flex');
+
+            // Start polling for progress immediately
+            updateProgress(); // First update immediately
+
+            // Then continue polling - faster interval for real-time updates
             progressInterval = setInterval(updateProgress, 500); // Poll every 0.5 seconds
         });
 
@@ -186,38 +206,56 @@
             $.ajax({
                 url: '{{ route('admin.products.import.progress') }}',
                 method: 'GET',
-                success: function(data) {
-                    if (data.percentage > 0) {
-                        $('#progressBar').css('width', data.percentage + '%');
-                        $('#progressBar').text(data.percentage.toFixed(1) + '%');
-                        
-                        // Calculate current batch (2 products per batch)
-                        let currentBatch = Math.ceil(data.current / 2);
-                        let totalBatches = Math.ceil(data.total / 2);
-                        
-                        $('#progressText').html(
-                            '<strong>Importing:</strong> ' + data.current + ' / ' + data.total + ' products<br>' +
-                            '<small>Batch: ' + currentBatch + ' / ' + totalBatches + ' (2 products per batch)</small>'
-                        );
+                success: function (data) {
+                    console.log('Progress data:', data); // Debug log
+
+                    // Always update progress bar
+                    let percentage = data.percentage || 0;
+                    $('#progressBar').css('width', percentage + '%');
+                    $('#progressBar').text(percentage.toFixed(1) + '%');
+
+                    // Update progress text based on data
+                    if (data.total > 0) {
+                        let current = data.current || 0;
+
+                        if (current > 0) {
+                            // Calculate current batch (2 products per batch)
+                            let currentBatch = Math.ceil(current / 2);
+                            let totalBatches = Math.ceil(data.total / 2);
+
+                            $('#progressText').html(
+                                '<strong>' + percentage.toFixed(1) + '% - Batch: ' + currentBatch + ' / ' + totalBatches + '</strong><br>' +
+                                '<small style="opacity: 0.9;">Products: ' + current + ' / ' + data.total + ' (2 per batch)</small>'
+                            );
+                        } else {
+                            // Starting state - show 0%
+                            $('#progressText').html('<strong>Starting import...</strong><br><small>Total: ' + data.total + ' products</small>');
+                        }
+                    } else {
+                        // Preparing/waiting state
+                        $('#progressText').html('<strong>Preparing import...</strong><br><small>Please wait</small>');
                     }
-                    
+
                     // Stop polling when complete
                     if (data.status === 'completed' || data.percentage >= 100) {
                         clearInterval(progressInterval);
+                        $('#progressBar').css('width', '100%');
+                        $('#progressBar').text('100%');
                         $('#progressText').html('<strong>✅ Import completed!</strong><br><small>Refreshing page...</small>');
-                        setTimeout(function() {
+                        setTimeout(function () {
                             location.reload();
                         }, 1500);
                     }
                 },
-                error: function() {
-                    console.error('Failed to fetch progress');
+                error: function (xhr, status, error) {
+                    console.error('Failed to fetch progress:', error);
+                    console.error('Response:', xhr.responseText);
                 }
             });
         }
 
         // Cancel Import Button Handler
-        $('#cancelImportBtn').on('click', function() {
+        $('#cancelImportBtn').on('click', function () {
             if (confirm('Are you sure you want to cancel the import? Products imported so far will be saved.')) {
                 // Call backend to set cancel flag
                 $.ajax({
@@ -226,25 +264,25 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(response) {
+                    success: function (response) {
                         console.log('Cancel request sent successfully');
                     },
-                    error: function() {
+                    error: function () {
                         console.error('Failed to send cancel request');
                     }
                 });
-                
+
                 // Stop polling
                 clearInterval(progressInterval);
-                
+
                 // Update UI immediately
                 $('#progressBar').removeClass('bg-success').addClass('bg-danger');
                 $('#progressText').html('<strong>⚠️ Cancelling Import...</strong><br><small>Stopping after current product...</small>');
                 $('.loader-text').text('Cancelling import...');
-                
+
                 // Hide loader and reload page after delay
-                setTimeout(function() {
-                    $('#fullScreenLoader').hide();
+                setTimeout(function () {
+                    $('#fullScreenLoader').css('display', 'none');
                     location.reload();
                 }, 2000);
             }

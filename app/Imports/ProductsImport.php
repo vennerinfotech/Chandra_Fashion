@@ -19,30 +19,51 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
 {
     private static $importedCount = 0;
     private static $currentBatch = 0;
-    private static $totalRows = 0;
-    private static $sessionKey = '';
+    // private static $totalRows = 0;
+    // private static $sessionKey = '';
+    private int $totalRows;
+    private string $sessionKey;
+    // public function __construct($totalRows = 0, $sessionKey = 'import_progress')
+    // {
+    //     // Reset counters when new import starts
+    //     self::$importedCount = 0;
+    //     self::$currentBatch = 0;
+    //     self::$totalRows = $totalRows;
+    //     self::$sessionKey = $sessionKey;
 
-    public function __construct($totalRows = 0, $sessionKey = 'import_progress')
+    //     // Clear any previous cancel flag
+    //     session(['import_cancelled' => false]);
+
+    //     // Initialize progress in cache
+    //     \Cache::put($sessionKey, [
+    //         'total' => $totalRows,
+    //         'current' => 0,
+    //         'percentage' => 0,
+    //         'status' => 'starting'
+    //     ], now()->addHours(1));
+
+    //     Log::info('=== Product Import Started ===');
+    //     Log::info('Total rows: ' . $totalRows);
+    // }
+
+    public function __construct(int $totalRows, string $sessionKey)
     {
-        // Reset counters when new import starts
-        self::$importedCount = 0;
-        self::$currentBatch = 0;
-        self::$totalRows = $totalRows;
-        self::$sessionKey = $sessionKey;
+        $this->totalRows = $totalRows;
+        $this->sessionKey = $sessionKey;
 
-        // Clear any previous cancel flag
-        session(['import_cancelled' => false]);
+        // Clear any previous cancellation flag
+        session()->forget('import_cancelled');
 
-        // Initialize progress in cache
-        \Cache::put($sessionKey, [
+        cache()->put($sessionKey, [
             'total' => $totalRows,
             'current' => 0,
             'percentage' => 0,
             'status' => 'starting'
-        ], now()->addHours(1));
+        ], now()->addHour());
 
-        Log::info('=== Product Import Started ===');
-        Log::info('Total rows: ' . $totalRows);
+        cache()->put("{$sessionKey}_cancel", false, now()->addHour());
+
+        Log::info("=== Product Import Started ({$totalRows}) ===");
     }
 
     public function chunkSize(): int
@@ -235,6 +256,14 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             Log::info('📦 Batch #' . self::$currentBatch . ' (Products ' . self::$importedCount . '-' . (self::$importedCount + 1) . ')');
         }
 
+        // Add delay after every 10 products (5 batches) to prevent gateway timeout
+        // This is crucial for large imports (1800-2000+ products)
+        if (self::$importedCount % 10 == 0 && self::$importedCount > 0) {
+            Log::info('⏸️  Pausing for 2 seconds after ' . self::$importedCount . ' products (Batch #' . self::$currentBatch . ') to prevent timeout...');
+            sleep(2);  // Wait 2 seconds
+            Log::info('▶️  Resuming import...');
+        }
+
         // Log product start
         Log::info("[{$row['product_code']}] Starting: {$row['name']}");
 
@@ -244,12 +273,20 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
         $exists = ProductVariant::where('product_code', $row['product_code'])->exists();
 
         if ($exists) {
-            Log::warning("[{$row['product_code']}] SKIPPED - Already exists");
-            throw new \Maatwebsite\Excel\Validators\ValidationException(
-                \Illuminate\Validation\ValidationException::withMessages([
-                    'product_code' => ["Product code '{$row['product_code']}' already exists!"],
-                ])
-            );
+            Log::warning("[{$row['product_code']}] ⏭️ SKIPPED - Product code already exists in database");
+
+            // Update progress even for skipped products
+            if ($this->totalRows > 0) {
+                $percentage = round((self::$importedCount / $this->totalRows) * 100, 2);
+                \Cache::put($this->sessionKey, [
+                    'total' => $this->totalRows,
+                    'current' => self::$importedCount,
+                    'percentage' => $percentage,
+                    'status' => 'importing'
+                ], now()->addHours(1));
+            }
+
+            return null;  // Return null to skip this row and continue with next product
         }
 
         $category = Category::firstOrCreate([
@@ -310,15 +347,17 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
 
         Log::info("[{$row['product_code']}] ✅ COMPLETED (Total: " . self::$importedCount . ')');
 
-        // Update progress in cache
-        if (self::$totalRows > 0) {
-            $percentage = round((self::$importedCount / self::$totalRows) * 100, 2);
-            \Cache::put(self::$sessionKey, [
-                'total' => self::$totalRows,
+        // Update progress in cache (BEFORE returning product, so it updates for ALL products)
+        if ($this->totalRows > 0) {
+            $percentage = round((self::$importedCount / $this->totalRows) * 100, 2);
+            \Cache::put($this->sessionKey, [
+                'total' => $this->totalRows,
                 'current' => self::$importedCount,
                 'percentage' => $percentage,
                 'status' => 'importing'
             ], now()->addHours(1));
+
+            Log::info('📊 Progress updated: ' . $percentage . '% (' . self::$importedCount . '/' . $this->totalRows . ')');
         }
 
         return $product;

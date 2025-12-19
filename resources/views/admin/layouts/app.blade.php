@@ -68,7 +68,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(0, 0, 0, 0.7); /* Darker background for better text visibility */
         display: none;
         justify-content: center;
         align-items: center;
@@ -79,8 +79,8 @@
     .loader-spinner {
         width: 70px;
         height: 70px;
-        border: 8px solid #ddd;
-        border-top: 8px solid #3498db;
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-top: 8px solid #fff;
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }
@@ -89,7 +89,7 @@
         margin-top: 15px;
         font-size: 18px;
         font-weight: 600;
-        color: #333;
+        color: #fff;
         width: max-content;
     }
 
