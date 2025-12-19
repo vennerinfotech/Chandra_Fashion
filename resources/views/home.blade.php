@@ -197,10 +197,12 @@
                             }
 
                             // Prepare final image path
-                            $imagePath =
-                                $mainImage && file_exists(public_path('images/variants/' . basename($mainImage)))
-                                ? asset('images/variants/' . basename($mainImage))
-                                : asset('images/default-product.jpg');
+                            $imagePath = null;
+                            if ($mainImage && file_exists(public_path('images/variants/' . basename($mainImage)))) {
+                                $imagePath = asset('images/variants/' . basename($mainImage));
+                            } elseif ($mainImage && file_exists(public_path($mainImage))) {
+                                $imagePath = asset($mainImage);
+                            }
 
                             // Determine MOQ
                             $moq = $product->variants->count() ? $product->variants->min('moq') : $product->moq;
@@ -209,7 +211,13 @@
                         <div class="new-arrival-box card">
                             <a href="{{ route('products.show', $product) }}">
                                 <div class="new-arrival-box-img">
-                                    <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
+                                    @if($imagePath)
+                                        <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
+                                    @else
+                                        <div class="no-image-placeholder text-center d-flex justify-content-center align-items-center" style="min-height: 250px; background-color: #f8f9fa;">
+                                            <i class="fa-solid fa-image fa-4x text-muted"></i>
+                                        </div>
+                                    @endif
                                 </div>
                             </a>
                             <div class="arrival-list">

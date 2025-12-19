@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
+use App\Exports\ProductImportFormatExport;
+use App\Http\Controllers\Controller;
+use App\Imports\ProductsImport;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
-use App\Models\ProductVariant;
-use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
-use App\Imports\ProductsImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
-use App\Exports\ProductImportFormatExport;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
@@ -50,32 +50,111 @@ class ProductController extends Controller
             'file' => 'required|mimes:csv,xlsx,xls'
         ]);
 
-        try {
-            Excel::import(new \App\Imports\ProductsImport, $request->file('file'));
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        // Increase execution time for large imports with images
+        set_time_limit(0);  // Unlimited
+        ini_set('max_execution_time', 0);
 
+        try {
+            $file = $request->file('file');
+
+            // Create session key for progress tracking
+            $sessionKey = 'import_progress_' . time();
+            session(['current_import_key' => $sessionKey]);
+
+            // Initialize progress
+            \Cache::put($sessionKey, [
+                'total' => 0,
+                'current' => 0,
+                'percentage' => 0,
+                'status' => 'starting'
+            ], now()->addHours(1));
+
+            // Try to count rows (best effort)
+            $totalRows = 0;
+            try {
+                $tempImport = new \App\Imports\ProductsImport();
+                $reader = \Maatwebsite\Excel\Facades\Excel::toCollection($tempImport, $file);
+                $totalRows = $reader->first()->count();
+            } catch (\Exception $e) {
+                // If counting fails, proceed without exact count
+                \Log::warning('Could not count rows for progress: ' . $e->getMessage());
+            }
+
+            // Create import instance with total rows
+            $importWithProgress = new \App\Imports\ProductsImport($totalRows, $sessionKey);
+
+            // Perform the import
+            Excel::import($importWithProgress, $file);
+
+            // Mark as completed
+            \Cache::put($sessionKey, [
+                'total' => $totalRows,
+                'current' => $totalRows,
+                'percentage' => 100,
+                'status' => 'completed'
+            ], now()->addHours(1));
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $messages = [];
 
             foreach ($e->failures() as $failure) {
-                $messages[] =  implode(', ', $failure->errors());
+                $row = $failure->row();
+                $errors = implode(', ', $failure->errors());
+                $messages[] = "Row {$row}: {$errors}";
             }
 
-            return back()->withErrors($messages);
+            return back()
+                ->withErrors(['import_error' => 'Import validation failed. Please check the error details below.'])
+                ->with('validation_details', $messages);
+        } catch (\Exception $e) {
+            \Log::error('Product import failed: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            return back()->withErrors([
+                'import_error' => 'Import failed. Please verify your file format is correct and all required columns are present. If the issue persists, please contact support.'
+            ]);
         }
 
         return back()->with('success', 'Products imported successfully!');
     }
 
+    public function importProgress()
+    {
+        $sessionKey = session('current_import_key', 'import_progress');
+        $progress = \Cache::get($sessionKey, [
+            'total' => 0,
+            'current' => 0,
+            'percentage' => 0,
+            'status' => 'idle'
+        ]);
 
+        return response()->json($progress);
+    }
+
+    public function cancelImport()
+    {
+        // Set cancel flag in session
+        $sessionKey = session('current_import_key', 'import_progress');
+        session(['import_cancelled' => true]);
+
+        // Update cache status
+        \Cache::put($sessionKey, [
+            'total' => 0,
+            'current' => 0,
+            'percentage' => 0,
+            'status' => 'cancelled'
+        ], now()->addHours(1));
+
+        \Log::info('🛑 Import cancellation requested by user');
+
+        return response()->json(['success' => true, 'message' => 'Import cancellation requested']);
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-
     // public function downloadImportFormat()
     // {
     //     $filename = "product_import_format.csv";
-
     //     $headers = [
     //         "Content-type"        => "text/csv",
     //         "Content-Disposition" => "attachment; filename=$filename",
@@ -83,7 +162,6 @@ class ProductController extends Controller
     //         "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
     //         "Expires"             => "0"
     //     ];
-
     //     $columns = [
     //         'name',
     //         'description',
@@ -100,20 +178,15 @@ class ProductController extends Controller
     //         'dai',
     //         'chadti'
     //     ];
-
     //     // Convert all column headers to uppercase
     //     $columns = array_map('strtoupper', $columns);
-
     //     $callback = function () use ($columns) {
     //         $file = fopen('php://output', 'w');
     //         fputcsv($file, $columns);
     //         fclose($file);
     //     };
-
     //     return response()->stream($callback, 200, $headers);
     // }
-
-
     public function downloadImportFormat()
     {
         return Excel::download(new ProductImportFormatExport, 'product_import_format.xlsx');
@@ -133,9 +206,8 @@ class ProductController extends Controller
             'price' => 'required|regex:/^[0-9]+$/',
             'delivery_time' => ['required', 'regex:/^\d+(-\d+)?$/'],
             'variants' => 'required|array|min:1',
-
             // 'variants.*.product_code' => 'required|integer|distinct',
-            'variants.*.product_code' => ['required', 'string', 'distinct',  Rule::unique('product_variants', 'product_code')],
+            'variants.*.product_code' => ['required', 'string', 'distinct', Rule::unique('product_variants', 'product_code')],
             'variants.*.moq' => 'required|integer|min:1',
             'variants.*.color' => 'nullable',
             'variants.*.images' => 'required|array|min:1',
@@ -229,10 +301,10 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.products.index')
+        return redirect()
+            ->route('admin.products.index')
             ->with('success', 'Product created successfully!');
     }
-
 
     /**
      * Display the specified resource.
@@ -245,7 +317,6 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
@@ -254,15 +325,15 @@ class ProductController extends Controller
         // Load subcategories of selected category
         $subcategories = $product->category_id
             ? \App\Models\SubCategory::where('category_id', $product->category_id)
-            ->where('status', 1)->get()
+                ->where('status', 1)
+                ->get()
             : [];
 
         // Get the product variants and parse colors
-        $colors = json_decode($product->variants->pluck('color')->implode(','), true); // Decode JSON string to array
+        $colors = json_decode($product->variants->pluck('color')->implode(','), true);  // Decode JSON string to array
 
         return view('admin.products.edit', compact('product', 'categories', 'subcategories', 'colors'));
     }
-
 
     public function getSubcategories($categoryId)
     {
@@ -270,12 +341,9 @@ class ProductController extends Controller
         return response()->json(['subcategories' => $subcategories]);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
-
-
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
@@ -316,7 +384,6 @@ class ProductController extends Controller
             'variants.*.chadti' => 'Product CHADTI is required.',
         ]);
 
-
         // Validate variant images
         foreach ($request->variants as $index => $variantData) {
             $existingImages = [];
@@ -338,14 +405,15 @@ class ProductController extends Controller
 
             if (empty($remainingImages) && empty($newImages)) {
                 return back()->withInput()->withErrors([
-                    "variants.$index.images" => "Variant images are required."
+                    "variants.$index.images" => 'Variant images are required.'
                 ]);
             }
         }
 
         // Main product image
         if ($request->hasFile('image')) {
-            if ($product->image) @unlink(public_path($product->image));
+            if ($product->image)
+                @unlink(public_path($product->image));
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('images/products'), $imageName);
@@ -368,8 +436,7 @@ class ProductController extends Controller
                     //     : null,
                     'color' => isset($variantData['color']) && $variantData['color'] !== null
                         ? json_encode(array_filter(explode(',', $variantData['color'])))
-                        : $variant->color, // keep old value if not provided
-
+                        : $variant->color,  // keep old value if not provided
                     'size' => $variantData['size'] ?? null,
                     'moq' => $variantData['moq'] ?? null,
                     'gsm' => $variantData['gsm'] ?? null,
@@ -386,7 +453,6 @@ class ProductController extends Controller
             //     $variant->color = json_encode($colorsArray);
             //     $variant->save();
             // }
-
 
             $variantIds[] = $variant->id;
 
@@ -419,13 +485,9 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
-
-
-
     /**
      * Remove the specified resource from storage.
      */
-
     public function destroy(Product $product)
     {
         // Delete main product image

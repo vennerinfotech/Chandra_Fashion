@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\NewsletterController;
+use App\Http\Controllers\Admin\SettingController;
+use Illuminate\Support\Facades\Route;
 
 // Guest routes (only when not logged in as admin)
 Route::middleware('admin.guest')->group(function () {
@@ -18,8 +18,10 @@ Route::middleware('admin.auth')->group(function () {
     // Route::get('/dashboard1', [DashboardController::class, 'index'])->name('admin.main');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
 
-    // Product Import Route
+    // Product Import Routes
     Route::post('/products/import', [\App\Http\Controllers\Admin\ProductController::class, 'import'])->name('admin.products.import');
+    Route::get('/products/import-progress', [\App\Http\Controllers\Admin\ProductController::class, 'importProgress'])->name('admin.products.import.progress');
+    Route::post('/products/cancel-import', [\App\Http\Controllers\Admin\ProductController::class, 'cancelImport'])->name('admin.products.cancel.import');
 
     Route::get('/admin/products/import-format', [\App\Http\Controllers\Admin\ProductController::class, 'downloadImportFormat'])->name('admin.products.import.format');
 

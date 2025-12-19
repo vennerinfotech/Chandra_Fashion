@@ -2,33 +2,75 @@
 
 namespace App\Imports;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Models\Category;
 use App\Models\SubCategory;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Illuminate\Validation\Rule;
 
-class ProductsImport implements ToModel, WithHeadingRow, WithValidation
+class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChunkReading
 {
+    private static $importedCount = 0;
+    private static $currentBatch = 0;
+    private static $totalRows = 0;
+    private static $sessionKey = '';
+
+    public function __construct($totalRows = 0, $sessionKey = 'import_progress')
+    {
+        // Reset counters when new import starts
+        self::$importedCount = 0;
+        self::$currentBatch = 0;
+        self::$totalRows = $totalRows;
+        self::$sessionKey = $sessionKey;
+
+        // Clear any previous cancel flag
+        session(['import_cancelled' => false]);
+
+        // Initialize progress in cache
+        \Cache::put($sessionKey, [
+            'total' => $totalRows,
+            'current' => 0,
+            'percentage' => 0,
+            'status' => 'starting'
+        ], now()->addHours(1));
+
+        Log::info('=== Product Import Started ===');
+        Log::info('Total rows: ' . $totalRows);
+    }
+
+    public function chunkSize(): int
+    {
+        return 2;  // Process 2 products at a time for real-time progress
+    }
 
     public function rules(): array
     {
         return [
-            'name'            => 'required|string|max:255',
-            'description'     => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'short_description' => 'nullable|string|max:500',
             'care_instructions' => 'nullable|string',
-            'category'        => 'required|string',
-            'subcategory'     => 'required|string',
-            'materials'       => 'required|string|max:255',
-            'export_ready'    => 'nullable|boolean',
-            'price'           => 'required|numeric',
-            'delivery_time'   => 'nullable|string',
+            'category' => 'required|string',
+            'subcategory' => 'required|string',
+            'materials' => 'required|string|max:255',
+            'export_ready' => 'nullable|boolean',
+            'price' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    // Allow empty strings or null
+                    if ($value !== null && $value !== '' && !is_numeric($value)) {
+                        $fail('Price must be a valid number.');
+                    }
+                },
+            ],
+            'delivery_time' => 'nullable|string',
             // 'product_code'    => ['required', 'string', Rule::unique('product_variants', 'product_code')],
             'product_code' => [
                 'required',
@@ -39,92 +81,96 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation
                     }
                 },
             ],
-            'moq'             => 'required|integer',
-            'color'           => 'nullable|string',
-            'size'            => 'nullable|string',
-            'images'          => 'required|string',
-            'gsm'             => 'nullable|string',
-            'dai'             => 'nullable|string',
-            'chadti'          => 'nullable|string',
+            'moq' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // Accept both "150" and "150 Kgs" formats
+                    $cleanedValue = preg_replace('/[^0-9]/', '', $value);
+                    if (empty($cleanedValue) || !is_numeric($cleanedValue) || $cleanedValue <= 0) {
+                        $fail('MOQ must be a positive number (e.g., 150 or 150 Kgs).');
+                    }
+                },
+            ],
+            'color' => 'nullable|string',
+            'size' => 'nullable|string',
+            'images' => 'nullable|string',
+            'gsm' => 'nullable|string',
+            'dai' => 'nullable|string',
+            'chadti' => 'nullable|string',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'name.required'                => 'Product name is required.',
-            'name.string'                  => 'Product name must be valid text.',
-            'name.max'                     => 'Product name cannot exceed 255 characters.',
-
+            'name.required' => 'Product name is required.',
+            'name.string' => 'Product name must be valid text.',
+            'name.max' => 'Product name cannot exceed 255 characters.',
             // 'description.required'         => 'Product description is required.',
             // 'description.string'           => 'Description must be valid text.',
-
             // 'short_description.string'     => 'Short description must be valid text.',
-            'short_description.max'        => 'Short description cannot exceed 500 characters.',
-
+            'short_description.max' => 'Short description cannot exceed 500 characters.',
             // 'care_instructions.required'   => 'Care instructions are required.',
             // 'care_instructions.string'     => 'Care instructions must be valid text.',
-
             // Category Fields
-            'category.required'            => 'Category is required.',
+            'category.required' => 'Category is required.',
             // 'category.string'              => 'Category must be valid text.',
-
-            'subcategory.required'         => 'Subcategory is required.',
+            'subcategory.required' => 'Subcategory is required.',
             // 'subcategory.string'           => 'Subcategory must be valid text.',
-
             // Material
-            'materials.required'           => 'Materials field is required.',
+            'materials.required' => 'Materials field is required.',
             // 'materials.string'             => 'Materials must be valid text.',
-            'materials.max'                => 'Materials cannot exceed 255 characters.',
-
+            'materials.max' => 'Materials cannot exceed 255 characters.',
             // Export Ready
             // 'export_ready.boolean'         => 'Export ready must be true or false.',
-
             // Price
-            'price.required'               => 'Price is required.',
-            'price.numeric'                => 'Price must be a number.',
-
+            // 'price.required'               => 'Price is required.',
+            'price.numeric' => 'Price must be a number.',
             // Delivery Time
             // 'delivery_time.string'         => 'Delivery time must be valid text.',
-
             // Product Code (IMPORTANT)
-            'product_code.required'        => 'Product code is required.',
-            'product_code.string'          => 'Product code must be valid text.',
-            'product_code.unique'          => 'This product code already exists.',
-
+            'product_code.required' => 'Product code is required.',
+            'product_code.string' => 'Product code must be valid text.',
+            'product_code.unique' => 'This product code already exists.',
             // MOQ
-            'moq.required'                 => 'MOQ is required.',
-            'moq.integer'                  => 'MOQ must be a whole number.',
-
+            'moq.required' => 'MOQ is required.',
+            'moq.integer' => 'MOQ must be a whole number.',
             // Color + Size
             // 'color.string'                 => 'Color must be valid text.',
             // 'size.string'                  => 'Size must be valid text.',
-
             // Images
-            'images.required'              => 'Image URLs are required.',
+            // 'images.required'              => 'Image URLs are required.',
             // 'images.string'                => 'Images must be provided as a text list.',
-
             // GSM / DAI / CHADTI
-            'gsm.required'                 => 'GSM value is required.',
+            'gsm.required' => 'GSM value is required.',
             // 'gsm.string'                   => 'GSM must be valid text.',
-
-            'dai.required'                 => 'Dai value is required.',
+            'dai.required' => 'Dai value is required.',
             // 'dai.string'                   => 'Dai must be valid text.',
-
-            'chadti.required'              => 'Chadti value is required.',
+            'chadti.required' => 'Chadti value is required.',
             // 'chadti.string'                => 'Chadti must be valid text.',
         ];
     }
 
+    private function parseMoq($value)
+    {
+        if (empty($value))
+            return null;
+
+        // Extract numeric value from formats like "150 Kgs" or "150"
+        $cleanedValue = preg_replace('/[^0-9]/', '', $value);
+
+        return !empty($cleanedValue) && is_numeric($cleanedValue) ? (int) $cleanedValue : null;
+    }
 
     private function convertDriveLink($url)
     {
-        if (!$url) return null;
+        if (!$url)
+            return null;
 
         if (str_contains($url, 'drive.google.com')) {
             preg_match('/\/d\/(.*?)\//', $url, $matches);
             if (isset($matches[1])) {
-                return "https://drive.google.com/uc?export=download&id=" . $matches[1];
+                return 'https://drive.google.com/uc?export=download&id=' . $matches[1];
             }
         }
         return $url;
@@ -132,43 +178,76 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation
 
     private function extractMultipleUrls($string)
     {
-        if (!$string) return [];
+        if (!$string)
+            return [];
 
         return preg_split('/\s*,\s*|\s+/', trim($string));
     }
+
     private function downloadAndSaveImage($url)
     {
-        if (!$url) return null;
+        if (!$url)
+            return null;
 
         try {
-            $imageContent = file_get_contents($url);
-            if (!$imageContent) return null;
+            // Add timeout to prevent hanging on slow image downloads
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 15,  // 15 seconds timeout per image
+                    'user_agent' => 'Mozilla/5.0'
+                ]
+            ]);
+
+            $imageContent = file_get_contents($url, false, $context);
+            if (!$imageContent)
+                return null;
 
             $folder = public_path('images/variants/');
-            if (!file_exists($folder)) mkdir($folder, 0777, true);
+            if (!file_exists($folder))
+                mkdir($folder, 0777, true);
 
             $filename = time() . '_' . uniqid() . '.jpg';
             $path = $folder . $filename;
             file_put_contents($path, $imageContent);
 
-            return "images/variants/" . $filename;
+            return 'images/variants/' . $filename;
         } catch (\Exception $e) {
+            // Log error but continue with import
+            Log::warning("Failed to download image: {$url}. Error: " . $e->getMessage());
             return null;
         }
     }
 
-
     public function model(array $row)
     {
+        // Check if import has been cancelled
+        if (session('import_cancelled')) {
+            Log::warning('🛑 Import cancelled by user at product ' . (self::$importedCount + 1));
+            throw new \Exception('Import cancelled by user');
+        }
+
+        // Increment counter
+        self::$importedCount++;
+
+        // Log batch start
+        if (self::$importedCount % 2 == 1) {
+            self::$currentBatch++;
+            Log::info('📦 Batch #' . self::$currentBatch . ' (Products ' . self::$importedCount . '-' . (self::$importedCount + 1) . ')');
+        }
+
+        // Log product start
+        Log::info("[{$row['product_code']}] Starting: {$row['name']}");
+
         // ------------------------------------------
         // EXTRA VALIDATION: product_code already exists?
         // ------------------------------------------
         $exists = ProductVariant::where('product_code', $row['product_code'])->exists();
 
         if ($exists) {
+            Log::warning("[{$row['product_code']}] SKIPPED - Already exists");
             throw new \Maatwebsite\Excel\Validators\ValidationException(
                 \Illuminate\Validation\ValidationException::withMessages([
-                    "product_code" => ["Product code '{$row['product_code']}' already exists!"],
+                    'product_code' => ["Product code '{$row['product_code']}' already exists!"],
                 ])
             );
         }
@@ -178,45 +257,69 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation
         ]);
 
         $subcategory = SubCategory::firstOrCreate([
-            'name'        => $row['subcategory'] ?? 'General',
+            'name' => $row['subcategory'] ?? 'General',
             'category_id' => $category->id
         ]);
 
         $imageUrls = $this->extractMultipleUrls($row['images'] ?? null);
 
         $savedImages = [];
-        foreach ($imageUrls as $url) {
+        if (!empty($imageUrls)) {
+            Log::info("[{$row['product_code']}] Downloading " . count($imageUrls) . ' image(s)');
+        }
+        foreach ($imageUrls as $index => $url) {
             $directUrl = $this->convertDriveLink($url);
             $savedPath = $this->downloadAndSaveImage($directUrl);
-            if ($savedPath) $savedImages[] = $savedPath;
+            if ($savedPath) {
+                $savedImages[] = $savedPath;
+                Log::info("[{$row['product_code']}] ✅ Image " . ($index + 1));
+            } else {
+                Log::warning("[{$row['product_code']}] ❌ Image " . ($index + 1) . ' failed');
+            }
         }
 
-        $productImage = $savedImages[0] ?? null;
+        // Use first image as product image, or null if no images
+        $productImage = !empty($savedImages) ? $savedImages[0] : null;
+
+        // Parse MOQ to extract numeric value (handles "150 Kgs" and "150")
+        $moqValue = $this->parseMoq($row['moq'] ?? null);
 
         $product = Product::create([
-            'name'              => $row['name'],
-            'description'       => $row['description'],
+            'name' => $row['name'],
+            'description' => $row['description'],
             'short_description' => $row['short_description'],
             'care_instructions' => $row['care_instructions'],
-            'materials'         => $row['materials'],
-            'export_ready'      => $row['export_ready'] ?? 0,
-            'price'             => $row['price'] ?? 0,
-            'image'             => $productImage,
-            'category_id'       => $category->id,
-            'subcategory_id'    => $subcategory->id,
+            'materials' => $row['materials'],
+            'export_ready' => $row['export_ready'] ?? 0,
+            'price' => !empty($row['price']) ? $row['price'] : null,
+            'image' => $productImage,
+            'category_id' => $category->id,
+            'subcategory_id' => $subcategory->id,
         ]);
-
 
         ProductVariant::create([
-            'product_id'   => $product->id,
+            'product_id' => $product->id,
             'product_code' => $row['product_code'],
-            'images'       => json_encode($savedImages),
-            'image_url'    => $productImage,
-            'moq'          => $row['moq'] ?? 0,
-            'gsm'          => $row['gsm'],
-            'dai'          => $row['dai'],
-            'chadti'       => $row['chadti'],
+            'images' => !empty($savedImages) ? json_encode($savedImages) : null,
+            'image_url' => $productImage,
+            'moq' => $moqValue,
+            'gsm' => $row['gsm'],
+            'dai' => $row['dai'],
+            'chadti' => $row['chadti'],
         ]);
+
+        Log::info("[{$row['product_code']}] ✅ COMPLETED (Total: " . self::$importedCount . ')');
+
+        // Update progress in cache
+        if (self::$totalRows > 0) {
+            $percentage = round((self::$importedCount / self::$totalRows) * 100, 2);
+            \Cache::put(self::$sessionKey, [
+                'total' => self::$totalRows,
+                'current' => self::$importedCount,
+                'percentage' => $percentage,
+                'status' => 'importing'
+            ], now()->addHours(1));
+        }
 
         return $product;
     }
@@ -246,7 +349,6 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation
     //     }
 
     //     $productImage = $savedImages[0] ?? null;  // main image
-
 
     //     $product = Product::create([
     //         'name'              => $row['name'],
