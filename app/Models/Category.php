@@ -21,8 +21,8 @@ class Category extends Model
     public function getImageUrlAttribute()
     {
         // Check if image exists and file exists in public path
-        if ($this->image && file_exists(public_path($this->image))) {
-            return asset($this->image);
+        if ($this->image && file_exists(public_path('images/categories/' . $this->image))) {
+            return asset('images/categories/' . $this->image);
         }
 
         // Return default image
