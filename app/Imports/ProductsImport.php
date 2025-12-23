@@ -15,8 +15,10 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChunkReading
+class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChunkReading, SkipsOnFailure
 {
+    use SkipsFailures;
+
     private static $importedCount = 0;
     private static $currentBatch = 0;
     // private static $totalRows = 0;
@@ -249,6 +251,11 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             throw new \Exception('Import cancelled by user');
         }
 
+        // Skip completely empty rows
+        if (!array_filter($row)) {
+            return null;
+        }
+
         // Increment counter
         self::$importedCount++;
 
@@ -309,14 +316,59 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             return null;  // Return null to skip this row and continue with next product
         }
 
-        $category = Category::firstOrCreate([
-            'name' => $row['category']
-        ]);
+        // ------------------------------------------
+        // CATEGORY: Handle duplicates (1062)
+        // ------------------------------------------
+        $categoryName = trim($row['category']);
+        $category = Category::where('name', $categoryName)->first();
 
-        $subcategory = SubCategory::firstOrCreate([
-            'name' => $row['subcategory'] ?? 'General',
-            'category_id' => $category->id
-        ]);
+        if (!$category) {
+            try {
+                $category = Category::create(['name' => $categoryName]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->errorInfo[1] == 1062) {
+                    $category = Category::where('name', $categoryName)->first();
+                } else {
+                    throw $e;
+                }
+            }
+        }
+
+        // ------------------------------------------
+        // SUBCATEGORY: Handle duplicates (1062 - Global Name Constraint)
+        // ------------------------------------------
+        $subCategoryName = trim($row['subcategory'] ?? 'General');
+
+        // Try finding by name AND category first
+        // If the same subcategory name exists in another category, and the DB enforces unique names globally,
+        // we must reuse the existing one to avoid a crash, OR we simply catch the error.
+
+        $subcategory = SubCategory::where('name', $subCategoryName)->where('category_id', $category->id)->first();
+
+        if (!$subcategory) {
+            // Check if name exists globally (if strict unique constraint exists on 'name' only)
+            $existingGlobal = SubCategory::where('name', $subCategoryName)->first();
+
+            if ($existingGlobal) {
+                // Use existing globally to avoid crash.
+                // This effectively links the product to the existing SubCategory, regardless of its parent Category.
+                $subcategory = $existingGlobal;
+            } else {
+                try {
+                    $subcategory = SubCategory::create([
+                        'name' => $subCategoryName,
+                        'category_id' => $category->id
+                    ]);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    if ($e->errorInfo[1] == 1062) {
+                        // Race condition or global unique hit
+                        $subcategory = SubCategory::where('name', $subCategoryName)->first();
+                    } else {
+                        throw $e;
+                    }
+                }
+            }
+        }
 
         $imageUrls = $this->extractMultipleUrls($row['images'] ?? null);
 

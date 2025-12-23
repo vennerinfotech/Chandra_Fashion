@@ -80,7 +80,9 @@
                 <div class="col-md-6">
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
-                        <h6 class="product-price"> ₹{{ $product->price }}</h6>
+                        @if($product->price)
+                            <h6 class="product-price"> ₹{{ $product->price }}</h6>
+                        @endif
                         <p class="product-desc">{!! $product->short_description ?? 'No short description available.' !!}</p>
                         <div class="fabric">
                             <h6 class="product-specification">Product Specifications :</h6>

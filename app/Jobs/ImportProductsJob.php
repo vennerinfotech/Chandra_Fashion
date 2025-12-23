@@ -45,11 +45,26 @@ class ImportProductsJob implements ShouldQueue
 
         // Update import log status to processing
         $importLog = ProductImportLog::find($this->importLogId);
+        $user = $importLog ? $importLog->user : null;
+        // Prioritize ADMIN_EMAIL from .env, fallback to the user who started the import
+        $recipientEmail = env('ADMIN_EMAIL') ?? ($user ? $user->email : null);
+
         if ($importLog) {
             $importLog->update([
                 'status' => 'processing',
                 'started_at' => now(),
             ]);
+
+            // SEND IMPORT STARTED EMAIL
+            if ($recipientEmail) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(
+                        new \App\Mail\ImportStartedMail(basename($this->filePath), $this->totalRows, now())
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to send Import Started Email: ' . $e->getMessage());
+                }
+            }
         }
 
         // Update cache status
@@ -79,52 +94,52 @@ class ImportProductsJob implements ShouldQueue
             ], now()->addHours(24));
 
             if ($importLog) {
+                // Refresh log to get latest skipped counts from DB if ProductsImport updated it
+                $importLog->refresh();
+
+                // Handle Validation Failures (SkipsOnFailure)
+                $failures = $importWithProgress->failures();
+                $failedRowsCount = count($failures);
+                $failedDetails = [];
+
+                foreach ($failures as $failure) {
+                    $row = $failure->row();
+                    $attribute = $failure->attribute();
+                    $errors = implode(', ', $failure->errors());
+                    $failedDetails[] = [
+                        'row' => $row,
+                        'product_code' => 'N/A', // Cannot easily get original row data here without more logic
+                        'reason' => "Validation Failed: {$attribute} - {$errors}"
+                    ];
+                }
+
+                // Merge with existing skipped details if any
+                $existingDetails = $importLog->skipped_details ?? [];
+                $allDetails = array_merge($existingDetails, $failedDetails);
+
                 $importLog->update([
-                    'status' => 'completed',
+                    'status' => 'completed', // Job completed, even if some rows failed
                     'completed_at' => now(),
                     'processed_rows' => $this->totalRows,
-                    'successful_rows' => $this->totalRows,  // Adjust if you track failed rows separately
+                    'failed_rows' => $failedRowsCount,
+                    'skipped_details' => $allDetails, // Store failure details here
+                    // 'successful_rows' logic: Total - Skipped - Failed
+                    'successful_rows' => $this->totalRows - ($importLog->skipped_rows ?? 0) - $failedRowsCount,
                 ]);
+
+                // SEND IMPORT COMPLETED EMAIL
+                if ($recipientEmail) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(
+                            new \App\Mail\ImportCompletedMail($importLog)
+                        );
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send Import Completed Email: ' . $e->getMessage());
+                    }
+                }
             }
 
             Log::info('=== ImportProductsJob Completed Successfully ===');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            $errorMessages = [];
-
-            foreach ($failures as $failure) {
-                $row = $failure->row();
-                $attribute = $failure->attribute();
-                $errors = implode(', ', $failure->errors());
-                $errorMessages[] = "Row {$row}: {$attribute} - {$errors}";
-            }
-
-            $formattedError = 'Validation Failed: ' . implode(' | ', array_slice($errorMessages, 0, 5));
-            if (count($errorMessages) > 5) {
-                $formattedError .= ' ... and ' . (count($errorMessages) - 5) . ' more errors.';
-            }
-
-            Log::error('=== Import Validation Failed ===');
-            Log::error($formattedError);
-
-            // Update cache with error status
-            cache()->put($this->sessionKey, [
-                'total' => $this->totalRows,
-                'current' => 0,
-                'percentage' => 0,
-                'status' => 'failed',
-                'error' => $formattedError
-            ], now()->addHours(24));
-
-            if ($importLog) {
-                $importLog->update([
-                    'status' => 'failed',
-                    'completed_at' => now(),
-                    'error_message' => $formattedError,
-                ]);
-            }
-
-            throw $e;
         } catch (\Exception $e) {
             Log::error('=== ImportProductsJob Failed ===');
             Log::error('Error: ' . $e->getMessage());
@@ -145,6 +160,18 @@ class ImportProductsJob implements ShouldQueue
                     'completed_at' => now(),
                     'error_message' => $e->getMessage(),
                 ]);
+
+                // SEND IMPORT FAILED EMAIL
+                $importLog->refresh();
+                if ($recipientEmail) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(
+                            new \App\Mail\ImportCompletedMail($importLog)
+                        );
+                    } catch (\Exception $ex) {
+                        Log::error('Failed to send Import Failed Email: ' . $ex->getMessage());
+                    }
+                }
             }
 
             throw $e;  // Re-throw to mark job as failed
@@ -160,12 +187,28 @@ class ImportProductsJob implements ShouldQueue
         Log::error('Error: ' . $exception->getMessage());
 
         $importLog = ProductImportLog::find($this->importLogId);
+        // Prioritize ADMIN_EMAIL from .env, fallback to the user who started the import
+        $recipientEmail = env('ADMIN_EMAIL');
+        if (!$recipientEmail && $importLog && $importLog->user) {
+             $recipientEmail = $importLog->user->email;
+        }
+        
         if ($importLog) {
             $importLog->update([
                 'status' => 'failed',
                 'completed_at' => now(),
                 'error_message' => 'Job failed after ' . $this->tries . ' attempts: ' . $exception->getMessage(),
             ]);
+            
+            // SEND PERMANENT FAILURE EMAIL
+            if ($recipientEmail) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(
+                        new \App\Mail\ImportCompletedMail($importLog)
+                    );
+                } catch (\Exception $ex) {
+                    Log::error('Failed to send Import Failed Email: ' . $ex->getMessage());
+                }
+            }
         }
     }
-}
