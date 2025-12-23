@@ -49,6 +49,8 @@ class ImportProductsJob implements ShouldQueue
         // Prioritize ADMIN_EMAIL from .env, fallback to the user who started the import
         $recipientEmail = env('ADMIN_EMAIL') ?? ($user ? $user->email : null);
 
+        Log::info('ImportProductsJob: Resolved Recipient Email: ' . ($recipientEmail ?? 'NULL'));
+
         if ($importLog) {
             $importLog->update([
                 'status' => 'processing',
@@ -108,7 +110,7 @@ class ImportProductsJob implements ShouldQueue
                     $errors = implode(', ', $failure->errors());
                     $failedDetails[] = [
                         'row' => $row,
-                        'product_code' => 'N/A', // Cannot easily get original row data here without more logic
+                        'product_code' => 'N/A',  // Cannot easily get original row data here without more logic
                         'reason' => "Validation Failed: {$attribute} - {$errors}"
                     ];
                 }
@@ -118,11 +120,11 @@ class ImportProductsJob implements ShouldQueue
                 $allDetails = array_merge($existingDetails, $failedDetails);
 
                 $importLog->update([
-                    'status' => 'completed', // Job completed, even if some rows failed
+                    'status' => 'completed',  // Job completed, even if some rows failed
                     'completed_at' => now(),
                     'processed_rows' => $this->totalRows,
                     'failed_rows' => $failedRowsCount,
-                    'skipped_details' => $allDetails, // Store failure details here
+                    'skipped_details' => $allDetails,  // Store failure details here
                     // 'successful_rows' logic: Total - Skipped - Failed
                     'successful_rows' => $this->totalRows - ($importLog->skipped_rows ?? 0) - $failedRowsCount,
                 ]);
@@ -190,16 +192,16 @@ class ImportProductsJob implements ShouldQueue
         // Prioritize ADMIN_EMAIL from .env, fallback to the user who started the import
         $recipientEmail = env('ADMIN_EMAIL');
         if (!$recipientEmail && $importLog && $importLog->user) {
-             $recipientEmail = $importLog->user->email;
+            $recipientEmail = $importLog->user->email;
         }
-        
+
         if ($importLog) {
             $importLog->update([
                 'status' => 'failed',
                 'completed_at' => now(),
                 'error_message' => 'Job failed after ' . $this->tries . ' attempts: ' . $exception->getMessage(),
             ]);
-            
+
             // SEND PERMANENT FAILURE EMAIL
             if ($recipientEmail) {
                 try {
@@ -212,3 +214,4 @@ class ImportProductsJob implements ShouldQueue
             }
         }
     }
+}
