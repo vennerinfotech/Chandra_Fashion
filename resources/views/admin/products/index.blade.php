@@ -58,48 +58,76 @@
 
 
             </form>
+
+            {{-- Skipped Summary --}}
+            @if((session('show_import_status') || request('import_completed')) && isset($recentImports) && $recentImports->count() > 0)
+                @php $latestImport = $recentImports->first(); @endphp
+                @if($latestImport->skipped_rows > 0)
+                    <div class="alert alert-warning mt-3 mb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>{{ $latestImport->skipped_rows }} Products Skipped</strong>
+                                <small class="text-muted ms-2">(Duplicate product codes)</small>
+                            </div>
+                            <button class="btn btn-sm btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#skippedDetails" aria-expanded="false">
+                                View Details
+                            </button>
+                        </div>
+                        <div class="collapse mt-2" id="skippedDetails">
+                            <div class="card card-body bg-light border-0 p-2" style="max-height: 200px; overflow-y: auto;">
+                                <table class="table table-sm table-borderless mb-0" style="font-size: 13px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Row</th>
+                                            <th>Product Code</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if($latestImport->skipped_details)
+                                            @foreach($latestImport->skipped_details as $skip)
+                                                <tr>
+                                                    <td>{{ $skip['row'] ?? '-' }}</td>
+                                                    <td><code>{{ $skip['product_code'] ?? '-' }}</code></td>
+                                                    <td class="text-muted">{{ $skip['reason'] ?? 'Unknown' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr><td colspan="3">No details available.</td></tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endif
         </div>
 
 
 
-        {{-- Full Screen Loader with Progress Bar --}}
-        <div id="fullScreenLoader">
-            {{-- Cancel Button in Top-Left Corner --}}
-            <button id="cancelImportBtn" class="cancel-import-btn" title="Cancel Import">
-                <i class="fa fa-times"></i>
-            </button>
-
-            <div class="loader-inner">
-                <div class="loader-spinner"></div>
-                <p class="loader-text" style="font-size: 20px; margin-top: 20px; margin-bottom: 10px;">Importing products,
-                    please wait...</p>
-
-                {{-- Large Progress Percentage Display --}}
-                <!-- <div style="text-align: center; margin: 20px 0;">
-                    <h1 id="largeProgressDisplay"
-                        style="color: #fff; font-size: 48px; font-weight: bold; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                        Preparing...
-                    </h1>
-                </div> -->
-
-                <div class="progress-container" style="width: 80%; max-width: 600px; margin: 20px auto;">
-                    <div class="progress"
-                        style="height: 35px; background-color: rgba(255,255,255,0.2); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                                 role="progressbar" style="width: 0%; font-size: 16px; font-weight: bold; line-height: 35px;">
-                                0%
-                            </div>
-                        <!-- <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                            role="progressbar" style="width: 0%; min-width: 60px;">
-                            0%
-                        </div> -->
-
-                    </div>
-                    <!-- <div class="progress-info" style="text-align: center; margin-top: 15px; color: #fff; font-size: 16px;">
-                        <span id="progressText">Preparing import...</span>
-                    </div> -->
-                </div>
+        {{-- Small Floating Import Progress Widget --}}
+        <div id="importProgressWidget" style="display: none; position: fixed; top: 100px; right: 20px; z-index: 9999; width: 320px; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-left: 5px solid #198754;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-file-import me-2"></i>Importing...</h6>
+                <span id="widgetPercentage" class="badge bg-success">0%</span>
             </div>
+            
+            <div class="progress" style="height: 8px; margin-bottom: 8px; background-color: #e9ecef;">
+                <div id="widgetProgressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- <small class="text-muted" style="font-size: 12px;">
+                    Processed: <strong id="widgetProcessedCount">0</strong> / <span id="widgetTotalCount">0</span>
+                </small> --}}
+                <div></div> {{-- Spacer to keep Cancel button on right --}}
+                <button id="widgetCancelBtn" class="btn btn-sm btn-outline-danger py-0 px-2" style="font-size: 11px;">
+                    <i class="fas fa-times me-1"></i>Cancel
+                </button>
+            </div>
+            <p id="widgetStatusText" class="mb-0 mt-1 text-muted text-truncate" style="font-size: 11px;">Initializing...</p>
         </div>
 
         <div class="card shadow-sm">
@@ -141,9 +169,7 @@
                                             {{-- Include Lightbox --}}
                                             @include('admin.lightbox', ['images' => [asset($firstImage)]])
                                         @else
-                                            <div class="text-center text-muted">
-                                                <i class="fa-solid fa-image fa-2x"></i>
-                                            </div>
+                                            <img src="{{ asset('images/cf-logo-1.png') }}" width="50" height="50" class="rounded border">
                                         @endif
                                     </td>
 
@@ -187,108 +213,120 @@
                 "searching": true,
                 "order": [[0, 'desc']] // Default sorting by ID column (descending order)
             });
+
+            // Auto-start widget if import was just queued
+            @if(session('show_import_status'))
+                $("#importProgressWidget").fadeIn();
+                window.importSessionKey = "{{ session('import_key') }}";
+                
+                if(typeof progressInterval === 'undefined') {
+                    progressInterval = setInterval(updateProgress, 1000);
+                }
+            @endif
         });
 
         let progressInterval;
 
         $("form[action='{{ route('admin.products.import') }}']").on('submit', function () {
-            // Show loader with flex display for proper layout
-            $("#fullScreenLoader").css('display', 'flex');
+            // Show new widget
+            $("#importProgressWidget").fadeIn();
+            
+            // Reset values
+            $('#widgetProgressBar').css('width', '0%');
+            $('#widgetPercentage').text('0%');
+            $('#widgetProcessedCount').text('0');
+            $('#widgetTotalCount').text('...');
+            $('#widgetStatusText').text('Starting upload...');
 
-            // Start polling for progress immediately
-            updateProgress(); // First update immediately
-
-            // Then continue polling - faster interval for real-time updates
-            progressInterval = setInterval(updateProgress, 500); // Poll every 0.5 seconds
+            // Start polling
+            progressInterval = setInterval(updateProgress, 1000); 
         });
 
         function updateProgress() {
+            let url = '{{ route('admin.products.import.progress') }}';
+            if (window.importSessionKey) {
+                url += '?key=' + window.importSessionKey;
+            }
+
             $.ajax({
-                url: '{{ route('admin.products.import.progress') }}',
+                url: url,
                 method: 'GET',
                 success: function (data) {
-                    console.log('Progress data:', data); // Debug log
-
-                    // Always update progress bar
+                    console.log('Import Progress:', data);
+                    
                     let percentage = data.percentage || 0;
-                    $('#progressBar').css('width', percentage + '%');
-                    $('#progressBar').text(percentage.toFixed(1) + '%');
+                    let current = data.current || 0;
+                    let total = data.total || 0;
 
-                    // Update loader text based on status
+                    // Update UI
+                    $('#widgetProgressBar').css('width', percentage + '%');
+                    
+                    // Format: 34.52% (58/168)
+                    let progressText = percentage.toFixed(2) + '% (' + current + '/' + total + ')';
+                    $('#widgetPercentage').text(progressText);
+                    
+                    $('#widgetProcessedCount').text(current);
+                    $('#widgetTotalCount').text(total);
+
+                    // Status text update
                     if (data.status === 'starting' || data.status === 'pending') {
-                        $('.loader-text').html('Preparing import...<br><small>Please wait...</small>');
+                         $('#widgetStatusText').text('Preparing import...');
                     } else if (data.status === 'processing') {
-                        let current = data.current || 0;
-                        let total = data.total || 0;
-                        $('.loader-text').html(
-                            'Importing products...<br>' +
-                            '<small><strong>' + current + ' / ' + total + '</strong> products processed (' + percentage.toFixed(1) + '%)</small>'
-                        );
+                         $('#widgetStatusText').text('Processing records...');
                     } else if (data.status === 'completed') {
-                        $('.loader-text').html(
-                            '✅ Import completed!<br>' +
-                            '<small>Successfully imported <strong>' + (data.total || 0) + '</strong> products</small>'
-                        );
+                         $('#widgetStatusText').text('Import Completed! Reloading...');
+                         $('#widgetProgressBar').removeClass('progress-bar-animated');
+                         $('#widgetCancelBtn').hide(); // Hide cancel button on success
                     } else if (data.status === 'failed') {
-                        $('.loader-text').html(
-                            '❌ Import failed!<br>' +
-                            '<small class="text-danger">' + (data.error || 'Unknown error occurred') + '</small>'
-                        );
-                        $('#progressBar').removeClass('bg-success').addClass('bg-danger');
+                         $('#widgetStatusText').text('Failed: ' + (data.error || 'Error'));
+                         $('#widgetProgressBar').addClass('bg-danger');
                     }
 
                     // Stop polling when complete or failed
                     if (data.status === 'completed' || data.percentage >= 100) {
                         clearInterval(progressInterval);
-                        $('#progressBar').css('width', '100%');
-                        $('#progressBar').text('100%');
+                        $('#widgetProgressBar').css('width', '100%');
+                        $('#widgetPercentage').text('100%');
+                        $('#widgetTotalCount').text(data.total); // Ensure total is accurate
                         setTimeout(function () {
-                            location.reload();
-                        }, 2000);
+                            // Reload with flag to show summary
+                            let currentUrl = new URL(window.location.href);
+                            currentUrl.searchParams.set('import_completed', '1');
+                            window.location.href = currentUrl.toString();
+                        }, 3000); // 3 seconds delay before reload
                     } else if (data.status === 'failed') {
                         clearInterval(progressInterval);
                         setTimeout(function () {
                             location.reload();
-                        }, 3000);
+                        }, 4000); // 4 seconds delay on failure
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error('Failed to fetch progress:', error);
-                    console.error('Response:', xhr.responseText);
+                    // console.error('Failed to fetch progress');
                 }
             });
         }
 
         // Cancel Import Button Handler
-        $('#cancelImportBtn').on('click', function () {
-            if (confirm('Are you sure you want to cancel the import? Products imported so far will be saved.')) {
-                // Call backend to set cancel flag
+        $('#widgetCancelBtn').on('click', function () {
+            if (confirm('Are you sure you want to cancel the import?')) {
                 $.ajax({
                     url: '{{ route('admin.products.cancel.import') }}',
                     method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     success: function (response) {
-                        console.log('Cancel request sent successfully');
-                    },
-                    error: function () {
-                        console.error('Failed to send cancel request');
+                        // console.log('Cancelled');
                     }
                 });
 
-                // Stop polling
                 clearInterval(progressInterval);
-
-                // Update UI immediately
-                $('#progressBar').removeClass('bg-success').addClass('bg-danger');
-                $('.loader-text').html('⚠️ Cancelling Import...<br><small>Stopping after current product...</small>');
-
-                // Hide loader and reload page after delay
+                $('#widgetProgressBar').addClass('bg-danger');
+                $('#widgetStatusText').text('Cancelling...');
+                
                 setTimeout(function () {
-                    $('#fullScreenLoader').css('display', 'none');
+                    $('#importProgressWidget').fadeOut();
                     location.reload();
-                }, 2000);
+                }, 1500);
             }
         });
     </script>

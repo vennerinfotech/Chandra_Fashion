@@ -30,7 +30,7 @@
         {{-- Existing Image (for Edit page only) --}}
         @if(isset($category) && $category->image)
             <div class="mt-2">
-                <img src="{{ asset('images/categories/' . $category->image) }}" alt="Current Image" id="existingImage"
+                <img src="{{ $category->image_url }}" alt="Current Image" id="existingImage"
                     width="80" height="80" class="rounded border">
             </div>
         @endif

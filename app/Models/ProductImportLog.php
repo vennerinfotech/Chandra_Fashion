@@ -14,6 +14,7 @@ class ProductImportLog extends Model
         'successful_rows',
         'failed_rows',
         'skipped_rows',
+        'skipped_details',
         'status',
         'started_at',
         'completed_at',
@@ -25,6 +26,7 @@ class ProductImportLog extends Model
     protected $casts = [
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
+        'skipped_details' => 'array',
     ];
 
     public function user()

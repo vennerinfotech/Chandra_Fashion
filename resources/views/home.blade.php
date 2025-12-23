@@ -91,8 +91,8 @@
                         <div class="featured-collection-grid">
                             <a href="{{ route('allcollection') }}" class="featured-link">
                                 <div class="featured-img">
-                                    <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
-                                        alt="{{ $category->name }}">
+                                    <img src="{{ $category->image_url }}" class="img-fluid" alt="{{ $category->name }}"
+                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 </div>
                                 <div class="featured-content">
                                     <h2>{{ $category->name }}</h2>
@@ -152,7 +152,8 @@
                     @foreach ($categories as $category)
                     <div class="collection-item">
                         <a href="{{ route('allcollection') }}">
-                            <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                                    <img src="{{ $category->image_url }}" alt="{{ $category->name }}" 
+                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 alt="{{ $category->name }}">
 
                             <div class="collection-info">
@@ -214,9 +215,7 @@
                                     @if($imagePath)
                                         <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
                                     @else
-                                        <div class="no-image-placeholder text-center d-flex justify-content-center align-items-center" style="min-height: 250px; background-color: #f8f9fa;">
-                                            <i class="fa-solid fa-image fa-4x text-muted"></i>
-                                        </div>
+                                        <img src="{{ asset('images/cf-logo-1.png') }}" alt="{{ $product->name }}" class="img-fluid">
                                     @endif
                                 </div>
                             </a>
@@ -269,7 +268,8 @@
                 @foreach ($categories as $category)
                 <div class="collection-item">
                     <a href="{{ route('allcollection') }}">
-                        <img src="{{ $category->image ? asset('images/categories/' . $category->image) : asset('images/placeholder.png') }}"
+                        <img src="{{ $category->image_url }}" alt="{{ $category->name }}"
+                             onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                             alt="{{ $category->name }}">
 
                         <div class="collection-info">

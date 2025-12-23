@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Product extends Model
 {
-     protected $table = 'products';
+    protected $table = 'products';
+
     protected $fillable = [
         'name',
         'description',
@@ -40,5 +40,15 @@ class Product extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
-}
 
+    public function getImageUrlAttribute()
+    {
+        // Check if image exists and file exists in public path
+        if ($this->image && file_exists(public_path($this->image))) {
+            return asset($this->image);
+        }
+
+        // Return default image
+        return asset('images/cf-logo-1.png');  // Adjust path if inside public/images
+    }
+}

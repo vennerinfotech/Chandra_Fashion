@@ -23,6 +23,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
     // private static $sessionKey = '';
     private int $totalRows;
     private string $sessionKey;
+    private $importLogId;
     // public function __construct($totalRows = 0, $sessionKey = 'import_progress')
     // {
     //     // Reset counters when new import starts
@@ -35,7 +36,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
     //     session(['import_cancelled' => false]);
 
     //     // Initialize progress in cache
-    //     \Cache::put($sessionKey, [
+    //     cache()->put($sessionKey, [
     //         'total' => $totalRows,
     //         'current' => 0,
     //         'percentage' => 0,
@@ -46,10 +47,11 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
     //     Log::info('Total rows: ' . $totalRows);
     // }
 
-    public function __construct(int $totalRows, string $sessionKey)
+    public function __construct(int $totalRows, string $sessionKey, $importLogId = null)
     {
         $this->totalRows = $totalRows;
         $this->sessionKey = $sessionKey;
+        $this->importLogId = $importLogId;
 
         // Clear any previous cancellation flag
         session()->forget('import_cancelled');
@@ -96,11 +98,11 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             'product_code' => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) {
-                    if (\App\Models\ProductVariant::where('product_code', $value)->exists()) {
-                        $fail("The product code '{$value}' already exists.");
-                    }
-                },
+                // function ($attribute, $value, $fail) {
+                //     if (\App\Models\ProductVariant::where('product_code', $value)->exists()) {
+                //         $fail("The product code '{$value}' already exists.");
+                //     }
+                // },
             ],
             'moq' => [
                 'required',
@@ -275,10 +277,28 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
         if ($exists) {
             Log::warning("[{$row['product_code']}] ⏭️ SKIPPED - Product code already exists in database");
 
+            // Log detail to DB
+            if ($this->importLogId) {
+                $importLog = \App\Models\ProductImportLog::find($this->importLogId);
+                if ($importLog) {
+                    $skippedDetails = $importLog->skipped_details ?? [];
+                    $skippedDetails[] = [
+                        'row' => self::$importedCount,
+                        'product_code' => $row['product_code'],
+                        'reason' => "The product code '{$row['product_code']}' already exists."
+                    ];
+
+                    $importLog->update([
+                        'skipped_rows' => ($importLog->skipped_rows ?? 0) + 1,
+                        'skipped_details' => $skippedDetails
+                    ]);
+                }
+            }
+
             // Update progress even for skipped products
             if ($this->totalRows > 0) {
                 $percentage = round((self::$importedCount / $this->totalRows) * 100, 2);
-                \Cache::put($this->sessionKey, [
+                cache()->put($this->sessionKey, [
                     'total' => $this->totalRows,
                     'current' => self::$importedCount,
                     'percentage' => $percentage,
@@ -350,7 +370,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
         // Update progress in cache (BEFORE returning product, so it updates for ALL products)
         if ($this->totalRows > 0) {
             $percentage = round((self::$importedCount / $this->totalRows) * 100, 2);
-            \Cache::put($this->sessionKey, [
+            cache()->put($this->sessionKey, [
                 'total' => $this->totalRows,
                 'current' => self::$importedCount,
                 'percentage' => $percentage,

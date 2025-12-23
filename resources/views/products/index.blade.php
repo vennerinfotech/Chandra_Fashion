@@ -158,9 +158,7 @@
                                                         <img src="{{ asset('images/variants/' . basename($mainImage)) }}" class="img-fluid" alt="{{ $product->name }}">
                                                     </a>
                                                 @else
-                                                    <div class="no-image-placeholder text-center">
-                                                        <i class="fa-solid fa-photo-film fa-3x"></i>
-                                                    </div>
+                                                    <img src="{{ asset('images/cf-logo-1.png') }}" class="img-fluid" alt="{{ $product->name }}">
                                                 @endif
                                             </div>
 

@@ -53,7 +53,7 @@ class ImportProductsJob implements ShouldQueue
         }
 
         // Update cache status
-        Cache::put($this->sessionKey, [
+        cache()->put($this->sessionKey, [
             'total' => $this->totalRows,
             'current' => 0,
             'percentage' => 0,
@@ -65,13 +65,13 @@ class ImportProductsJob implements ShouldQueue
             ini_set('memory_limit', '1024M');
 
             // Create import instance with progress tracking
-            $importWithProgress = new ProductsImport($this->totalRows, $this->sessionKey);
+            $importWithProgress = new ProductsImport($this->totalRows, $this->sessionKey, $this->importLogId);
 
             // Perform the import
             Excel::import($importWithProgress, $this->filePath);
 
             // Mark as completed
-            Cache::put($this->sessionKey, [
+            cache()->put($this->sessionKey, [
                 'total' => $this->totalRows,
                 'current' => $this->totalRows,
                 'percentage' => 100,
@@ -88,13 +88,50 @@ class ImportProductsJob implements ShouldQueue
             }
 
             Log::info('=== ImportProductsJob Completed Successfully ===');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+
+            foreach ($failures as $failure) {
+                $row = $failure->row();
+                $attribute = $failure->attribute();
+                $errors = implode(', ', $failure->errors());
+                $errorMessages[] = "Row {$row}: {$attribute} - {$errors}";
+            }
+
+            $formattedError = 'Validation Failed: ' . implode(' | ', array_slice($errorMessages, 0, 5));
+            if (count($errorMessages) > 5) {
+                $formattedError .= ' ... and ' . (count($errorMessages) - 5) . ' more errors.';
+            }
+
+            Log::error('=== Import Validation Failed ===');
+            Log::error($formattedError);
+
+            // Update cache with error status
+            cache()->put($this->sessionKey, [
+                'total' => $this->totalRows,
+                'current' => 0,
+                'percentage' => 0,
+                'status' => 'failed',
+                'error' => $formattedError
+            ], now()->addHours(24));
+
+            if ($importLog) {
+                $importLog->update([
+                    'status' => 'failed',
+                    'completed_at' => now(),
+                    'error_message' => $formattedError,
+                ]);
+            }
+
+            throw $e;
         } catch (\Exception $e) {
             Log::error('=== ImportProductsJob Failed ===');
             Log::error('Error: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
 
             // Update cache with error status
-            Cache::put($this->sessionKey, [
+            cache()->put($this->sessionKey, [
                 'total' => $this->totalRows,
                 'current' => 0,
                 'percentage' => 0,

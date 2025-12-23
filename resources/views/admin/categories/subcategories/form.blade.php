@@ -47,8 +47,8 @@
         {{-- Show old image if exists --}}
         @if(isset($subcategory) && $subcategory->image)
             <div class="mt-2">
-                <img src="{{ asset('images/subcategories/' . $subcategory->image) }}" alt="SubCategory Image" width="100"
-                    class="rounded shadow-sm">
+                <img src="{{ asset('images/subcategories/' . $subcategory->image) }}" alt="SubCategory Image" width="100" class="rounded border"
+                     onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
             </div>
         @endif
     </div>

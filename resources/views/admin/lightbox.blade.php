@@ -26,7 +26,7 @@
     @endif
 @else
     <!-- No images, show only icon -->
-    <i class="fa-solid fa-photo-film"></i>
+    <img src="{{ asset('images/cf-logo-1.png') }}" width="50" height="50" class="rounded" alt="Default Logo" />
 @endif
 
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.0/dist/fancybox/fancybox.umd.js"></script>

@@ -21,8 +21,8 @@
                     <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                         <div class="collection-item">
                             <a href="{{ route('products.index', ['subcategory' => $subcategory->id]) }}">
-                                <img src="{{ $subcategory->image ? asset('images/subcategories/' . $subcategory->image) : asset('images/placeholder.png') }}"
-                                    alt="{{ $subcategory->name }}" class="img-fluid">
+                                <img src="{{ $subcategory->image_url }}" alt="{{ $subcategory->name }}"
+                                     onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
 
                                 <div class="collection-info">
                                     <h3>{{ $subcategory->name }}</h3>

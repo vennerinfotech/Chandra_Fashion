@@ -227,7 +227,8 @@
 
                             @foreach($variantImages as $img)
                                 <div class="position-relative d-inline-block me-1 mb-1">
-                                    <img src="{{ asset($img) }}" width="80" height="80" class="rounded border">
+                                    <img src="{{ asset($img) }}" width="80" height="80" class="rounded border" 
+                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                     <span class="position-absolute top-0 end-0 p-1 cursor-pointer remove-old-image">
                                         <i class="fa-solid fa-circle-xmark text-danger"></i>
                                     </span>

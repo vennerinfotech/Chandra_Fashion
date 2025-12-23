@@ -11,7 +11,7 @@
     </div>
 
     {{-- Recent Import Notifications --}}
-    @if(isset($recentImports) && $recentImports->count() > 0)
+    @if(session('show_import_status') && isset($recentImports) && $recentImports->count() > 0)
         <div class="card border-0 shadow-sm rounded-3 mb-4">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-file-import me-2"></i>Recent Product Imports</h5>

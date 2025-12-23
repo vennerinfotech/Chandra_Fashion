@@ -55,9 +55,8 @@
                         <div id="colorGallery" class="img-thumbnail-main">
                             @foreach ($colorImages[$colors[0]] as $img)
 
-                                <img src="{{ asset('images/variants/' . basename($img)) }}"
-                                    class="img-thumbnail selectable-image"
-                                    data-image="{{ asset('images/variants/' . basename($img)) }}">
+                                <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border" 
+                                     onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                             @endforeach
                         </div>
                         <div class="badge-top d-flex align-items-center gap-2 mb-2">
@@ -336,7 +335,8 @@
                                             ? $firstImage[0] ?? '/images/product2.jpg'
                                             : json_decode($firstImage, true)[0] ?? '/images/product2.jpg';
                                     @endphp
-                                    <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid">
+                                    <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid"
+                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 </div>
                                 <div class="arrival-list">
                                     <p>{{ $rProduct->is_featured ? 'FEATURED' : 'TRENDING' }}</p>

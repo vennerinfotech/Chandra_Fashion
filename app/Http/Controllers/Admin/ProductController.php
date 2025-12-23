@@ -27,7 +27,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with(['category', 'subcategory'])->latest()->get();
-        return view('admin.products.index', compact('products'));
+        $recentImports = \App\Models\ProductImportLog::latest()->take(1)->get();  // Get latest import for summary
+        return view('admin.products.index', compact('products', 'recentImports'));
     }
 
     /**
@@ -75,9 +76,10 @@ class ProductController extends Controller
             // Create session key for progress tracking
             $sessionKey = 'import_progress_' . time();
             session(['current_import_key' => $sessionKey]);
+            Log::info("GENERATED session key: '{$sessionKey}' and saved to session.");
 
             // Initialize progress
-            Cache::put($sessionKey, [
+            cache()->put($sessionKey, [
                 'total' => 0,
                 'current' => 0,
                 'percentage' => 0,
@@ -112,34 +114,54 @@ class ProductController extends Controller
 
             Log::info('Job dispatched to queue successfully');
 
-            return back()->with('success', 'Import job has been queued! Processing will run in the background. You can monitor progress below.');
+            return back()
+                ->with('success', 'Import job has been queued! Processing will run in the background. You can monitor progress below.')
+                ->with('show_import_status', true)
+                ->with('import_key', $sessionKey);
         } catch (\Exception $e) {
             Log::error('Product import failed: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
 
             return back()->withErrors([
                 'import_error' => 'Import failed: ' . $e->getMessage()
-            ]);
+            ])->with('show_import_status', true);
         }
     }
 
-    public function importProgress()
+    public function importProgress(Request $request)
     {
-        $sessionKey = session('current_import_key', 'import_progress');
-        $progress = \Cache::get($sessionKey, [
+        $sessionKey = $request->input('key');
+
+        if (!$sessionKey) {
+            // Fallback: Check for latest processing import log for this user
+            $activeLog = \App\Models\ProductImportLog::where('user_id', \Auth::id())
+                ->whereIn('status', ['pending', 'processing'])
+                ->latest()
+                ->first();
+
+            if ($activeLog) {
+                $sessionKey = $activeLog->session_key;
+            } else {
+                $sessionKey = session('current_import_key', 'import_progress');
+            }
+        }
+
+        $progress = cache()->get($sessionKey, [
             'total' => 0,
             'current' => 0,
             'percentage' => 0,
-            'status' => 'idle'
+            'status' => 'idle_default'
         ]);
+
+        // Log::info('Progress data retrieved: ' . json_encode($progress));
 
         return response()->json($progress);
     }
 
-    public function cancelImport()
+    public function cancelImport(Request $request)
     {
         // Set cancel flag in session
-        $sessionKey = session('current_import_key', 'import_progress');
+        $sessionKey = $request->input('key') ?? session('current_import_key', 'import_progress');
         session(['import_cancelled' => true]);
 
         // Update cache status
