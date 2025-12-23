@@ -39,25 +39,35 @@
                         <div class="left-img zoom-container">
                             @php
                                 $firstVariant = $product->variants->first();
-                                $mainImage = $firstVariant
-                                    ? (is_array($firstVariant->images)
-                                        ? $firstVariant->images[0]
-                                        : json_decode($firstVariant->images, true)[0])
-                                    : $product->image_url;
+                                $mainImage = null;
+                                if ($firstVariant) {
+                                    $vImages = $firstVariant->images;
+                                    if (is_string($vImages)) {
+                                        $vImages = json_decode($vImages, true);
+                                    }
+                                    $mainImage = (is_array($vImages) && !empty($vImages)) ? $vImages[0] : null;
+                                }
+                                $mainImage = $mainImage ?? $product->image_url;
                             @endphp
 
-                            <img src="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}"
-                                id="mainProductImage" class="img-fluid selectable-image"
-                                data-image="{{ asset('images/variants/' . basename($colorImages[$colors[0]][0])) }}">
+                            @if($mainImage)
+                                <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
+                                    id="mainProductImage" class="img-fluid selectable-image"
+                                    data-image="{{ asset('images/variants/' . basename($mainImage)) }}"
+                                    onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
+                            @else
+                                <img src="{{ asset('images/cf-logo-1.png') }}" id="mainProductImage" class="img-fluid selectable-image">
+                            @endif
 
                         </div>
 
                         <div id="colorGallery" class="img-thumbnail-main">
-                            @foreach ($colorImages[$colors[0]] as $img)
-
-                                <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border" 
-                                     onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
-                            @endforeach
+                            @if(!empty($colors) && isset($colorImages[$colors[0]]) && is_array($colorImages[$colors[0]]))
+                                @foreach ($colorImages[$colors[0]] as $img)
+                                    <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border" 
+                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
+                                @endforeach
+                            @endif
                         </div>
                         <div class="badge-top d-flex align-items-center gap-2 mb-2">
                             <span class="badge bg-danger">New</span>
@@ -330,10 +340,12 @@
                             <div class="new-arrival-box card">
                                 <div class="new-arrival-box-img">
                                     @php
-                                        $firstImage = $rProduct->variants->first()?->images;
-                                        $firstImage = is_array($firstImage)
-                                            ? $firstImage[0] ?? '/images/product2.jpg'
-                                            : json_decode($firstImage, true)[0] ?? '/images/product2.jpg';
+                                        $vImages = $rProduct->variants->first()?->images;
+                                        if (is_string($vImages)) {
+                                            $vImages = json_decode($vImages, true);
+                                        }
+                                        $firstImage = (is_array($vImages) && !empty($vImages)) ? $vImages[0] : null;
+                                        $firstImage = $firstImage ?? $rProduct->image_url;
                                     @endphp
                                     <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid"
                                          onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">

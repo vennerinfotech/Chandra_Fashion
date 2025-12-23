@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Country;
 use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
     public function index(Request $request)
     {
-        $query = Product::query()->with('variants', 'category', 'subcategory')
+        $query = Product::query()
+            ->with('variants', 'category', 'subcategory')
             ->whereHas('category', function ($q) {
                 $q->where('status', 1);
             });
@@ -41,16 +41,22 @@ class ProductController extends Controller
                 $q->whereHas('variants', function ($q2) use ($request) {
                     $q2->where(function ($q3) use ($request) {
                         foreach ($request->moq_range as $range) {
-                            if ($range === '50-100') $q3->orWhereBetween('moq', [50, 100]);
-                            elseif ($range === '100-500') $q3->orWhereBetween('moq', [100, 500]);
-                            elseif ($range === '500+') $q3->orWhere('moq', '>=', 500);
+                            if ($range === '50-100')
+                                $q3->orWhereBetween('moq', [50, 100]);
+                            elseif ($range === '100-500')
+                                $q3->orWhereBetween('moq', [100, 500]);
+                            elseif ($range === '500+')
+                                $q3->orWhere('moq', '>=', 500);
                         }
                     });
                 })->orWhere(function ($q2) use ($request) {
                     foreach ($request->moq_range as $range) {
-                        if ($range === '50-100') $q2->orWhereBetween('moq', [50, 100]);
-                        elseif ($range === '100-500') $q2->orWhereBetween('moq', [100, 500]);
-                        elseif ($range === '500+') $q2->orWhere('moq', '>=', 500);
+                        if ($range === '50-100')
+                            $q2->orWhereBetween('moq', [50, 100]);
+                        elseif ($range === '100-500')
+                            $q2->orWhereBetween('moq', [100, 500]);
+                        elseif ($range === '500+')
+                            $q2->orWhere('moq', '>=', 500);
                     }
                 });
             });
@@ -62,9 +68,12 @@ class ProductController extends Controller
 
         // Sorting
         $sort = $request->get('sort', 'latest');
-        if ($sort == 'price_asc') $query->orderBy('price', 'asc');
-        elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
-        else $query->orderBy('created_at', 'desc');
+        if ($sort == 'price_asc')
+            $query->orderBy('price', 'asc');
+        elseif ($sort == 'price_desc')
+            $query->orderBy('price', 'desc');
+        else
+            $query->orderBy('created_at', 'desc');
 
         $totalProducts = $query->count();
         $products = $query->paginate(6)->withQueryString();
@@ -97,6 +106,7 @@ class ProductController extends Controller
 
         foreach ($product->variants as $variant) {
             $imgs = is_array($variant->images) ? $variant->images : json_decode($variant->images, true);
+            $imgs = is_array($imgs) ? $imgs : [];
             $colorImages[$variant->color] = $imgs;
 
             $sizesByColor[$variant->color][] = $variant->size;
@@ -116,8 +126,7 @@ class ProductController extends Controller
             ->take(6)
             ->get();
 
-        return view('products.show', compact( 'product', 'colors','countries','colorImages','sizesByColor','skuByColor','moqByColor',
-            'deliveryByColor','gsmByColor','daiByColor','chadtiByColor', 'relatedProducts'
-        ));
+        return view('products.show', compact('product', 'colors', 'countries', 'colorImages', 'sizesByColor', 'skuByColor', 'moqByColor',
+            'deliveryByColor', 'gsmByColor', 'daiByColor', 'chadtiByColor', 'relatedProducts'));
     }
 }
