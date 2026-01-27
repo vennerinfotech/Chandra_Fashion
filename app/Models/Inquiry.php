@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Inquiry extends Model
 {
@@ -19,6 +19,7 @@ class Inquiry extends Model
         'selected_size',
         'selected_images',
         'variant_details',
+        'color',
         'country_id',
         'state_id',
         'city_id',

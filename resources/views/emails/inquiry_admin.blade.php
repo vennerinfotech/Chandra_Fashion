@@ -390,6 +390,12 @@
                         <td>Quantity Interested:</td>
                         <td><span class="highlight-value">{{ $inquiry->quantity }} Kg</span></td>
                     </tr>
+                    @if($inquiry->color)
+                    <tr>
+                        <td>Color:</td>
+                        <td><span class="highlight-value">{{ $inquiry->color }}</span></td>
+                    </tr>
+                    @endif
                 </table>
             </div>
 

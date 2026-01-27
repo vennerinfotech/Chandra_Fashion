@@ -64,7 +64,7 @@
                         <div id="colorGallery" class="img-thumbnail-main">
                             @if(!empty($colors) && isset($colorImages[$colors[0]]) && is_array($colorImages[$colors[0]]))
                                 @foreach ($colorImages[$colors[0]] as $img)
-                                    <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border" 
+                                    <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border"
                                          onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 @endforeach
                             @endif
@@ -245,6 +245,12 @@
                                         <div class="mb-3">
                                             <label class="form-label">Quantity Interested (KG)</label>
                                             <input type="number" name="quantity" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Color</label>
+                                            <input type="text" name="color" class="form-control" placeholder="e.g. Red, Blue, Green">
                                         </div>
                                     </div>
                                 </div>

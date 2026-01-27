@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Mail;
+use App\Jobs\SendInquiryEmails;
+use App\Mail\InquiryAdminMail;
+use App\Mail\InquiryUserMail;
 use App\Models\Country;
 use App\Models\Inquiry;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Mail\InquiryUserMail;
-use App\Mail\InquiryAdminMail;
-use App\Jobs\SendInquiryEmails;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class InquiryController extends Controller
 {
-
     public function store(Request $request)
     {
         Log::info('Inquiry Submit Request:', $request->all());
@@ -32,6 +31,7 @@ class InquiryController extends Controller
             'selected_size' => 'nullable|string',
             'selected_images' => 'nullable|string',
             'variant_details' => 'nullable|string',
+            'color' => 'nullable|string|max:255',
         ]);
 
         // Check if this name + email combination already exists
@@ -63,33 +63,34 @@ class InquiryController extends Controller
             'selected_size' => $selected_size,
             'selected_images' => $selected_images,
             'variant_details' => $variant_details,
+            'color' => $validated['color'] ?? null,
         ]);
 
         // Fetch product info (optional for admin)
         $product = $validated['product_id']
-                    ? Product::with(['variants', 'category', 'subcategory'])->find($validated['product_id'])
-                    : null;
+            ? Product::with(['variants', 'category', 'subcategory'])->find($validated['product_id'])
+            : null;
 
         // Send emails (Admin & User)
         // Send email to admin
-        \Mail::send('emails.inquiry_admin', [
+        Mail::send('emails.inquiry_admin', [
             'inquiry' => $inquiry,
             'product' => $product,
-        ], function($message) {
+        ], function ($message) {
             $adminEmail = env('ADMIN_EMAIL');
-            $message->to($adminEmail, 'Admin')
-                    ->subject('New Product Inquiry Received');
+            $message
+                ->to($adminEmail, 'Admin')
+                ->subject('New Product Inquiry Received');
         });
 
-        \Mail::send('emails.inquiry_user', ['inquiry' => $inquiry, 'product' => $product], function($message) use ($inquiry) {
-            $message->to($inquiry->email, $inquiry->name)
-                    ->subject('Your Product Inquiry Confirmation');
+        Mail::send('emails.inquiry_user', ['inquiry' => $inquiry, 'product' => $product], function ($message) use ($inquiry) {
+            $message
+                ->to($inquiry->email, $inquiry->name)
+                ->subject('Your Product Inquiry Confirmation');
         });
 
         return redirect()->back()->with('success', 'Your inquiry has been submitted successfully!');
     }
-
-
 
     public function checkUser(Request $request)
     {
@@ -128,7 +129,4 @@ class InquiryController extends Controller
 
         return response()->json(['exists' => false]);
     }
-
-
-
 }

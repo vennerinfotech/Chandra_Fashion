@@ -57,6 +57,12 @@
                         <th>Quantity</th>
                         <td>{{ $inquiry->quantity }}</td>
                     </tr>
+                    @if($inquiry->color)
+                    <tr>
+                        <th>Color</th>
+                        <td>{{ $inquiry->color }}</td>
+                    </tr>
+                    @endif
                     <tr>
                         <th>Created At</th>
                         <td>{{ $inquiry->created_at->format('d M Y, h:i A') }}</td>

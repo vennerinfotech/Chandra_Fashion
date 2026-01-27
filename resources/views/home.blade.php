@@ -42,38 +42,6 @@
         </button>
     </div>
 
-    {{-- <section class="featured-section section-padding">
-        <div class="container-fluid">
-            <div class="row">
-                <h2 class="section-title">
-                    {{ $featured->main_title ?? 'Featured Collections' }}
-                </h2>
-                <p class="section-sub-title">
-                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
-                </p>
-            </div>
-            <div class="row">
-                <div class="custom-owl-carousel owl-carousel featured-carousel">
-                    @foreach ($featuredCollections as $card)
-                    <div class="featured-collection-grid">
-                        <div class="featured-img">
-                            @if ($card->image)
-                            <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
-                            @endif
-                        </div>
-                        <div class="featured-content">
-                            <h2>{{ $card->title }}</h2>
-                            <p>{{ $card->subtitle }}</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-
-            </div>
-        </div>
-    </section> --}}
-
-
     <section class="featured-section section-padding">
         <div class="container-fluid">
             <div class="row">
@@ -92,11 +60,11 @@
                             <a href="{{ route('allcollection') }}" class="featured-link">
                                 <div class="featured-img">
                                     <img src="{{ $category->image_url }}" class="img-fluid" alt="{{ $category->name }}"
-                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 </div>
                                 <div class="featured-content">
                                     <h2>{{ $category->name }}</h2>
-                                    <p>{{ $category->description ?? '' }}</p>
+                                    {{-- <p>{{ $category->description ?? '' }}</p> --}}
                                 </div>
                             </a>
                         </div>
@@ -105,69 +73,6 @@
             </div>
         </div>
     </section>
-
-
-
-    {{-- <section class="featured-section section-padding">
-        <div class="container-fluid">
-            <div class="row">
-                <h2 class="section-title">
-                    {{ $featured->main_title ?? 'Featured Collections' }}
-                </h2>
-                <p class="section-sub-title">
-                    {{ $featured->main_subtitle ?? 'Discover our latest designs and seasonal highlights' }}
-                </p>
-            </div>
-
-            Featured Collections
-            <div class="row mb-5">
-                <div class="custom-owl-carousel owl-carousel featured-carousel">
-                    @foreach ($featuredCollections as $card)
-                    <div class="featured-collection-grid">
-                        <div class="featured-img">
-                            @if ($card->image)
-                            <img src="{{ asset($card->image) }}" alt="{{ $card->title }}">
-                            @endif
-                        </div>
-                        <div class="featured-content">
-                            <h2>{{ $category->name }}</h2>
-                            <p>{{ $card->subtitle }}</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            Categories / Collections (merged section)
-            <div class="row mt-5">
-                <h2 class="section-title">
-                    {{ $collections->title ?? 'Our Collections' }}
-                </h2>
-                <p class="section-sub-title">
-                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with
-                    uncompromising quality standards' }}
-                </p>
-
-                <div class="custom-owl-carousel owl-carousel collection-carousel">
-                    @foreach ($categories as $category)
-                    <div class="collection-item">
-                        <a href="{{ route('allcollection') }}">
-                                    <img src="{{ $category->image_url }}" alt="{{ $category->name }}" 
-                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
-                                alt="{{ $category->name }}">
-
-                            <div class="collection-info">
-                                <h3>{{ $category->name }}</h3>
-                                <p>{{ $category->description ?? '' }}</p>
-                            </div>
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
 
     <section class="new-arriaval section-padding">
         <div class="container">
@@ -212,10 +117,11 @@
                         <div class="new-arrival-box card">
                             <a href="{{ route('products.show', $product) }}">
                                 <div class="new-arrival-box-img">
-                                    @if($imagePath)
+                                    @if ($imagePath)
                                         <img src="{{ $imagePath }}" alt="{{ $product->name }}" class="img-fluid">
                                     @else
-                                        <img src="{{ asset('images/cf-logo-1.png') }}" alt="{{ $product->name }}" class="img-fluid">
+                                        <img src="{{ asset('images/cf-logo-1.png') }}" alt="{{ $product->name }}"
+                                            class="img-fluid">
                                     @endif
                                 </div>
                             </a>
@@ -254,35 +160,6 @@
         </div>
     </section>
 
-    {{-- <section class="collections-section section-padding">
-        <div class="container">
-            <div class="row">
-                <h2 class="section-title">{{ $collections->title ?? 'Our Collections' }}</h2>
-                <p class="section-sub-title">
-                    {{ $collections->subtitle ?? 'Specialized manufacturing across diverse fashion categories with
-                    uncompromising quality standards' }}
-                </p>
-            </div>
-
-            <div class="custom-owl-carousel owl-carousel collection-carousel">
-                @foreach ($categories as $category)
-                <div class="collection-item">
-                    <a href="{{ route('allcollection') }}">
-                        <img src="{{ $category->image_url }}" alt="{{ $category->name }}"
-                             onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
-                            alt="{{ $category->name }}">
-
-                        <div class="collection-info">
-                            <h3>{{ $category->name }}</h3>
-                            <p>{{ $category->description ?? '' }}</p>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section> --}}
-
     <section class="card-section section-padding">
         <div class="container">
             <div class="row">
@@ -298,37 +175,37 @@
                 @endphp
 
                 @for ($i = 0; $i < 3; $i++)
-                        @php
-                            $card = $cards[$i] ?? null;
-                        @endphp
-                        <div class="col-sm-6 col-md-6 col-lg-4">
-                            <div class="card">
-                                <div class="card-body text-center d-flex flex-column align-items-center gap-3">
+                    @php
+                        $card = $cards[$i] ?? null;
+                    @endphp
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center d-flex flex-column align-items-center gap-3">
 
-                                    <div class="svg-wrapper">
-                                        @if ($card && $card->svg_path)
-                                            <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
-                                        @else
-                                            <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
-                                        @endif
-                                    </div>
-
-                                    <h5 class="card-title m-0">
-                                        {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
-                                    </h5>
-
-                                    <p class="card-text">
-                                        {{ $card->description ??
-                    [
-                        'Flexible minimum order quantities starting from 100 pieces per style',
-                        'Serving 25+ countries across Europe, North America, and Asia',
-                        'ISO certified facility with rigorous quality control processes.',
-                    ][$i] }}
-                                    </p>
-
+                                <div class="svg-wrapper">
+                                    @if ($card && $card->svg_path)
+                                        <img src="{{ asset($card->svg_path) }}" alt="{{ $card->title }}">
+                                    @else
+                                        <img src="{{ $staticSvgs[$i] }}" alt="Static SVG">
+                                    @endif
                                 </div>
+
+                                <h5 class="card-title m-0">
+                                    {{ $card->title ?? ['Low MOQ', 'Global Export', 'Premium Quality'][$i] }}
+                                </h5>
+
+                                <p class="card-text">
+                                    {{ $card->description ??
+                                        [
+                                            'Flexible minimum order quantities starting from 100 pieces per style',
+                                            'Serving 25+ countries across Europe, North America, and Asia',
+                                            'ISO certified facility with rigorous quality control processes.',
+                                        ][$i] }}
+                                </p>
+
                             </div>
                         </div>
+                    </div>
                 @endfor
 
             </div>
@@ -414,38 +291,11 @@
         </div>
     </section>
 
-    {{-- Subscription Section --}}
-    {{-- <section class="subscription-section">
-        <div class="subscription-content">
-            <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
-            <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special
-                offers' }}
-            </p>
-            <form action="#">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
-        </div>
-    </section> --}}
-
-
     <section class="subscription-section">
         <div class="subscription-content">
             <h2>{{ $subscription->title ?? 'Join Our Buyers Network' }}</h2>
             <p>{{ $subscription->subtitle ?? 'Get exclusive access to new collections, industry insights, and special offers' }}
             </p>
-
-            {{-- @if(session('success'))
-            <div class="alert alert-success mt-2">{{ session('success') }}</div>
-            @endif
-
-            @if($errors->any())
-            <div class="alert alert-danger mt-2">
-                @foreach($errors->all() as $error)
-                <div>{{ $error }}</div>
-                @endforeach
-            </div>
-            @endif --}}
 
             <form action="{{ route('subscribe') }}" method="POST">
                 @csrf
@@ -456,20 +306,20 @@
             </form>
         </div>
     </section>
-    @if(session('success') || $errors->any())
+    @if (session('success') || $errors->any())
         <div id="toastMessage"
             class="toast align-items-center text-white {{ session('success') ? 'bg-success' : 'bg-danger' }} border-0 position-fixed bottom-0 end-0 m-4"
             role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
             <div class="d-flex">
                 <div class="toast-body">
                     {{-- ✅ Success Message --}}
-                    @if(session('success'))
+                    @if (session('success'))
                         {{ session('success') }}
                     @endif
 
                     {{-- ❌ Error Messages --}}
-                    @if($errors->any())
-                        @foreach($errors->all() as $error)
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
                             <div>{{ $error }}</div>
                         @endforeach
                     @endif
@@ -493,7 +343,7 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".featured-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -516,7 +366,7 @@
                     992: {
                         items: 3
                     },
-                     1200: {
+                    1200: {
                         items: 6
                     }
                 }
@@ -600,10 +450,12 @@
         });
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const toastEl = document.getElementById('toastMessage');
             if (toastEl) {
-                const toast = new bootstrap.Toast(toastEl, { delay: 5000 }); //  stays 5 seconds
+                const toast = new bootstrap.Toast(toastEl, {
+                    delay: 5000
+                }); //  stays 5 seconds
                 toast.show();
             }
         });
