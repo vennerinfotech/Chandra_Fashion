@@ -8,14 +8,14 @@
             <div class="row g-4">
 
                 {{-- Display Flash Messages --}}
-                @if(session('success'))
+                @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
 
-                @if(session('error'))
+                @if (session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -34,7 +34,7 @@
                 @endif
 
                 {{-- Left Side: Product Image & Thumbnails --}}
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     <div class="product-detail-left">
                         <div class="left-img zoom-container">
                             @php
@@ -45,27 +45,29 @@
                                     if (is_string($vImages)) {
                                         $vImages = json_decode($vImages, true);
                                     }
-                                    $mainImage = (is_array($vImages) && !empty($vImages)) ? $vImages[0] : null;
+                                    $mainImage = is_array($vImages) && !empty($vImages) ? $vImages[0] : null;
                                 }
                                 $mainImage = $mainImage ?? $product->image_url;
                             @endphp
 
-                            @if($mainImage)
-                                <img src="{{ asset('images/variants/' . basename($mainImage)) }}"
-                                    id="mainProductImage" class="img-fluid selectable-image"
+                            @if ($mainImage)
+                                <img src="{{ asset('images/variants/' . basename($mainImage)) }}" id="mainProductImage"
+                                    class="img-fluid selectable-image"
                                     data-image="{{ asset('images/variants/' . basename($mainImage)) }}"
                                     onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                             @else
-                                <img src="{{ asset('images/cf-logo-1.png') }}" id="mainProductImage" class="img-fluid selectable-image">
+                                <img src="{{ asset('images/cf-logo-1.png') }}" id="mainProductImage"
+                                    class="img-fluid selectable-image">
                             @endif
 
                         </div>
 
                         <div id="colorGallery" class="img-thumbnail-main">
-                            @if(!empty($colors) && isset($colorImages[$colors[0]]) && is_array($colorImages[$colors[0]]))
+                            @if (!empty($colors) && isset($colorImages[$colors[0]]) && is_array($colorImages[$colors[0]]))
                                 @foreach ($colorImages[$colors[0]] as $img)
-                                    <img src="{{ asset('images/variants/' . basename($img)) }}" class="img-fluid rounded border"
-                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
+                                    <img src="{{ asset('images/variants/' . basename($img)) }}"
+                                        class="img-fluid rounded border"
+                                        onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 @endforeach
                             @endif
                         </div>
@@ -77,10 +79,10 @@
                 </div>
 
                 {{-- Right Side: Product Info --}}
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     <div class="product-detail-right">
                         <h2 class="product-title">{{ $product->name }}</h2>
-                        @if($product->price)
+                        @if ($product->price)
                             <h6 class="product-price"> ₹{{ $product->price }}</h6>
                         @endif
                         <p class="product-desc">{!! $product->short_description ?? 'No short description available.' !!}</p>
@@ -158,8 +160,9 @@
                                 <p>Minimum Order Qty (KG)</p>
                             </div>
                             <div class="moq-delivery">
-                                <h4 id="deliveryValue">{{ $product->delivery_time }} <span class="time">Hour's</span></h4>
-                                <p>Same Day Delivery</p>
+                                <h4 id="deliveryValue">24-36 <span class="time">Hour's</span>
+                                </h4>
+                                <p>delivery time</p>
                             </div>
                         </div>
 
@@ -250,13 +253,15 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Color</label>
-                                            <input type="text" name="color" class="form-control" placeholder="e.g. Red, Blue, Green">
+                                            <input type="text" name="color" class="form-control"
+                                                placeholder="e.g. Red, Blue, Green">
                                         </div>
                                     </div>
                                 </div>
 
                                 {{-- <button type="submit" class="btn w-100">Submit to Check Price</button> --}}
-                                <button type="submit" class="btn w-100" id="inquirySubmitBtn">Submit to Check Price</button>
+                                <button type="submit" class="btn w-100" id="inquirySubmitBtn">Submit to Check
+                                    Price</button>
 
                                 <!-- Loader -->
                                 <div id="formLoader" style="display:none; text-align:center; margin-top:10px;">
@@ -280,7 +285,8 @@
                             role="tab">Description</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care Instructions</a>
+                        <a class="nav-link" id="care-tab" data-bs-toggle="tab" href="#care" role="tab">Care
+                            Instructions</a>
                     </li>
                 </ul>
 
@@ -352,11 +358,11 @@
                                         if (is_string($vImages)) {
                                             $vImages = json_decode($vImages, true);
                                         }
-                                        $firstImage = (is_array($vImages) && !empty($vImages)) ? $vImages[0] : null;
+                                        $firstImage = is_array($vImages) && !empty($vImages) ? $vImages[0] : null;
                                         $firstImage = $firstImage ?? $rProduct->image_url;
                                     @endphp
                                     <img src="{{ asset($firstImage) }}" alt="{{ $rProduct->name }}" class="img-fluid"
-                                         onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                 </div>
                                 <div class="arrival-list">
                                     <p>{{ $rProduct->is_featured ? 'FEATURED' : 'TRENDING' }}</p>
@@ -385,7 +391,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".new-arrival-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -415,9 +421,9 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var inquiryModal = document.getElementById('inquiryModal');
-            inquiryModal.addEventListener('show.bs.modal', function (event) {
+            inquiryModal.addEventListener('show.bs.modal', function(event) {
                 var button = event.relatedTarget;
                 var productId = button.getAttribute('data-product');
                 var inputProduct = inquiryModal.querySelector('#product_id');
@@ -425,7 +431,7 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll('.color-circle');
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
@@ -573,7 +579,7 @@
 
             const inquiryForm = document.getElementById('inquiryForm');
             if (inquiryForm) {
-                inquiryForm.addEventListener('submit', function () {
+                inquiryForm.addEventListener('submit', function() {
                     updateHiddenInputs();
                 });
             }
@@ -586,13 +592,13 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll(".color-btn");
             const mainImage = document.querySelector(".col-md-6 img");
             const relatedDiv = document.getElementById("relatedProducts");
 
             colorButtons.forEach(btn => {
-                btn.addEventListener("click", function () {
+                btn.addEventListener("click", function() {
                     const selectedColor = btn.getAttribute("data-color");
 
                     // Update main image based on color
@@ -605,7 +611,8 @@
                             relatedDiv.innerHTML = '';
                             data.related.forEach(p => {
                                 const gallery = JSON.parse(p.gallery);
-                                relatedDiv.innerHTML += `
+                                relatedDiv.innerHTML +=
+                                    `
                                                                                                                                     <div class="card" style="width:120px;">
                                                                                                                                         <img src="${gallery[0]}" class="card-img-top" style="height:100px; object-fit:cover;">
                                                                                                                                         <div class="card-body p-2 text-center">
@@ -620,12 +627,12 @@
         });
 
         // img zoom script
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const thumbnails = document.querySelectorAll('.gallery-thumb');
 
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function () {
+                thumb.addEventListener('click', function() {
                     const newSrc = this.getAttribute('data-full');
                     mainImage.src = newSrc;
                 });
@@ -634,7 +641,7 @@
             // Zoom effect
             const container = document.querySelector(".zoom-container");
 
-            container.addEventListener("mousemove", function (e) {
+            container.addEventListener("mousemove", function(e) {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -646,14 +653,14 @@
                 mainImage.style.transform = "scale(2)";
             });
 
-            container.addEventListener("mouseleave", function () {
+            container.addEventListener("mouseleave", function() {
                 mainImage.style.transform = "scale(1)";
                 mainImage.style.transformOrigin = "center center";
             });
         });
 
         // color click changes img
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('mainProductImage');
             const gallery = document.getElementById('colorGallery');
             const sizeContainer = document.getElementById('sizeContainer');
@@ -664,7 +671,7 @@
 
             // Color buttons
             document.querySelectorAll('.color-circle').forEach(circle => {
-                circle.addEventListener('click', function () {
+                circle.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const images = JSON.parse(this.dataset.images);
 
@@ -729,7 +736,7 @@
         const deliveryByColor = @json($deliveryByColor);
 
         document.querySelectorAll('.color-circle').forEach(circle => {
-            circle.addEventListener('click', function () {
+            circle.addEventListener('click', function() {
                 const color = this.dataset.color;
 
                 // Existing updates (images, gallery, sizes, SKU)...
@@ -745,7 +752,7 @@
         });
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
 
             // Store selections
             let selectedSizes = [];
@@ -755,7 +762,7 @@
             // Example: user clicks on a variant color box
             const variantBoxes = document.querySelectorAll('.variant-box'); // add class to your variant options
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function () {
+                box.addEventListener('click', function() {
                     const color = this.dataset.color;
                     const sizeOptions = JSON.parse(this.dataset.sizes); // array of available sizes
                     const images = JSON.parse(this.dataset.images); // array of image URLs
@@ -798,7 +805,7 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const countrySelect = document.getElementById('country');
             const stateSelect = document.getElementById('state');
             const citySelect = document.getElementById('city');
@@ -866,11 +873,11 @@
             }
 
             //  Event listeners
-            countrySelect.addEventListener('change', function () {
+            countrySelect.addEventListener('change', function() {
                 loadStates(this.value);
             });
 
-            stateSelect.addEventListener('change', function () {
+            stateSelect.addEventListener('change', function() {
                 loadCities(this.value);
             });
         });
@@ -878,12 +885,12 @@
 
 
         // apture Selected Images in JavaScript
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let selectedImages = [];
 
             // When user clicks any product image
             document.querySelectorAll('.selectable-image').forEach(img => {
-                img.addEventListener('click', function () {
+                img.addEventListener('click', function() {
                     let imgPath = this.getAttribute('data-image');
 
                     if (!selectedImages.includes(imgPath)) {
@@ -898,14 +905,14 @@
             });
 
             // Before form submit
-            document.getElementById('inquiryForm').addEventListener('submit', function () {
+            document.getElementById('inquiryForm').addEventListener('submit', function() {
                 document.getElementById('selected_images').value = JSON.stringify(selectedImages);
             });
         });
 
 
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const inquiryForm = document.getElementById('inquiryForm');
             const selectedImagesInput = document.getElementById('selected_images');
             const mainImage = document.getElementById('mainProductImage');
@@ -913,14 +920,14 @@
             if (!inquiryForm || !mainImage) return;
 
             // On form submit, store the current main image into hidden input
-            inquiryForm.addEventListener('submit', function () {
+            inquiryForm.addEventListener('submit', function() {
                 const currentMainImage = mainImage.dataset.image || mainImage.src;
                 selectedImagesInput.value = JSON.stringify([currentMainImage]); // store as array
                 console.log('Storing Main Image to DB:', currentMainImage);
             });
 
             // Optional: if you want clicking gallery to also update main image visually
-            document.getElementById('colorGallery').addEventListener('click', function (e) {
+            document.getElementById('colorGallery').addEventListener('click', function(e) {
                 if (e.target.tagName === 'IMG') {
                     const imgPath = e.target.dataset.image || e.target.src;
                     mainImage.src = imgPath;
@@ -930,7 +937,7 @@
         });
 
         // show a inquiryModal mes
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const inquiryForm = document.getElementById('inquiryForm');
             const submitBtn = document.getElementById('inquirySubmitBtn');
             const loader = document.getElementById('formLoader');
@@ -939,7 +946,7 @@
 
             if (!inquiryForm) return;
 
-            inquiryForm.addEventListener('submit', function (e) {
+            inquiryForm.addEventListener('submit', function(e) {
                 const enteredQty = parseInt(quantityInput.value);
                 const moq = parseInt(moqElement.textContent);
 
@@ -985,7 +992,7 @@
 
 
         // exsting user detalis fatch js
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.querySelector('#inquiryForm input[name="name"]');
             const emailInput = document.querySelector('#inquiryForm input[name="email"]');
             const companyInput = document.querySelector('#inquiryForm input[name="company"]');
@@ -1048,7 +1055,7 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const colorButtons = document.querySelectorAll('.color-btn');
             const selectedColorInput = document.getElementById('selected_size');
             const mainImage = document.getElementById('mainProductImage');
@@ -1077,7 +1084,8 @@
 
                 // Optional: if you want main image to always show the first selected color
                 if (selectedColors.length > 0 && btn.dataset.images) {
-                    const firstSelectedBtn = document.querySelector(`.color-btn[data-color="${selectedColors[0]}"]`);
+                    const firstSelectedBtn = document.querySelector(
+                        `.color-btn[data-color="${selectedColors[0]}"]`);
                     if (firstSelectedBtn && firstSelectedBtn.dataset.images) {
                         const images = JSON.parse(firstSelectedBtn.dataset.images);
                         if (images.length > 0) {
@@ -1106,8 +1114,5 @@
                 btn.addEventListener('click', () => toggleColor(btn));
             });
         });
-
-
-
     </script>
 @endpush

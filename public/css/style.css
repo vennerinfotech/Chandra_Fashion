@@ -1305,12 +1305,12 @@ footer .chatbot-btn svg path {
 
 .product-detail-left .left-img.zoom-container {
     height: auto;
-        border-radius: 15px;
+    border-radius: 15px;
 }
 
 .product-detail-left .left-img img {
-    object-fit: cover;
-    height: 550px;
+    object-fit: contain;
+    height: auto;
     width: 100%;
     border-radius: 15px;
 }
