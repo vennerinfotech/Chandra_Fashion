@@ -162,7 +162,7 @@
                             <div class="moq-delivery">
                                 <h4 id="deliveryValue">24-36 <span class="time">Hour's</span>
                                 </h4>
-                                <p>delivery time</p>
+                                <p>Delivery time</p>
                             </div>
                         </div>
 
