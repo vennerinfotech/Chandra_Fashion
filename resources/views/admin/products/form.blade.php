@@ -1,5 +1,6 @@
 <div class="card shadow-sm p-4">
     {{-- <h4 class="mb-3">{{ isset($product) ? 'Edit Product' : 'Add Product' }}</h4> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     {{-- <h4 class="mb-3">{{ $product->exists ? 'Edit Product' : 'Add Product' }}</h4> --}}
 
     <h4 class="mb-3">{{ isset($product) && $product->exists ? 'Edit Product' : 'Add Product' }}</h4>
@@ -10,6 +11,26 @@
         <label for="name" class="form-label">Product Name</label>
         <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $product->name ?? '') }}">
         @error('name')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    {{-- Status --}}
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="status_active" value="1" 
+                    {{ old('status', $product->status ?? 1) == 1 ? 'checked' : '' }}>
+                <label class="form-check-label" for="status_active">Active</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="status_draft" value="0" 
+                    {{ old('status', $product->status ?? 1) == 0 ? 'checked' : '' }}>
+                <label class="form-check-label" for="status_draft">Draft</label>
+            </div>
+        </div>
+        @error('status')
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
@@ -217,22 +238,29 @@
                             @php
                                 $variantImages = [];
                                 if (is_array($variant)) {
-                                    $variantImages = $variant['images'] ?? '[]';
+                                    if (isset($variant['ordered_images'])) {
+                                        $variantImages = $variant['ordered_images'];
+                                    } else {
+                                        $variantImages = $variant['images'] ?? [];
+                                    }
                                 } else {
-                                    $variantImages = $variant->images ?? '[]';
+                                    $variantImages = $variant->images ?? [];
                                 }
 
-                                $variantImages = json_decode($variantImages, true) ?? [];
+                                if (is_string($variantImages)) {
+                                    $variantImages = json_decode($variantImages, true) ?? [];
+                                }
                             @endphp
 
                             @foreach($variantImages as $img)
-                                <div class="position-relative d-inline-block me-1 mb-1">
+                                <div class="position-relative d-inline-block me-1 mb-1 sortable-image-item" style="cursor: grab;">
                                     <img src="{{ asset($img) }}" width="80" height="80" class="rounded border" 
                                          onerror="this.onerror=null;this.src='{{ asset('images/cf-logo-1.png') }}';">
                                     <span class="position-absolute top-0 end-0 p-1 cursor-pointer remove-old-image">
                                         <i class="fa-solid fa-circle-xmark text-danger"></i>
                                     </span>
-                                    <input type="hidden" value="{{ $img }}">
+                                    {{-- <input type="hidden" value="{{ $img }}"> --}}
+                                    <input type="hidden" name="variants[{{ $index }}][ordered_images][]" value="{{ $img }}">
                                 </div>
                             @endforeach
                         </div>
@@ -591,6 +619,38 @@
                     setTimeout(initMultiColorPickers, 300);
                 });
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Sortable for all existing preview wrappers
+            document.querySelectorAll('.preview-wrapper').forEach(function(el) {
+                new Sortable(el, {
+                    animation: 150,
+                    ghostClass: 'bg-light'
+                });
+            });
+
+            // Observer to initialize Sortable on new variants
+            const wrapper = document.getElementById('variants-wrapper');
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes.length) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.classList && node.classList.contains('variant-item')) {
+                                const previewWrapper = node.querySelector('.preview-wrapper');
+                                if (previewWrapper) {
+                                    new Sortable(previewWrapper, {
+                                        animation: 150,
+                                        ghostClass: 'bg-light'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            observer.observe(wrapper, { childList: true });
         });
 
 

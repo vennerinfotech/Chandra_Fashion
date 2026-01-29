@@ -23,7 +23,8 @@ class ProductImportFormatExport implements FromArray
                 'MOQ',
                 'GSM',
                 'DAI',
-                'CHADTI'
+                'CHADTI',
+                'STATUS'
             ]
         ];
     }

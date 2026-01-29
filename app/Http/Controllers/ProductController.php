@@ -12,7 +12,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query()
+        $query = Product::active()
             ->with('variants', 'category', 'subcategory')
             ->whereHas('category', function ($q) {
                 $q->where('status', 1);
@@ -89,7 +89,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::with(['category', 'variants'])->findOrFail($id);
+        $product = Product::active()->with(['category', 'variants'])->findOrFail($id);
 
         $colors = $product->variants->pluck('color')->unique()->values()->all();
         $countries = Country::orderBy('name', 'asc')->get();
@@ -120,7 +120,8 @@ class ProductController extends Controller
         }
 
         //  RELATED PRODUCTS
-        $relatedProducts = Product::with('variants')
+        $relatedProducts = Product::active()
+            ->with('variants')
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(6)

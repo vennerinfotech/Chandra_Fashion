@@ -16,6 +16,8 @@ Route::middleware('admin.guest')->group(function () {
 Route::middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     // Route::get('/dashboard1', [DashboardController::class, 'index'])->name('admin.main');
+    Route::post('/products/toggle-status', [\App\Http\Controllers\Admin\ProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
+    Route::post('/products/bulk-status', [\App\Http\Controllers\Admin\ProductController::class, 'bulkUpdateStatus'])->name('admin.products.bulk-status');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class, ['as' => 'admin']);
 
     // Product Import Routes

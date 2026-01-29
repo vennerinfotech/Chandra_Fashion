@@ -132,12 +132,23 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
+                <div class="mb-3 d-none" id="bulkActions">
+                    <button class="btn btn-outline-success btn-sm bulk-action" data-status="1">
+                        <i class="fa-solid fa-check"></i> Set Active
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm bulk-action" data-status="0">
+                        <i class="fa-solid fa-ban"></i> Set Draft
+                    </button>
+                    <span class="ms-2 text-muted" id="selectedCount">0 selected</span>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered custom-table" id="productsTable">
                         <thead>
                             <tr>
+                                <th width="40"><input type="checkbox" id="selectAll" class="form-check-input"></th>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Status</th>
                                 <th>Image</th>
                                 <th>Category</th>
                                 <th>Subcategory</th>
@@ -149,8 +160,15 @@
                         <tbody>
                             @forelse($products as $product)
                                 <tr>
+                                    <td><input type="checkbox" class="product-checkbox form-check-input" value="{{ $product->id }}"></td>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $product->name }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input toggle-status" type="checkbox" role="switch" 
+                                                data-id="{{ $product->id }}" {{ $product->status ? 'checked' : '' }}>
+                                        </div>
+                                    </td>
                                     <td>
                                         @php
                                             $firstImage = $product->image ?? null;
@@ -211,7 +229,10 @@
                 "lengthMenu": [10, 25, 50, 100],
                 "ordering": true,
                 "searching": true,
-                "order": [[0, 'desc']] // Default sorting by ID column (descending order)
+                "order": [[1, 'desc']], // Default sorting by ID column (descending order)
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 } // Disable sorting on checkbox column
+                ]
             });
 
             // Auto-start widget if import was just queued
@@ -223,6 +244,90 @@
                     progressInterval = setInterval(updateProgress, 1000);
                 }
             @endif
+
+            // Status Toggle AJAX
+            $(document).on('change', '.toggle-status', function() {
+                var status = $(this).prop('checked') == true ? 1 : 0;
+                var productId = $(this).data('id');
+                
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "{{ route('admin.products.toggle-status') }}",
+                    data: {
+                        'status': status,
+                        'id': productId,
+                        '_token': "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+                        // console.log(data.message);
+                        // Optional: Show toast or alert
+                    },
+                    error: function(xhr) {
+                        console.log('Error:', xhr);
+                        alert('Something went wrong!');
+                    }
+                });
+            });
+
+            // Bulk Selection Logic
+            $('#selectAll').on('change', function() {
+                $('.product-checkbox').prop('checked', $(this).prop('checked'));
+                toggleBulkActions();
+            });
+
+            $(document).on('change', '.product-checkbox', function() {
+                toggleBulkActions();
+                // Optionally update selectAll checkbox state
+                if ($('.product-checkbox:checked').length == $('.product-checkbox').length) {
+                    $('#selectAll').prop('checked', true);
+                } else {
+                    $('#selectAll').prop('checked', false);
+                }
+            });
+
+            function toggleBulkActions() {
+                var selected = $('.product-checkbox:checked').length;
+                if (selected > 0) {
+                    $('#bulkActions').removeClass('d-none');
+                    $('#selectedCount').text(selected + ' selected');
+                } else {
+                    $('#bulkActions').addClass('d-none');
+                }
+            }
+
+            // Bulk Action Click
+            $('.bulk-action').on('click', function() {
+                var status = $(this).data('status');
+                var ids = [];
+                $('.product-checkbox:checked').each(function() {
+                    ids.push($(this).val());
+                });
+
+                if (ids.length === 0) return;
+
+                if (confirm('Are you sure you want to update ' + ids.length + ' products?')) {
+                    $.ajax({
+                        url: "{{ route('admin.products.bulk-status') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            ids: ids,
+                            status: status
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert('Error updating status');
+                            }
+                        },
+                        error: function(xhr) {
+                            alert('Something went wrong');
+                        }
+                    });
+                }
+            });
         });
 
         let progressInterval;

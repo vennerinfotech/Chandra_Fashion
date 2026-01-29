@@ -243,6 +243,7 @@ class ProductController extends Controller
             'variants.*.gsm' => 'nullable|string|max:50',
             'variants.*.dai' => 'nullable|string|max:50',
             'variants.*.chadti' => 'nullable|string|max:50',
+            'status' => 'boolean',
         ], [
             'name.required' => 'Product Name is required.',
             'description.required' => 'Description is required.',
@@ -391,6 +392,7 @@ class ProductController extends Controller
             'variants.*.gsm' => 'nullable|string|max:50',
             'variants.*.dai' => 'nullable|string|max:50',
             'variants.*.chadti' => 'nullable|string|max:50',
+            'status' => 'boolean',
         ], [
             'name.required' => 'Product Name is required.',
             'description.required' => 'Description is required.',
@@ -484,14 +486,31 @@ class ProductController extends Controller
 
             $variantIds[] = $variant->id;
 
-            // Remove old images
-            $existing = $variant->images ? json_decode($variant->images, true) : [];
+            // Handle removed images (physical deletion)
+            $removed = [];
             if (!empty($variantData['removed_images'])) {
                 $removed = json_decode($variantData['removed_images'], true);
                 foreach ($removed as $img) {
-                    @unlink(public_path($img));
-                    $existing = array_filter($existing, fn($e) => $e != $img);
+                    if (file_exists(public_path($img))) {
+                        @unlink(public_path($img));
+                    }
                 }
+            }
+
+            // Determine existing images order
+            $existing = [];
+
+            if (isset($variantData['ordered_images']) && is_array($variantData['ordered_images'])) {
+                // Use the order provided by the frontend
+                $existing = $variantData['ordered_images'];
+                // Ensure we don't accidentally include removed ones if they somehow snuck in (though frontend shouldn't send them)
+                if (!empty($removed)) {
+                    $existing = array_diff($existing, $removed);
+                }
+            } else {
+                // Fallback: Use existing DB images minus removed ones
+                $currentImages = $variant->images ? json_decode($variant->images, true) : [];
+                $existing = array_diff($currentImages, $removed);
             }
 
             // Add new images
@@ -536,5 +555,32 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
+    }
+
+    public function toggleStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:products,id',
+            'status' => 'required|boolean'
+        ]);
+
+        $product = Product::find($request->id);
+        $product->status = $request->status;
+        $product->save();
+
+        return response()->json(['success' => true, 'message' => 'Product status updated successfully!']);
+    }
+
+    public function bulkUpdateStatus(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:products,id',
+            'status' => 'required|boolean'
+        ]);
+
+        Product::whereIn('id', $request->ids)->update(['status' => $request->status]);
+
+        return response()->json(['success' => true, 'message' => 'Bulk status updated successfully!']);
     }
 }

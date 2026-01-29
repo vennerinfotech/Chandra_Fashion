@@ -122,6 +122,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             'gsm' => 'nullable|string',
             'dai' => 'nullable|string',
             'chadti' => 'nullable|string',
+            'status' => 'required|string',
         ];
     }
 
@@ -400,6 +401,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation, WithChu
             'care_instructions' => $row['care_instructions'],
             'materials' => $row['materials'],
             'export_ready' => $row['export_ready'] ?? 0,
+            'status' => isset($row['status']) && in_array(strtolower($row['status']), ['draft', 'inactive', '0', 'false']) ? 0 : 1,
             'price' => !empty($row['price']) ? $row['price'] : null,
             'image' => $productImage,
             'category_id' => $category->id,

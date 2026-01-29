@@ -19,12 +19,19 @@ class Product extends Model
         'image',
         'delivery_time',
         'category_id',
-        'subcategory_id'
+        'subcategory_id',
+        'status'
     ];
 
     protected $casts = [
         'export_ready' => 'boolean',
+        'status' => 'boolean',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
 
     public function variants()
     {

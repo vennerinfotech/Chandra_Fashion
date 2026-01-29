@@ -1,25 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Category;
 use App\Models\Client;
+use App\Models\CollectionSection;
+use App\Models\FeatureCard;
+use App\Models\FeaturedCollection;
+use App\Models\Heritage;
+use App\Models\HeroSection;
+use App\Models\NewsletterSubscription;
 use App\Models\Product;
+use App\Models\QuickLink;
 use App\Models\Service;
 use App\Models\Setting;
-use App\Models\Category;
-use App\Models\Heritage;
-use App\Models\QuickLink;
-use App\Models\FeatureCard;
-use App\Models\HeroSection;
-use Illuminate\Http\Request;
-use App\Models\CollectionSection;
-use App\Models\FeaturedCollection;
 use App\Models\SubscriptionSection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\NewsletterSubscription;
 
 class HomeController extends Controller
 {
-
     public function index()
     {
         $heroSections = HeroSection::all();
@@ -36,14 +36,14 @@ class HomeController extends Controller
 
         // Fetch latest products for "New Arrivals"
         $newArrivals = Product::with('category', 'variants')
-                            ->whereHas('category', fn($q) => $q->where('status', 1))
-                            ->orderBy('created_at', 'desc')
-                            ->take(10)
-                            ->get();
+            ->active()
+            ->whereHas('category', fn($q) => $q->where('status', 1))
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
 
-        return view('home', compact( 'categories', 'heroSections', 'collections','featuredCollections', 'heritage', 'clients', 'subscription', 'footer', 'services', 'quickLinks',
-            'featureCards', 'newArrivals'
-        ));
+        return view('home', compact('categories', 'heroSections', 'collections', 'featuredCollections', 'heritage', 'clients', 'subscription', 'footer', 'services', 'quickLinks',
+            'featureCards', 'newArrivals'));
     }
 
     public function subscribe(Request $request)
@@ -60,5 +60,4 @@ class HomeController extends Controller
 
         return back()->with('success', 'Thank you for subscribing!');
     }
-
 }
